@@ -1,0 +1,47 @@
+Compiled from "AbstractPlayer.java"
+public interface io.lumine.mythic.api.adapters.AbstractPlayer extends io.lumine.mythic.api.adapters.AbstractEntity {
+  public abstract boolean hasPermission(java.lang.String);
+  public abstract boolean isInCreativeMode();
+  public abstract boolean isInSpectatorMode();
+  public abstract void sendMessage(java.lang.String);
+  public abstract float getExperience();
+  public abstract void setExperience(float);
+  public abstract void hidePlayer(io.lumine.mythic.api.adapters.AbstractPlayer);
+  public abstract void hideEntity(io.lumine.mythic.api.adapters.AbstractEntity);
+  public abstract boolean canSee(io.lumine.mythic.api.adapters.AbstractPlayer);
+  public abstract boolean canSee(io.lumine.mythic.api.adapters.AbstractEntity);
+  public abstract boolean isOnline();
+  public abstract int getLevel();
+  public abstract void setLevel(int);
+  public abstract void setHealthScale(double);
+  public abstract void setHealthScaled(boolean);
+  public abstract void setPersonalTime(long, boolean);
+  public abstract void resetPersonalTime();
+  public abstract void setPersonalWeather(java.lang.String);
+  public abstract void resetPersonalWeather();
+  public abstract void setAllowFlight(boolean);
+  public abstract boolean getAllowFlight();
+  public abstract void showPlayer(io.lumine.mythic.api.adapters.AbstractPlayer);
+  public abstract void showEntity(io.lumine.mythic.api.adapters.AbstractEntity);
+  public abstract void setFlying(boolean);
+  public abstract void setFlyingSpeed(float);
+  public abstract void setWalkSpeed(float);
+  public abstract int getFoodLevel();
+  public abstract void setFoodLevel(int);
+  public abstract float getFoodSaturation();
+  public abstract void setFoodSaturation(float);
+  public abstract void setGameMode(io.lumine.mythic.api.adapters.AbstractGameMode);
+  public abstract io.lumine.mythic.api.adapters.AbstractGameMode getGameMode();
+  public abstract void sendActionBarMessage(java.lang.String);
+  public abstract int getRemainingAir();
+  public abstract void setRemainingAir(int);
+  public abstract int getMaximumAir();
+  public abstract void setMaximumAir(int);
+  public abstract void sendTitle(java.lang.String, java.lang.String, int, int, int);
+  public abstract void updateInventory();
+  public abstract int getFortuneLevel();
+  public abstract float getItemGroupCooldownPercent(java.lang.String);
+  public abstract boolean isItemGroupOnCooldown(java.lang.String);
+  public abstract void setItemGroupCooldown(java.lang.String, int);
+  public abstract void removeItemGroupCooldown(java.lang.String);
+}

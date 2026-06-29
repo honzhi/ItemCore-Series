@@ -1,0 +1,44 @@
+Compiled from "DamageMetadata.java"
+public class io.lumine.mythic.api.skills.damage.DamageMetadata {
+  public void putObject(java.lang.String, java.lang.Object);
+  public java.lang.Object getValue(java.lang.String);
+  public java.lang.Object getOrDefault(java.lang.String, java.lang.Object);
+  public void putAll(java.util.Map<java.lang.String, java.lang.Object>);
+  public void putString(java.lang.String, java.lang.String);
+  public void putBoolean(java.lang.String, boolean);
+  public void putTag(java.lang.String);
+  public void putFloat(java.lang.String, float);
+  public void putDouble(java.lang.String, double);
+  public java.lang.String getString(java.lang.String);
+  public boolean getBoolean(java.lang.String);
+  public float getFloat(java.lang.String);
+  public double getDouble(java.lang.String);
+  public java.lang.String toString();
+  public io.lumine.mythic.api.skills.SkillCaster getDamager();
+  public io.lumine.mythic.api.skills.SkillMetadata getMetadata();
+  public io.lumine.mythic.api.adapters.AbstractItemStack getDamagerItem();
+  public double getAmount();
+  public java.util.Map<java.lang.String, java.lang.Double> getBonusDamage();
+  public java.util.Map<java.lang.String, java.lang.Double> getBonusDamageModifiers();
+  public java.lang.String getElement();
+  public double getMultiplier();
+  public java.util.Map<java.lang.String, java.lang.Object> getData();
+  public java.util.Collection<java.lang.String> getTags();
+  public java.lang.Boolean getIgnoresArmor();
+  public java.lang.Boolean getPreventsImmunity();
+  public java.lang.Boolean getPreventsKnockback();
+  public java.lang.Boolean getIgnoreEnchantments();
+  public org.bukkit.event.entity.EntityDamageEvent$DamageCause getDamageCause();
+  public void setAmount(double);
+  public void setBonusDamage(java.util.Map<java.lang.String, java.lang.Double>);
+  public void setBonusDamageModifiers(java.util.Map<java.lang.String, java.lang.Double>);
+  public void setElement(java.lang.String);
+  public void setMultiplier(double);
+  public void setIgnoresArmor(java.lang.Boolean);
+  public void setPreventsImmunity(java.lang.Boolean);
+  public void setPreventsKnockback(java.lang.Boolean);
+  public void setIgnoreEnchantments(java.lang.Boolean);
+  public boolean equals(java.lang.Object);
+  public int hashCode();
+  public io.lumine.mythic.api.skills.damage.DamageMetadata(io.lumine.mythic.api.skills.SkillCaster, io.lumine.mythic.api.skills.SkillMetadata, io.lumine.mythic.api.adapters.AbstractItemStack, double, java.util.Map<java.lang.String, java.lang.Double>, java.util.Map<java.lang.String, java.lang.Double>, java.lang.String, double, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, java.lang.Boolean, org.bukkit.event.entity.EntityDamageEvent$DamageCause);
+}

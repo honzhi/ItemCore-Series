@@ -1,0 +1,44 @@
+Compiled from "ServerInterface.java"
+public interface io.lumine.mythic.api.adapters.ServerInterface {
+  public abstract void initialize();
+  public abstract java.util.List<io.lumine.mythic.api.adapters.AbstractWorld> getWorlds();
+  public abstract void dispatchCommand(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractBlockMatcher getBlockMatcher(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractBlockMatcher getBlockMatcher(java.util.Collection<java.lang.String>);
+  public abstract java.util.List<io.lumine.mythic.api.adapters.AbstractPlayer> getOnlinePlayers();
+  public abstract int getOnlinePlayerCount();
+  public abstract io.lumine.mythic.api.adapters.AbstractLocation newLocation(io.lumine.mythic.api.adapters.AbstractWorld, double, double, double);
+  public abstract io.lumine.mythic.api.adapters.AbstractWorld getWorld(java.lang.String);
+  public abstract boolean isValidBiome(java.lang.Object);
+  public abstract io.lumine.mythic.api.adapters.AbstractBossBar createBossBar(java.lang.String, io.lumine.mythic.api.adapters.AbstractBossBar$BarColor, io.lumine.mythic.api.adapters.AbstractBossBar$BarStyle);
+  public abstract io.lumine.mythic.api.adapters.AbstractItemStack createItem(java.lang.String);
+  public default io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(io.lumine.mythic.api.config.MythicLineConfig);
+  public abstract io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(io.lumine.mythic.api.config.MythicLineConfig, java.lang.String);
+  public default io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(java.lang.String, boolean);
+  public default io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(java.util.Collection<java.lang.String>);
+  public abstract io.lumine.mythic.api.adapters.AbstractItemMatcher getItemMatcher(java.util.Collection<java.lang.String>, boolean);
+  public abstract io.lumine.mythic.api.adapters.AbstractEnchantment createEnchantment(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractPotionEffect createPotionEffect(java.lang.String, int, int, boolean, boolean, boolean);
+  public abstract io.lumine.mythic.api.adapters.AbstractPlayer getPlayer(java.util.UUID);
+  public abstract io.lumine.mythic.api.adapters.AbstractPlayer getPlayer(java.lang.String);
+  public abstract io.lumine.mythic.api.mobs.entities.MythicEntityType getMythicEntityType(org.bukkit.entity.EntityType);
+  public abstract io.lumine.mythic.api.adapters.AbstractEntity getEntity(java.util.UUID);
+  public abstract java.util.Collection<io.lumine.mythic.api.adapters.AbstractEntity> getEntities(io.lumine.mythic.api.adapters.AbstractWorld);
+  public abstract java.util.Collection<io.lumine.mythic.api.adapters.AbstractEntity> getLivingEntities(io.lumine.mythic.api.adapters.AbstractWorld);
+  public abstract java.util.Collection<io.lumine.mythic.api.adapters.AbstractPlayer> getPlayers(io.lumine.mythic.api.adapters.AbstractWorld);
+  public abstract java.util.Collection<io.lumine.mythic.api.adapters.AbstractEntity> getEntities(java.util.Collection<java.util.UUID>);
+  public abstract io.lumine.mythic.api.adapters.AbstractWorld getWorld(java.util.UUID);
+  public abstract void handleMobDespawnEvent(io.lumine.mythic.core.mobs.ActiveMob);
+  public abstract io.lumine.mythic.api.mobs.entities.MythicEntityType getMythicEntityType(org.bukkit.entity.Entity);
+  public abstract io.lumine.mythic.api.adapters.AbstractLocation newLocation(io.lumine.mythic.api.adapters.AbstractWorld, double, double, double, float, float);
+  public abstract io.lumine.mythic.api.adapters.AbstractFirework createFirework(java.lang.String, int, java.util.Collection<java.awt.Color>, java.util.Collection<java.awt.Color>, boolean, boolean);
+  public abstract io.lumine.mythic.api.adapters.AbstractBiome getBiome(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractBiome getBiome(io.lumine.mythic.api.adapters.AbstractLocation);
+  public abstract java.util.Collection<io.lumine.mythic.api.adapters.AbstractBiome> getBiomes(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractBlock getBlock(java.lang.String);
+  public abstract io.lumine.mythic.api.adapters.AbstractBlock getBlock(io.lumine.mythic.api.adapters.AbstractLocation);
+  public abstract io.lumine.mythic.api.adapters.items.components.AbstractItemConsumableComponent createItemConsumableComponent(io.lumine.mythic.core.items.MythicItem, io.lumine.mythic.api.config.MythicConfig);
+  public abstract io.lumine.mythic.api.adapters.items.components.AbstractItemDeathProtectionComponent createItemDeathProtectionComponent(io.lumine.mythic.core.items.MythicItem, io.lumine.mythic.api.config.MythicConfig);
+  public abstract io.lumine.mythic.api.adapters.AbstractTeleportData createTeleportData(io.lumine.mythic.api.config.MythicLineConfig);
+}

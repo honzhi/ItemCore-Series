@@ -24,14 +24,10 @@ Thumbs.db
 # Maven 记录文件
 javac.*.args
 
-# 依赖目录（不含源码的依赖包）
-依赖/
+# 外部工具与环境
 apache-maven-*/
 MMOItems-Zh-nightly/
 参考项目/
-
-# API库（内容是外部依赖库）
-API库/
 
 # 旧的 git 副本
 ItemCore-git/
