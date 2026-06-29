@@ -27,6 +27,9 @@ public class ItemBuilder {
     public static final NamespacedKey LORE_VERSION_KEY = new NamespacedKey("itemcore", "lore_ver");
     public static final NamespacedKey DURABILITY_KEY = new NamespacedKey("itemcore", "durability");
     public static final NamespacedKey MAX_DURABILITY_KEY = new NamespacedKey("itemcore", "max_durability");
+    public static final NamespacedKey DURABILITY_BREAK_KEY = new NamespacedKey("itemcore", "durability_break");
+    public static final NamespacedKey DISABLE_ANVIL_REPAIR_KEY = new NamespacedKey("itemcore", "disable_anvil_repair");
+    public static final NamespacedKey DISABLE_ENCHANTING_KEY = new NamespacedKey("itemcore", "disable_enchanting");
     
     // MMOItems 风格：添加假的属性修饰符来覆盖原版属性
     private static final UUID DECOY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
@@ -120,6 +123,9 @@ public class ItemBuilder {
             if (!meta.getPersistentDataContainer().has(DURABILITY_KEY, PersistentDataType.INTEGER)) {
                 meta.getPersistentDataContainer().set(DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
             }
+            meta.getPersistentDataContainer().set(DURABILITY_BREAK_KEY, PersistentDataType.INTEGER, customItem.isDurabilityBreak() ? 1 : 0);
+            meta.getPersistentDataContainer().set(DISABLE_ANVIL_REPAIR_KEY, PersistentDataType.INTEGER, customItem.isDisableAnvilRepair() ? 1 : 0);
+            meta.getPersistentDataContainer().set(DISABLE_ENCHANTING_KEY, PersistentDataType.INTEGER, customItem.isDisableEnchanting() ? 1 : 0);
         }
 
         itemStack.setItemMeta(meta);
