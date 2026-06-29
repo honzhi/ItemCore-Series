@@ -202,7 +202,13 @@ public class ItemCore extends JavaPlugin {
         getCommand("itemcore").setExecutor(commandManager);
         getCommand("itemcore").setTabCompleter(commandManager);
 
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        // ── bStats 使用统计 ──
+        new Metrics(this, 32281);
+
+        // 初始化耐久系统
+        DurabilityManager.init(this);
+
+                if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new ItemCoreExpansion(this).register();
             getLogger().info("PlaceholderAPI 扩展已注册");
         }
