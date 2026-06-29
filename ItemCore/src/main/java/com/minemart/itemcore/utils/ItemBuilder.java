@@ -123,7 +123,10 @@ public class ItemBuilder {
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         }
 
-        // 写入自定义耐久数据
+        // [Debug] 写入自定义耐久数据
+        if (customItem.hasDurability()) {
+            System.out.println("[ItemCore-Debug] ItemBuilder: id=" + customItem.getId() + " hasDurability=" + customItem.hasDurability() + " unbreakable=" + customItem.isUnbreakable() + " durability=" + customItem.getDurability());
+        }
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
             meta.getPersistentDataContainer().set(MAX_DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
             if (!meta.getPersistentDataContainer().has(DURABILITY_KEY, PersistentDataType.INTEGER)) {
