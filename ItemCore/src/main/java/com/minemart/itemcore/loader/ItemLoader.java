@@ -136,7 +136,7 @@ public class ItemLoader {
             .material(material)
             .type(categoryId);
 
-        String displayName = section.getString("display-name");
+        String displayName = section.getString("display_name");
         if (displayName != null) {
             builder.displayName(displayName);
         }
@@ -154,7 +154,7 @@ public class ItemLoader {
             }
         }
 
-        List<?> flagsList = section.getList("item-flags");
+        List<?> flagsList = section.getList("item_flags");
         if (flagsList != null) {
             List<ItemFlag> flags = YamlParserUtil.parseItemFlagList(flagsList);
             for (ItemFlag flag : flags) {
@@ -162,8 +162,8 @@ public class ItemLoader {
             }
         }
 
-        if (section.contains("custom-model-data")) {
-            builder.customModelData(section.getInt("custom-model-data"));
+        if (section.contains("custom_model_data")) {
+            builder.customModelData(section.getInt("custom_model_data"));
         }
 
         if (section.contains("unbreakable")) {
@@ -174,8 +174,20 @@ public class ItemLoader {
             builder.durability(section.getInt("durability"));
         }
 
-        if (section.contains("max-stack")) {
-            builder.maxStack(section.getInt("max-stack"));
+        if (section.contains("durability_break")) {
+            builder.durabilityBreak(section.getBoolean("durability_break"));
+        }
+
+        if (section.contains("disable_anvil_repair")) {
+            builder.disableAnvilRepair(section.getBoolean("disable_anvil_repair"));
+        }
+
+        if (section.contains("disable_enchanting")) {
+            builder.disableEnchanting(section.getBoolean("disable_enchanting"));
+        }
+
+        if (section.contains("max_stack")) {
+            builder.maxStack(section.getInt("max_stack"));
         }
 
         ConfigurationSection effectsSection = section.getConfigurationSection("effects");
@@ -204,7 +216,7 @@ public class ItemLoader {
             builder.skills(skills);
         }
 
-        List<?> slotsList = section.getList("active-slots");
+        List<?> slotsList = section.getList("active_slots");
         if (slotsList != null) {
             for (Object obj : slotsList) {
                 if (obj instanceof String) {
@@ -214,11 +226,11 @@ public class ItemLoader {
             }
         }
 
-        if (section.contains("right-clickable")) {
-            builder.rightClickable(section.getBoolean("right-clickable"));
+        if (section.contains("right_clickable")) {
+            builder.rightClickable(section.getBoolean("right_clickable"));
         }
-        if (section.contains("left-clickable")) {
-            builder.leftClickable(section.getBoolean("left-clickable"));
+        if (section.contains("left_clickable")) {
+            builder.leftClickable(section.getBoolean("left_clickable"));
         }
         if (section.contains("droppable")) {
             builder.droppable(section.getBoolean("droppable"));
@@ -226,8 +238,8 @@ public class ItemLoader {
         if (section.contains("clickable")) {
             builder.clickable(section.getBoolean("clickable"));
         }
-        if (section.contains("keep-on-death")) {
-            builder.keepOnDeath(section.getBoolean("keep-on-death"));
+        if (section.contains("keep_on_death")) {
+            builder.keepOnDeath(section.getBoolean("keep_on_death"));
         }
 
         try {
