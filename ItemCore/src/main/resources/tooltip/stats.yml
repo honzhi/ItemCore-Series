@@ -2,14 +2,6 @@
 durability_bar: '&f耐久: &a{bar}'
 
 # ========================================
-# 这个配置文件用于定义物品属性在 tooltip 中的显示格式
-# 占位符:
-#   {value} - 属性值
-#   <plus>  - 自动添加 +/- 符号 (正数+，负数-)
-durability: '&f耐久: &a{current}&7/&a{max}'
-durability_bar: '&f耐久: &a{bar}'
-
-# ========================================
 
 durability: '&f耐久: &a{current}&7/&a{max}'
 durability_bar: '&f耐久: &a{bar}'
