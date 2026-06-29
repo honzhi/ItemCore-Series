@@ -1,8 +1,8 @@
-
+﻿
 legendary_pickaxe:
   material: NETHERITE_PICKAXE
   type: tools
-  display-name: "&5&l传说镐"
+  display_name: "&5&l传说镐"
   lore:
     - "&7这把镐能挖掘一切"
     - "&7传说中它甚至能挖碎基岩"
@@ -11,15 +11,15 @@ legendary_pickaxe:
     fortune: 3
     unbreaking: 4
     mending: 1
-  custom-model-data: 3001
+  custom_model_data: 3001
   unbreakable: true
   attributes:
     ATTACK_DAMAGE: 5
     ATTACK_SPEED: 1.2
     LUCK: 5
-  active-slots:
+  active_slots:
     - main-hand
-  item-flags:
+  item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
     - HIDE_UNBREAKABLE

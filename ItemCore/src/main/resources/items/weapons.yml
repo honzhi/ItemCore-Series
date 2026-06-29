@@ -1,8 +1,8 @@
-
+﻿
 legendary_blade:
   material: NETHERITE_SWORD
   type: weapons
-  display-name: "&4&l传说之刃"
+  display_name: "&4&l传说之刃"
   lore:
     - "&7传说中的神秘武器"
     - "&7散发着毁灭的气息"
@@ -21,9 +21,9 @@ legendary_blade:
     right_click:
       provider: mythicmobs
       skill: text
-  active-slots:
+  active_slots:
     - main-hand
-  item-flags:
+  item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
     - HIDE_UNBREAKABLE
@@ -32,7 +32,7 @@ legendary_blade:
 mage_staff:
   material: BLAZE_ROD
   type: weapons
-  display-name: "&b&l大法师之杖"
+  display_name: "&b&l大法师之杖"
   lore:
     - "&7蕴含着强大的魔法能量"
   unbreakable: true
@@ -50,9 +50,9 @@ mage_staff:
     right_click:
       provider: mythicmobs
       skill: fireball
-  active-slots:
+  active_slots:
     - main-hand
-  item-flags:
+  item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
     - HIDE_UNBREAKABLE
@@ -61,7 +61,7 @@ mage_staff:
 ranger_bow:
   material: BOW
   type: weapons
-  display-name: "&a&l游侠长弓"
+  display_name: "&a&l游侠长弓"
   lore:
     - "&7百步穿杨，例无虚发"
   unbreakable: true
@@ -72,9 +72,9 @@ ranger_bow:
     CRIT_DAMAGE: 30
     PHYSICAL_PENETRATION: 5
     LUCK: 5
-  active-slots:
+  active_slots:
     - main-hand
-  item-flags:
+  item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
     - HIDE_UNBREAKABLE

@@ -1,4 +1,4 @@
-package com.minemart.itemcore.loader;
+﻿package com.minemart.itemcore.loader;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.ItemCategory;
@@ -110,7 +110,7 @@ public class CategoryLoader {
 
     private ItemCategory parseCategory(String categoryId, ConfigurationSection section) {
         String name = section.getString("name", categoryId);
-        String displayName = section.getString("display-name", name);
+        String displayName = section.getString("display_name", name);
 
         String materialStr = section.getString("icon", "DIRT");
         Material material = YamlParserUtil.parseMaterial(materialStr);
@@ -120,7 +120,7 @@ public class CategoryLoader {
 
         int slot = section.getInt("slot", -1);
         String permission = section.getString("permission", null);
-        String itemsFile = section.getString("items-file", null);
+        String itemsFile = section.getString("items_file", null);
 
         List<String> items = section.getStringList("items");
         if (items == null) {

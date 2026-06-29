@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # 分类配置
 # ========================================
 # 此文件定义了物品的分类
@@ -32,7 +32,7 @@ categories:
     # GUI 中显示的名称（支持颜色代码）
     # 颜色代码: &0=黑 &1=深蓝 &2=深绿 &3=深蓝 &4=深红 &5=深紫 &6=金 &7=灰
     #         &8=深灰 &9=蓝 &a=绿 &b=天蓝 &c=红 &d=粉 &e=黄 &f=白
-    display-name: "&c武器"
+    display_name: "&c武器"
     
     # GUI 中显示的描述（支持颜色代码）
     lore:
@@ -42,7 +42,7 @@ categories:
     # 物品配置文件名（必须存在于 items/ 目录）
     # 这个文件包含此分类下的所有物品
     # 如果文件不存在，此分类将没有物品
-    items-file: weapons.yml
+    items_file: weapons.yml
     
     # （可选）权限要求
     # 如果设置，玩家需要此权限才能查看此分类
@@ -55,11 +55,11 @@ categories:
     name: 护甲
     icon: DIAMOND_CHESTPLATE
     slot: 20
-    display-name: "&b护甲"
+    display_name: "&b护甲"
     lore:
       - "&7各种护甲装备"
       - "&7点击查看所有护甲"
-    items-file: armors.yml
+    items_file: armors.yml
 
   # ========================================
   # 工具分类
@@ -68,11 +68,11 @@ categories:
     name: 工具
     icon: DIAMOND_PICKAXE
     slot: 21
-    display-name: "&a工具"
+    display_name: "&a工具"
     lore:
       - "&7各种工具"
       - "&7点击查看所有工具"
-    items-file: tools.yml
+    items_file: tools.yml
 
   # ========================================
   # 其他分类
@@ -81,11 +81,11 @@ categories:
     name: 其他
     icon: NETHER_STAR
     slot: 22
-    display-name: "&d其他"
+    display_name: "&d其他"
     lore:
       - "&7其他物品"
       - "&7点击查看所有特殊物品"
-    items-file: misc.yml
+    items_file: misc.yml
 
 # ========================================
 # 添加新分类示例（复制后取消注释并修改）
@@ -94,11 +94,11 @@ categories:
 #   name: 我的分类
 #   icon: DIAMOND
 #   slot: 23
-#   display-name: "&5我的分类"
+#   display_name: "&5我的分类"
 #   lore:
 #     - "&7我的自定义物品"
 #     - "&7这是我创建的分类"
-#   items-file: my_items.yml
+#   items_file: my_items.yml
 # ========================================
 
 # ========================================
