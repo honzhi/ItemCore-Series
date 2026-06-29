@@ -104,13 +104,30 @@ public class DurabilityManager {
 
         meta.getPersistentDataContainer().set(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER, newDura);
 
-        // 触发 lore 刷新
+        // 先将耐久更新写入物品
+        item.setItemMeta(meta);
+
+        // 触发 lore 刷新（从已更新的 PDC 读取耐久值）
         ItemCore icPlugin = ItemCore.getInstance();
         if (icPlugin != null) {
-            meta.getPersistentDataContainer().set(ItemBuilder.LORE_VERSION_KEY, PersistentDataType.INTEGER, 0);
+            String itemId = meta.getPersistentDataContainer().get(ItemBuilder.ITEM_ID_KEY, PersistentDataType.STRING);
+            if (itemId != null) {
+                com.minemart.itemcore.item.CustomItem ci = icPlugin.getCoreManager().getItemManager().getCustomItem(itemId);
+                if (ci != null && icPlugin.getLoreManager() != null) {
+                    java.util.List<String> newLore = icPlugin.getLoreManager().generateLore(ci, item);
+                    ItemMeta freshMeta = item.getItemMeta();
+                    if (freshMeta != null) {
+                        java.util.List<net.kyori.adventure.text.Component> loreComponents = new java.util.ArrayList<>();
+                        for (String line : newLore) {
+                            loreComponents.add(com.minemart.itemcore.utils.MessageUtil.colorize(line));
+                        }
+                        freshMeta.lore(loreComponents);
+                        freshMeta.getPersistentDataContainer().set(ItemBuilder.LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
+                        item.setItemMeta(freshMeta);
+                    }
+                }
+            }
         }
-
-        item.setItemMeta(meta);
 
         if (newDura <= 0) {
             // 检查是否允许销�?
@@ -145,13 +162,30 @@ public class DurabilityManager {
 
         meta.getPersistentDataContainer().set(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER, newDura);
 
+        // 先将修复后的耐久写入物品
+        item.setItemMeta(meta);
+
         // 触发 lore 刷新
         ItemCore icPlugin = ItemCore.getInstance();
         if (icPlugin != null) {
-            meta.getPersistentDataContainer().set(ItemBuilder.LORE_VERSION_KEY, PersistentDataType.INTEGER, 0);
+            String itemId = meta.getPersistentDataContainer().get(ItemBuilder.ITEM_ID_KEY, PersistentDataType.STRING);
+            if (itemId != null) {
+                com.minemart.itemcore.item.CustomItem ci = icPlugin.getCoreManager().getItemManager().getCustomItem(itemId);
+                if (ci != null && icPlugin.getLoreManager() != null) {
+                    java.util.List<String> newLore = icPlugin.getLoreManager().generateLore(ci, item);
+                    ItemMeta freshMeta = item.getItemMeta();
+                    if (freshMeta != null) {
+                        java.util.List<net.kyori.adventure.text.Component> loreComponents = new java.util.ArrayList<>();
+                        for (String line : newLore) {
+                            loreComponents.add(com.minemart.itemcore.utils.MessageUtil.colorize(line));
+                        }
+                        freshMeta.lore(loreComponents);
+                        freshMeta.getPersistentDataContainer().set(ItemBuilder.LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
+                        item.setItemMeta(freshMeta);
+                    }
+                }
+            }
         }
-
-        item.setItemMeta(meta);
     }
 
     /**
