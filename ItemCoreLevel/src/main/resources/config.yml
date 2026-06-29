@@ -1,0 +1,152 @@
+# ========================================
+# ItemCoreLevel 配置文件
+# 基于 ItemCore 的玩家等级系统扩展插件
+# ========================================
+
+# 调试模式，启用后输出更详细的日志信息
+debug: false
+
+# ── 基础等级设置 ──
+
+# 新玩家的初始等级
+start-level: 1
+
+# 新玩家的初始经验值
+start-exp: 0
+
+# 玩家可达到的最高等级（0 = 无限制）
+max-level: 100
+
+# ── 等级经验曲线 ──
+
+# mode: formula（公式模式）/ list（列表模式）
+# formula 模式下用 expression 动态计算每级所需经验
+#   可用变量: {level} = 当前等级
+#   支持运算符: + - * / ^ ( )
+#   示例: 100*{level}^2+50*{level} → 1级需150, 2级需500, 3级需1050
+# list 模式下手动指定每级需求（第0项=1级升2级所需）
+level-curve:
+  mode: formula
+  expression: "100*{level}^2+50*{level}"
+  # list:
+  #   - 100
+  #   - 200
+  #   - 400
+
+# ── 等级属性奖励 ──
+
+# general: 每级累加（属性值 = 配置值 × 当前等级）
+# specific: 特定等级一次性给予（到达该等级后永久生效，不重复叠加）
+# 可用属性键参考 ItemCore 的 CustomAttribute 枚举:
+#   attack_damage, attack_speed, attack_range, health
+#   movement_speed, regeneration, knockback, luck
+#   spell_damage, physical_damage, projectile_damage
+#   spell_power, adaptive_force, crit_chance, crit_damage
+#   armor, physical_resist, spell_resist
+#   physical_penetration, physical_penetration_percent
+#   spell_penetration, spell_penetration_percent
+#   damage_reduction
+level-rewards:
+  general:
+    attack_damage: 0.5
+    health: 1.0
+  specific:
+    10:
+      attack_damage: 5.0
+      crit_chance: 2.0
+      health: 10.0
+    20:
+      attack_damage: 10.0
+      crit_damage: 5.0
+      spell_power: 5.0
+    30:
+      armor: 5.0
+      physical_resist: 3.0
+      spell_resist: 3.0
+    50:
+      adaptive_force: 5.0
+      damage_reduction: 2.0
+
+# ── MythicMobs 经验掉落配置 ──
+
+# 此区域仅在安装了 MythicMobs 插件时生效
+monster-exp:
+  # 未在下方 mobs 中配置的怪物默认经验值
+  default: 10
+  # 是否根据 MM 怪物的 Level 字段自动计算经验
+  use-mob-level: true
+  # 基于怪物等级的计算公式（{level} = 怪物等级）
+  mob-level-formula: "{level}*5+10"
+  # 特定怪物的经验值映射（key = MM 怪物内部ID）
+  # 优先级: mobs 配置 > mob-level-formula 计算 > default
+  mobs:
+    SkeletonKing: 100
+    ZombieLord: 75
+    Goblin: 15
+    GoblinWarrior: 25
+    Dragon: 500
+
+# ── 经验获取来源设置 ──
+
+exp-sources:
+  mythicmobs:
+    enabled: true
+    killer-only: true
+    share-in-party: false
+    multiplier: 1.0
+
+# ── 经验获取提示 ──
+
+# 玩家获得经验时聊天栏显示的文字
+# 可用占位符: {player}, {amount}, {level}, {exp}, {required}, {progress}
+exp-gain:
+  enabled: true
+  message: "&a+{amount} &7经验值 (&f{progress}&7)"
+  sound: "ENTITY_EXPERIENCE_ORB_PICKUP"
+  sound-volume: 0.5
+  sound-pitch: 1.0
+
+# ── 升级提示配置 ──
+
+# 玩家升级时的提示方式
+# mode 可选值: chat（聊天栏）/ actionbar（状态栏）/ title（标题）
+level-up:
+  enabled: true
+  mode: title
+  chat:
+    message: "&b&l✦ {player} &f升级了！ &7({old_level} → &b{level}&7)"
+  actionbar:
+    message: "&b&l✦ 升级！ &7你现在是 &bLv.{level}"
+  title:
+    main: "&b&l✦ 升级！"
+    sub: "&7Lv.{level}"
+    fade-in: 10
+    stay: 40
+    fade-out: 10
+  sound: "ENTITY_PLAYER_LEVELUP"
+  sound-volume: 0.5
+  sound-pitch: 1.0
+
+# ── MySQL 数据库配置 ──
+
+database:
+  host: localhost
+  port: 3306
+  database: itemcore
+  table-prefix: ic_level_
+  username: root
+  password: ""
+  pool-settings:
+    maximum-pool-size: 10
+    minimum-idle: 2
+    connection-timeout: 5000
+
+# ── PlaceholderAPI 进度条样式 ──
+
+placeholder:
+  progress-bar:
+    length: 20
+    done-char: "█"
+    done-color: "&a"
+    not-done-char: "░"
+    not-done-color: "&7"

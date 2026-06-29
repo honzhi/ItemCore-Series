@@ -1,0 +1,28 @@
+name: ItemCoreTrinkets
+version: 1.0.0
+main: com.minemart.itemcoretrinkets.ItemCoreTrinkets
+api-version: 1.21
+author: MineMart
+description: 基于ItemCore的饰品槽位系统
+depend: [ItemCore]
+
+commands:
+  ict:
+    description: 饰品管理命令
+    aliases: [trinkets, trinket, t]
+    usage: /<command> [reload]
+
+permissions:
+  itemcoretrinkets.gui:
+    description: 打开饰品界面
+    default: true
+
+  itemcoretrinkets.admin:
+    description: 管理员权限
+    default: op
+    children:
+      itemcoretrinkets.admin.reload: true
+
+  itemcoretrinkets.admin.reload:
+    description: 重载配置
+    default: op

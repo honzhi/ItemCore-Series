@@ -1,0 +1,43 @@
+# ================================================
+# ItemCoreForge 主配置文件
+# ================================================
+
+# 基础设置
+settings:
+  # 锻造台配置文件所在目录（相对于插件目录）
+  forges-directory: "forges"
+  # GUI布局文件所在目录（相对于插件目录）
+  layouts-directory: "layouts"
+  # 调试模式
+  debug: true
+
+# GUI界面设置
+gui:
+  # 配方选择界面每页显示的配方数量
+  recipes-per-page: 28
+  # 界面边框物品
+  border-item: GRAY_STAINED_GLASS_PANE
+  # 上一页按钮物品
+  previous-item: ARROW
+  # 下一页按钮物品
+  next-item: ARROW
+  # 返回按钮物品
+  back-item: BARRIER
+  # 制作按钮物品（材料充足时）
+  craft-item: GREEN_WOOL
+  # 制作按钮显示名称
+  craft-item-name: "&a开始制作"
+  # 制作按钮描述
+  craft-item-lore:
+    - "&7点击开始制作"
+    - "&7制作时间: {craft_time}秒"
+  # 制作按钮物品（材料不足时）
+  craft-disabled-item: RED_WOOL
+  # 材料不足时按钮显示名称
+  craft-disabled-name: "&c材料不足"
+  # 材料不足时按钮描述
+  craft-disabled-lore:
+    - "&7材料不足，无法制作"
+    - "&7请先收集材料"
+  # 点击冷却时间（毫秒），防止快速点击
+  craft-click-cooldown: 150

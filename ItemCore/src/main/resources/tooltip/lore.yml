@@ -1,0 +1,57 @@
+﻿# ========================================
+# Lore 布局配置
+# ========================================
+# 这是属性在物品 lore 中的展示顺序
+# 可以调整、删除、添加占位符
+#
+# 占位符说明:
+#   #属性名#  - 显示属性
+#   #item-lore# - 物品配置中的描述
+#   {bar}    - 分隔线，如果下面没有内容则隐藏
+#   {sbar}   - 分隔线，始终显示
+# ========================================
+
+general:
+  # 是否启用自动属性 lore
+  enabled: true
+
+# ========================================
+# Lore 展示顺序
+# ========================================
+
+lore-format:
+  # 物品描述
+  - '#item-lore#'
+  # 分隔线
+  - '{bar}'
+  # 基础属性
+  - '#attack_damage#'
+  - '#attack_speed#'
+  - '#attack_range#'
+  - '#health#'
+  - '#movement_speed#'
+  - '#regeneration#'
+  - '#knockback#'
+  - '#luck#'
+  # 伤害类型
+  - '#spell_damage#'
+  - '#physical_damage#'
+  - '#projectile_damage#'
+  - '#spell_power#'
+  - '#adaptive_force#'
+  # 暴击
+  - '#crit_chance#'
+  - '#crit_damage#'
+  # 防御
+  - '#armor#'
+  - '#physical_resist#'
+  - '#spell_resist#'
+  - '#physical_penetration#'
+  - '#physical_penetration_percent#'
+  - '#spell_penetration#'
+  - '#spell_penetration_percent#'
+  - '#damage_reduction#'
+  # 元素属性
+  - '#element_mastery#'
+  - '#element_resist#'
+  # 技能/效果预留

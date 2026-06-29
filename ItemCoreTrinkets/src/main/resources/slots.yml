@@ -1,0 +1,22 @@
+slots:
+  ring_left:                        #槽位ID
+    type: ring                      #装备该槽位所需物品类型
+
+  ring_right:
+    type: ring
+
+  amulet:
+    type: amulet
+    require:
+      permission: "trinkets.amulet"    #装备该槽位所需的权限
+
+  bracelet:
+    type: bracelet
+    require:
+      level: 10                      #装备该槽位所需的原版等级
+
+  belt:
+    type: belt
+    require:
+      permission: "trinkets.belt"
+      level: 20       

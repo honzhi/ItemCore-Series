@@ -1,0 +1,8 @@
+# ItemCoreMythic Configuration
+# Debug mode - enables detailed logging for debugging
+debug: false
+
+# Skill Provider configuration
+providers:
+  mythicmobs:
+    enabled: true

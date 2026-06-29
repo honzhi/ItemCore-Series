@@ -1,0 +1,56 @@
+﻿# ========================================
+# 属性描述配置（Stats Display）
+# ========================================
+# 这个配置文件用于定义物品属性在 tooltip 中的显示格式
+# 占位符:
+#   {value} - 属性值
+#   <plus>  - 自动添加 +/- 符号 (正数+，负数-)
+# ========================================
+
+# ========================================
+# 基础属性
+# ========================================
+
+attack_damage: '&f攻击伤害: &6<plus>{value}'
+attack_speed: '&f攻击速度: &6{value}'
+attack_range: '&f攻击范围: &6<plus>{value}'
+health: '&f生命值: &6<plus>{value}'
+movement_speed: '&f移动速度: &6<plus>{value}'
+regeneration: '&f生命恢复: &6<plus>{value}'
+knockback: '&f击退: &6<plus>{value}'
+luck: '&f幸运值: &6<plus>{value}'
+
+# ========================================
+# 伤害加成
+# ========================================
+
+spell_damage: '&f法术加成: &6<plus>{value}'
+physical_damage: '&f物理加成: &6<plus>{value}'
+projectile_damage: '&f射击加成: &6<plus>{value}'
+spell_power: '&f法术强度: &6<plus>{value}'
+adaptive_force: '&f适应之力: &6<plus>{value}'
+
+# ========================================
+# 暴击
+# ========================================
+
+crit_chance: '&f暴击几率: &6<plus>{value}%'
+crit_damage: '&f暴击伤害: &6<plus>{value}%'
+
+# ========================================
+# 防御
+# ========================================
+
+armor: '&f护甲: &6<plus>{value}'
+physical_resist: '&f物理抗性: &6<plus>{value}'
+spell_resist: '&f法抗: &6<plus>{value}'
+physical_penetration: '&f物理穿透: &6<plus>{value}'
+physical_penetration_percent: '&f物理穿透百分比: &6<plus>{value}%'
+spell_penetration: '&f法术穿透: &6<plus>{value}'
+spell_penetration_percent: '&f法术穿透百分比: &6<plus>{value}%'
+damage_reduction: '&f伤害减免: &6<plus>{value}%'
+
+# ========================================
+# 元素属性
+element_mastery: '&f{display}精通: &6<plus>{value}'
+element_resist: '&f{display}抗性: &6<plus>{value}'

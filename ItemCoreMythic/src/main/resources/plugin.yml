@@ -1,0 +1,8 @@
+name: ItemCoreMythic
+version: 1.0.0
+description: Bridge plugin between ItemCore and MythicMobs
+main: com.minemart.itemcoremythic.ItemCoreMythic
+author: MineMart
+api-version: 1.20
+depend: [ItemCore]
+softdepend: [MythicMobs]

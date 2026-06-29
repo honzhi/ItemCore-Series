@@ -1,0 +1,193 @@
+# ================================================
+# 锻造台配置文件 - 示例模板
+# ================================================
+# 复制此文件并重命名来创建新的锻造台
+# 文件名建议使用锻造台ID（例如: 熔炉.yml）
+
+# 锻造台ID（唯一标识，用于命令调用）
+# 建议使用英文命名
+forge-id: "example_template"
+
+# 显示名称（支持颜色代码）
+# 使用 & 符号进行颜色代码
+display-name: "&6示例锻造台"
+
+# 锻造台设置
+settings:
+  # 最大队列大小（允许同时排队的物品数量）
+  # 建议值：3-10
+  max-queue-size: 6
+  
+  # 锻造台类型
+  # custom: 使用自定义布局文件（需要 GUI 界面）
+  # crafting_table: 原版工作台配方（直接在原版工作台中使用）
+  # furnace: 熔炉类型
+  type: custom
+  
+  # 使用的布局文件（仅 type 为 custom 时生效）
+  # 布局文件位于 layouts/ 目录下
+  layout-file: "Default.yml"
+
+# 配方列表
+# 可以定义多个配方
+recipes:
+  # ====================
+  # 示例1：原版物品配方
+  # ====================
+  iron_sword:
+    # 产出物品
+    output:
+      # 物品来源
+      # vanilla: Minecraft原版物品
+      # itemcore: ItemCore插件自定义物品
+      # mythicmobs: MythicMobs插件自定义物品
+      source: "vanilla"
+      
+      # 物品ID
+      # 原版物品使用物品名称（如 IRON_SWORD）
+      # ItemCore物品使用物品ID
+      id: "IRON_SWORD"
+      
+      # 产出数量
+      amount: 1
+      
+      # 是否检查耐久度（仅对可修复物品有效）
+      check-durability: false
+    
+    # 所需材料（列表形式）
+    materials:
+      - source: "vanilla"
+        id: "IRON_INGOT"
+        amount: 2
+        check-durability: false
+      - source: "vanilla"
+        id: "STICK"
+        amount: 1
+        check-durability: false
+    
+    # 制作条件（可选）
+    # 可以定义多个条件，所有条件都满足才能制作
+    conditions:
+      # 等级条件
+      - type: "level"
+        value: 10              # 玩家需要达到10级
+      
+      # 权限条件（可选）
+      # - type: "permission"
+      #   value: "myplugin.forge.use"
+      
+      # 经济条件（可选，需要Vault插件）
+      # - type: "money"
+      #   value: 500            # 需要500金币
+    
+    # 制作时间（秒）
+    # 设置为 0 或负数表示即时完成（不加入队列）
+    craft-time: 5.0
+    
+    # 成功率（百分比），100表示必定成功，50表示50%成功率
+    # 当成功率小于100时，制作时有概率失败
+    success-rate: 100
+    
+    # 制作失败时是否消耗材料（仅当成功率<100时生效）
+    # true: 失败时材料被消耗
+    # false: 失败时材料返还给玩家
+    consume-on-fail: true
+    
+    # 触发器（可选）
+    # 在特定时机执行的动作
+    triggers:
+      # 开始制作时触发
+      on-start:
+        messages:
+          - "&6开始锻造铁剑..."
+        sounds:
+          - "BLOCK_ANVIL_USE 1 1"   # 格式: 声音名 音量 音调
+        commands:
+          - "say {player} 开始锻造铁剑"   # 控制台执行
+        # player-commands:            # 玩家执行
+        #   - "heal"
+      
+      # 领取物品时触发  
+      on-claim:
+        messages:
+          - "&a成功锻造铁剑！"
+        sounds:
+          - "ENTITY_PLAYER_LEVELUP 1 1"
+      
+      # 取消制作时触发
+      on-cancel:
+        messages:
+          - "&c已取消铁剑锻造"
+        sounds:
+          - "ENTITY_VILLAGER_NO 1 1"
+
+  # ====================
+  # 示例2：ItemCore物品配方
+  # ====================
+  # custom_sword_recipe:
+  #   output:
+  #     source: "itemcore"        # 使用ItemCore物品
+  #     category: "weapons"    # 类别：weapons（武器类）
+  #     id: "custom_sword"        # ItemCore物品ID
+  #     amount: 1
+  #     check-durability: false
+  #   
+  #   materials:
+  #     - source: "itemcore"
+  #       id: "custom_ingot"
+  #       amount: 3
+  #       check-durability: false
+  #     - source: "vanilla"
+  #       id: "STICK"
+  #       amount: 1
+  #       check-durability: false
+  #   
+  #   conditions:
+  #     - type: "level"
+  #       value: 20
+  #     - type: "money"
+  #       value: 1000
+  #   
+  #   craft-time: 10.0
+
+  # ====================
+  # 示例3：MythicMobs物品配方
+  # ====================
+  # mythic_sword_recipe:
+  #   output:
+  #     source: "mythicmobs"       # 使用MythicMobs物品
+  #     id: "mythic_sword"         # MythicMobs物品ID
+  #     amount: 1
+  #     check-durability: false
+  #   
+  #   materials:
+  #     - source: "mythicmobs"
+  #       id: "mythic_ingot"
+  #       amount: 3
+  #       check-durability: false
+  #     - source: "vanilla"
+  #       id: "STICK"
+  #       amount: 1
+  #       check-durability: false
+  #   
+  #   conditions:
+  #     - type: "level"
+  #       value: 20
+  #   
+  #   craft-time: 10.0
+
+# ================================================
+# 配置说明
+# ================================================
+
+# 物品来源 (source):
+#   vanilla:     Minecraft原版物品
+#   itemcore:    ItemCore插件自定义物品
+#   mythicmobs:  MythicMobs插件物品
+
+# 条件类型 (type):
+#   level:      玩家等级要求
+#   permission: 玩家权限节点要求
+#   money:      经济需求（需要Vault插件）
+
+# ================================================

@@ -1,0 +1,6 @@
+messages:
+  prefix: "&6[Trinkets] "
+  no-permission: "&c没有权限执行此命令"
+  type-mismatch: "&c物品类型不匹配槽位要求"
+  slot-locked: "&c槽位未解锁，无法使用"
+  config-reloaded: "&a配置已重载"

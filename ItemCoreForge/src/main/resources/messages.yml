@@ -1,0 +1,45 @@
+# ================================================
+# ItemCoreForge 消息配置文件
+# ================================================
+# 使用 & 符号进行颜色代码，例如 &a=绿色, &c=红色, &e=黄色, &7=灰色
+
+# 消息前缀
+prefix: "&8[&6Forge&8] &7"
+
+# 通用消息
+forge-not-found: "&c锻造台不存在: &e{forge}"
+recipe-not-found: "&c配方不存在"
+no-permission: "&c你没有权限"
+reloaded: "&a锻造台配置已重载！"
+
+# 制作消息
+crafting-started: "&7开始制作 &e{recipe}&7。"
+crafting-complete: "&a制作完成！&e{result} &a请及时领取"
+crafting-cancelled: "&a制作已取消: &e{recipe}"
+item-claimed: "&a已领取: &e{result}"
+
+# 材料/条件消息
+materials-insufficient: "&c材料不足！"
+conditions-not-met: "&c不满足制作条件！"
+consume-on-fail: "&c制作失败！材料已消耗"
+
+# 队列消息
+queue-full: "&c制作队列已满，请等待"
+in-queue: "&7已在队列中，等待制作..."
+queue-info: "&a正在制作: &e{recipe}&a，剩余时间: &e{time}秒"
+queue-waiting: "&7队列中还有: &e{count} &7个物品等待制作"
+
+# 错误消息
+inventory-full: "&c背包已满！请先清理背包"
+backpack-full-cancel: "&c背包已满！请清理背包后再取消制作"
+backpack-full-claim: "&c背包已满！请清理背包后再领取"
+
+# 帮助消息
+help-header: "&6=== ItemCoreForge 帮助 ==="
+help-gui: "&e/icf gui <锻造台ID> &7- 打开指定锻造台"
+help-list: "&e/icf list &7- 列出所有锻造台"
+help-reload: "&e/icf reload &7- 重载配置"
+
+# 列表消息
+list-header: "&6=== 锻造台列表 ==="
+list-item: "&7- &e{forge} &8(配方: {count})"

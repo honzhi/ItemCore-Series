@@ -1,0 +1,54 @@
+name: ItemCore
+version: ${project.version}
+main: com.minemart.itemcore.ItemCore
+api-version: 1.20
+author: GuCheng
+description: 自定义物品系统插件
+softdepend: [PlaceholderAPI]
+
+commands:
+  itemcore:
+    description: ItemCore 主命令
+    aliases: [ic]
+    usage: /<command> help
+
+permissions:
+  itemcore.admin:
+    description: ItemCore 管理员权限
+    default: op
+    children:
+      itemcore.command.help: true
+      itemcore.command.gui: true
+      itemcore.command.give: true
+      itemcore.command.list: true
+      itemcore.command.reload: true
+      itemcore.command.info: true
+      itemcore.gui.obtain: true
+
+  itemcore.command.help:
+    description: 显示帮助
+    default: true
+
+  itemcore.command.gui:
+    description: 打开物品库 GUI
+    default: op
+
+  itemcore.command.give:
+    description: 给予玩家物品
+    default: op
+
+  itemcore.command.list:
+    description: 列出物品
+    default: true
+
+  itemcore.command.reload:
+    description: 重载配置
+    default: op
+
+  itemcore.command.info:
+    description: 查看物品信息
+    default: true
+
+  itemcore.gui.obtain:
+    description: 在 GUI 中获取物品
+    default: op

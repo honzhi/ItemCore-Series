@@ -1,0 +1,26 @@
+name: 部署文档站
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/mkdocs.yml'
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 配置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: 安装 MkDocs
+        run: |
+          pip install mkdocs-material
+      - name: 部署到 GitHub Pages
+        run: mkdocs gh-deploy --force

@@ -1,0 +1,74 @@
+# ============================================================
+# ItemCore 元素系统 - 异常配置文件
+# ============================================================
+# 每个异常的配置结构:
+#   {AILMENT_ID}:                # 异常唯一标识（大写英文）
+#     display: "&x显示名"         # 异常显示名称（支持颜色代码）
+#     duration: 160              # 持续时间（tick，20 tick = 1 秒）
+#     refresh-policy: RESET      # 刷新策略（见下方说明）
+#     max-stacks: 5              # 最大层数（仅 STACK 策略有效）
+#     triggers:                  # 异常效果触发器列表
+#       - type: DAMAGE_PERCENT   #   触发器类型
+#         value: 0.02            #   伤害百分比 2%
+#         interval: 20           #   触发间隔（tick）
+#
+# ============================================================
+# 刷新策略 (refresh-policy):
+#   RESET   —— 重新开始计时（默认，适合 DOT 类异常）
+#   STACK   —— 叠加层数，每层独立计时（适合毒素/流血）
+#   IGNORE  —— 已有异常时忽略新触发（适合硬控类）
+#   REPLACE —— 移除旧的，应用新的（适合不同强度的同类型异常）
+# ============================================================
+# 触发器类型 (triggers.type):
+#   DAMAGE_PERCENT        —— 每 interval tick 造成 value% 当前生命伤害
+#   DAMAGE_FIXED          —— 每 interval tick 造成固定伤害
+#   ATTRIBUTE_MOD         —— 临时修改目标属性（异常持续期间）
+#   RESISTANCE_REDUCTION  —— 降低目标全元素抗性（异常持续期间）
+#   POTION_EFFECT         —— 附加原版药水效果（未实现）
+#
+#   参数说明:
+#     value     —— 效果数值（百分比用小数为 0~1，固定值可超 1）
+#     interval  —— 触发间隔（tick），不填默认 20
+#     attribute —— 属性名（ATTRIBUTE_MOD 时必填）
+#     effect    —— 药水效果名（POTION_EFFECT 时必填）
+# ============================================================
+
+ailments:
+
+  # === 流火 ===
+  # 效果: 持续 8 秒，每 1 秒造成当前生命 2% 的伤害
+  # 刷新: 再次触发时重置时间
+  LIUHUO_DOT:
+    display: "&c流火"
+    duration: 160
+    refresh-policy: RESET
+    triggers:
+      - type: DAMAGE_PERCENT
+        value: 0.02
+        interval: 20
+
+  # === 寒霜 ===
+  # 效果: 持续 4 秒，护甲 -30%，魔抗 -30%
+  # 刷新: 再次触发时重置时间
+  HANSHUANG_WEAKEN:
+    display: "&b寒霜"
+    duration: 80
+    refresh-policy: RESET
+    triggers:
+      - type: ATTRIBUTE_MOD
+        attribute: PHYSICAL_RESIST
+        value: -0.3
+      - type: ATTRIBUTE_MOD
+        attribute: SPELL_RESIST
+        value: -0.3
+
+  # === 雷蛰 ===
+  # 效果: 持续 6 秒，全元素抗性 -25%
+  # 刷新: 再次触发时重置时间
+  LEIZHE_BREAK:
+    display: "&e雷蛰"
+    duration: 120
+    refresh-policy: RESET
+    triggers:
+      - type: RESISTANCE_REDUCTION
+        value: -0.25

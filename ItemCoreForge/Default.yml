@@ -1,0 +1,70 @@
+# ================================================
+# GUI布局配置文件 - 默认布局
+# ================================================
+
+# 布局设置
+settings:
+  # GUI界面行数（1-6）
+  rows: 6
+
+# 布局定义
+# 使用字符来代表不同的功能位置
+# 每行必须是9个字符（GUI宽度固定为9格）
+layout:
+  - 'AAAAAAAAA'  
+  - 'AAA000AAA'  
+  - 'AZA000AEA'  
+  - 'AAA000AAA'  
+  - 'AAAAAAAAA'  
+  - '←AXXXXXAA'  
+
+# 字符定义
+# 每个字符代表一个功能位置
+slots:
+  # A - 边框位置
+  A:
+    material: BLACK_STAINED_GLASS_PANE  # 边框物品
+    display-name: ""                      # 显示名称（空表示不显示）
+    function: border                      # 功能类型：border（边框）
+
+  # 0 - 材料槽位置
+  0:
+    material: AIR                         # 显示为空气（实际显示玩家物品）
+    function: material_slot               # 功能类型：material_slot（材料槽）
+    show-item: true                       # 是否显示物品
+
+  # E - 产出槽位置
+  E:
+    material: AIR                         # 显示为空气（实际显示产出物品）
+    function: output_slot                 # 功能类型：output_slot（产出槽）
+
+  # X - 队列显示位置
+  X:
+    material: GREEN_STAINED_GLASS_PANE    # 队列背景物品
+    display-name: "&a制作队列"            # 显示名称
+    function: queue_display               # 功能类型：queue_display（队列显示）
+
+  # Z - 确认按钮位置
+  Z:
+    material: LIME_WOOL                  # 按钮物品
+    display-name: "&a开始制作"            # 显示名称
+    function: confirm_button              # 功能类型：confirm_button（确认按钮）
+    lore:                                # 描述信息
+      - "&7点击开始制作"
+      - "&7制作时间: {craft_time}秒"
+
+  ←:
+    material: ARROW
+    display-name: "&a返回"            
+    function: back_button             
+
+# ================================================
+# 功能类型说明
+# ================================================
+# border:           边框装饰，无交互功能
+# material_slot:    材料显示槽，显示所需材料
+# output_slot:      产出显示槽，显示制作结果
+# queue_display:    队列显示区域，显示正在制作和等待的物品
+# confirm_button:   确认按钮，点击开始制作
+# back_button:      返回配方列表
+# ================================================

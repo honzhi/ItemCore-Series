@@ -1,0 +1,78 @@
+# ============================================================
+# ItemCore 元素系统 - 元素配置文件
+# ============================================================
+# 每个元素的配置结构:
+#   {ELEMENT_ID}:              # 元素唯一标识（大写英文）
+#     display: "&x显示名"       # 元素显示名称（支持颜色代码）
+    # icon: '✦'                   # 元素图标（伤害飘字用）
+    # color: '&f'                 # 元素颜色代码（伤害飘字用）
+#     threshold: 30            # 积累阈值 —— 达到此值触发异常
+#     decay-per-second: 1       # 每秒自动衰减量（无元素伤害输入时）
+#     accumulation:             # 累积规则
+#       mode: DAMAGE_PERCENT    #   见下方「累积模式」说明
+#       value: 0.5             #   模式参数
+#       allow-sources:          #   允许积累的伤害来源
+#         - ATTACK              #     普通攻击
+#         - SKILL               #     技能伤害
+#     ailment: LIUHUO_DOT       # 达到阈值后触发的异常 ID（见 ailments.yml）
+#
+# ============================================================
+# 累积模式 (accumulation.mode):
+#   DAMAGE_PERCENT  —— 按元素伤害的百分比累积 (value=0.15 即 15%)
+#   FIXED           —— 每次固定累积值 (value=10)
+#   ATTRIBUTE       —— 基于攻击者某属性计算 (value=SPELL_POWER * multiplier)
+# ============================================================
+# 伤害来源 (allow-sources):
+#   ATTACK  —— 普通攻击
+#   SKILL   —— 技能伤害
+#   DOT     —— 持续伤害（建议排除，防止无限套娃）
+#   留空 = 允许所有来源
+# ============================================================
+
+elements:
+
+  # === 流火 ===
+  LIUHUO:
+    display: "&c流火"
+    icon: '🔥'
+    color: '&c'
+    threshold: 30
+    decay-per-second: 1
+    accumulation:
+      mode: DAMAGE_PERCENT
+      value: 0.5
+      allow-sources:
+        - ATTACK
+        - SKILL
+    ailment: LIUHUO_DOT
+
+  # === 寒霜 ===
+  HANSHUANG:
+    display: "&b寒霜"
+    icon: '❄'
+    color: '&b'
+    threshold: 30
+    decay-per-second: 2
+    accumulation:
+      mode: FIXED
+      value: 25
+      allow-sources:
+        - ATTACK
+        - SKILL
+    ailment: HANSHUANG_WEAKEN
+
+  # === 雷蛰 ===
+  LEIZHE:
+    display: "&e雷蛰"
+    icon: '⚡'
+    color: '&e'
+    threshold: 30
+    decay-per-second: 1
+    accumulation:
+      mode: ATTRIBUTE
+      attribute: SPELL_POWER
+      multiplier: 0.2
+      allow-sources:
+        - ATTACK
+        - SKILL
+    ailment: LEIZHE_BREAK

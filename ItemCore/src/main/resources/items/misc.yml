@@ -1,0 +1,57 @@
+
+life_crystal:
+  material: NETHER_STAR
+  type: misc
+  display-name: "&d&l生命水晶"
+  lore:
+    - "&7蕴含生命力量的水晶"
+    - "&7可以恢复大量生命值"
+  custom-model-data: 4001
+  unbreakable: true
+  attributes:
+    HEALTH: 20
+    REGENERATION: 3
+  active-slots:
+    - off-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+adaptive_stone:
+  material: AMETHYST_SHARD
+  type: misc
+  display-name: "&5&l适应之石"
+  lore:
+    - "&7根据你的战斗风格自动调整力量"
+  custom-model-data: 4002
+  unbreakable: true
+  attributes:
+    ADAPTIVE_FORCE: 15
+    SPELL_POWER: 5
+    LUCK: 2
+  active-slots:
+    - off-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+wind_feather:
+  material: FEATHER
+  type: misc
+  display-name: "&a&l疾风之羽"
+  lore:
+    - "&7让你如风一般轻盈"
+  unbreakable: true
+  attributes:
+    MOVEMENT_SPEED: 0.05
+    LUCK: 3
+  active-slots:
+    - off-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE

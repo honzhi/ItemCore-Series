@@ -1,0 +1,64 @@
+site_name: ItemCore
+site_description: Paper 1.21.x 自定义物品系统插件
+site_author: MineMart
+site_url: https://honzhi.github.io/ItemCore/
+repo_url: https://github.com/honzhi/ItemCore
+repo_name: honzhi/ItemCore
+
+theme:
+  name: material
+  language: zh
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: 切换暗色模式
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: 切换亮色模式
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - attr_list
+
+extra:
+  version:
+    provider: mike
+
+copyright: Copyright &copy; 2026 MineMart
+
+nav:
+  - 首页: index.md
+  - 安装与配置: getting-started.md
+  - 命令系统: commands.md
+  - 权限系统: permissions.md
+  - 物品创建: items.md
+  - 属性系统: attributes.md
+  - 元素系统: elements.md
+  - 伤害系统: damage.md
+  - Lore 展示系统: lore.md
+  - GUI 系统: gui.md
+  - 技能系统: skills.md
+  - PlaceholderAPI: placeholders.md
+  - 开发者 API: api.md
+  - 常见问题: faq.md

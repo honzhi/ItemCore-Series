@@ -1,0 +1,65 @@
+netherite_chestplate:
+  material: NETHERITE_CHESTPLATE
+  type: armors
+  display-name: "&4&l不朽重甲"
+  lore:
+    - "&7最强的胸甲装备"
+    - "&7提供极致的保护"
+  unbreakable: true
+  attributes:
+    HEALTH: 20
+    PHYSICAL_RESIST: 50
+    SPELL_RESIST: 20
+    DAMAGE_REDUCTION: 5
+    REGENERATION: 1
+    MOVEMENT_SPEED: -0.02
+    KNOCKBACK: -0.3
+  active-slots:
+    - chest
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+arcane_robe:
+  material: DIAMOND_CHESTPLATE
+  type: armors
+  display-name: "&b&l奥术法袍"
+  lore:
+    - "&7铭刻着古老符文的长袍"
+    - "&7提供强大的魔法防护"
+  unbreakable: true
+  attributes:
+    HEALTH: 10
+    SPELL_RESIST: 50
+    PHYSICAL_RESIST: 10
+    SPELL_POWER: 15
+    REGENERATION: 2
+    MOVEMENT_SPEED: 0.03
+  active-slots:
+    - chest
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+swift_boots:
+  material: NETHERITE_BOOTS
+  type: armors
+  display-name: "&a&l轻灵之靴"
+  lore:
+    - "&7如风一般轻盈"
+  unbreakable: true
+  attributes:
+    HEALTH: 5
+    MOVEMENT_SPEED: 0.08
+    PHYSICAL_RESIST: 10
+    LUCK: 3
+  active-slots:
+    - feet
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE

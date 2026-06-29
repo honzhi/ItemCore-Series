@@ -1,0 +1,348 @@
+ 占位符
+最后编辑：Lxlp，两个月前
+创建新的占位符
+步骤1 - 在特定包内创建你的占位类
+步骤2 - 扩展通用占位符<T>
+步骤3 - 创建一个与超类匹配的构造器
+步骤4 - 实现抽象方法
+步骤5 - 使用@MythicPlaceholder注释
+获取占位参数和属性
+从主 MythicLineConfig 获取属性
+简单占位符论证
+参数的动态使用量
+使用万能符参数
+其他类型的通用占位符
+EntityScopedPlaceholder
+ScopedVariablePlaceholder
+注册占位符
+创建新的占位符
+步骤1 - 在特定包内创建你的占位类
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+public class ExamplePlaceholder {
+
+}
+关于包裹
+
+包里应该只包含你想注册的占位符，这样以后批量注册会更方便
+
+第二步 - 延伸GenericPlaceholder<T>
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholder;
+
+public class ExamplePlaceholder extends GenericPlaceholder<String> {
+
+}
+“T”型
+
+T应该是占位符返回的类型。你的占位符会回归吗
+
+一根线？使用。extends GenericPlaceholder<String>
+地点？使用。extends GenericPlaceholder<AbstractLocation>
+整数？使用。extends GenericPlaceholder<Integer>
+...
+不同的延伸目标
+
+除此之外，当然，你也可以扩展它的继承者。MythicMobs已经提供了几个可以继承的职业供你延伸，稍后会详细说明GenericPlaceholder<T>
+
+步骤3 - 创建一个与超类匹配的构造器
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholder;
+
+public class ExamplePlaceholder extends GenericPlaceholder<String> {
+    
+    public ExamplePlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+    }
+
+}
+重要
+
+构造函数必须与超类匹配，否则占位符将无法注册！
+
+步骤4 - 实现抽象方法
+通常会有几种不同的实现方法：
+
+某种方法，负责解析占位符apply...
+一种方法，将T对象转换为字符串convertType
+一种方法，用于返回所用T类型的类对象getParsedValueClass
+提示
+
+MythicMobs 已经自带了一些接口，可以自动实现 和 。你可以在convertTypegetParsedValueClassio.lumine.mythic.core.skills.placeholders.types.GenericPlaceholderTypes
+
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholder;
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholderTypes.StringPlaceholder;
+
+import io.lumine.mythic.core.skills.placeholders.PlaceholderContext;
+import javax.annotation.Nullable;
+
+public class ExamplePlaceholder extends GenericPlaceholder<String> implements StringPlaceholder {
+    
+    public ExamplePlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+    }
+
+    @Nullable
+    @Override
+    public String applyWithMetaKeywords(PlaceholderContext placeholderContext) {
+        return "hello world";
+    }
+}
+步骤5 - 使用注释@MythicPlaceholder
+这个注释将允许 MythicMobs 之后注册占位符
+
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholder;
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholderTypes.StringPlaceholder;
+import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
+
+import io.lumine.mythic.core.skills.placeholders.PlaceholderContext;
+import javax.annotation.Nullable;
+
+@MythicPlaceholder(placeholder="example.placeholder")
+public class ExamplePlaceholder extends GenericPlaceholder<String> implements StringPlaceholder {
+    
+    public ExamplePlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+    }
+
+    @Nullable
+    @Override
+    public String applyWithMetaKeywords(PlaceholderContext placeholderContext) {
+        return "hello world";
+    }
+}
+获取占位参数和属性
+你可以选择性地利用以下方法之一获取占位参数（或 ）<example.placeholder.argument1.argument.2><example.placeholder{argument1=hello;argument2=world}>
+
+GenericPlaceholder#getResolver- 最完整的，但使用起来更笨重
+GenericPlaceholder#getPlaceholder- 一个功能性较差但更简洁的版本
+GenericPlaceholder#getPlaceholderString- 仅为占位字符串制作的非常快速版本
+警告
+
+当你想使用占位参数时，还需要在注释中设置 的值usedPlaceholderArgumentsMythicPlaceholder
+
+从主 MythicLineConfig 获取属性
+如果你只需要从主配置中获取属性（而不需要从特定占位段的属性），你可以这样做
+
+    public NumericEntityScopedPlaceholder(EntityScopedPlaceholderArguments context, int rounding) {
+        super(context);
+        if(context.config == null) {
+            return;
+        }
+        this.rounding = context.config.getInteger(new String[] {"rounding", "round", "r"}, rounding);
+    }
+简单占位符论证
+package your.plugin.compat.mythicmobs.skills.placeholders.all;
+
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholder;
+import io.lumine.mythic.core.skills.placeholders.types.GenericPlaceholderTypes.StringPlaceholder;
+import io.lumine.mythic.core.utils.annotations.MythicPlaceholder;
+
+import io.lumine.mythic.core.skills.placeholders.PlaceholderContext;
+import javax.annotation.Nullable;
+
+@MythicPlaceholder(placeholder="example.placeholder",usedPlaceholderArguments = 1)
+public class ExamplePlaceholder extends GenericPlaceholder<String> implements StringPlaceholder {
+    
+    private final ResolvedPlaceholderSegment<PlaceholderString> argument;
+
+    public ExamplePlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+        this.argument = ...
+    }
+
+    @Nullable
+    @Override
+    public String applyWithMetaKeywords(PlaceholderContext placeholderContext) {
+        return this.argument.getOrDefault(placeholderContext, PlaceholderString::get, null);
+    }
+}
+ResolvedPlaceholderSegment 可以通过以下所有方式获取>
+
+                this.<String>getResolver()
+                        .segIndex(0)
+                        .segValueParser(PlaceholderString::of)
+                        .build()
+                        .get();
+                this.<String>getPlaceholder(0, SegmentSource.EXTRA_ARGS, null, PlaceholderString::of)
+                this.getPlaceholderString(0)
+参数的动态使用量
+如果
+
+你使用的参数数量是动态的（“如果有符合这些条件的参数，就用它。否则，就默认用别的东西吧“）
+你想使用 MythicLineConfig 语法 （<example.placeholder{argument1=hello;argument2=world}>)
+你需要
+
+设置为负值（-1 正常）usedPlaceholderArguments
+在构造子末尾调用该方法#initializeMetaKeywords
+@MythicPlaceholder(placeholder="utils.epoch",version="5.9", description="Returns the current epoch time in seconds", usedPlaceholderArguments = -1)
+public class EpochPlaceholder extends GenericPlaceholder<Long> implements LongPlaceholder {
+
+    private final ResolvedPlaceholderSegment<PlaceholderString> type;
+
+    public EpochPlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+        this.type = getPlaceholderString(0);
+        initializeMetaKeywords();
+    }
+
+    @Nullable
+    @Override
+    public Long applyWithMetaKeywords(PlaceholderContext placeholderContext) {
+        if (type.value() == null) {
+            return Instant.now().getEpochSecond();
+        }
+        return switch (this.type.getOrDefault(placeholderContext, PlaceholderString::get, "seconds")) {
+            case "millis" -> Instant.now().getLong(java.time.temporal.ChronoField.MILLI_OF_SECOND);
+            case "ticks" -> Instant.now().getEpochSecond() * 20 + (Instant.now().getLong(java.time.temporal.ChronoField.MILLI_OF_SECOND) / 50);
+            case "timestamp" -> Instant.now().toEpochMilli();
+            default -> Instant.now().getEpochSecond();
+        };
+    }
+}
+注释
+
+要使用 MythicLineConfig 语法，您必须调用 getPlaceholder 或 getResolver
+
+使用万能符参数
+占位符名称本身可以包含万用符参数。你可以用以下方式使用和获取这些万用符参数
+
+@MythicPlaceholder(placeholder="skill.*.cooldown",usedPlaceholderArguments = -1)
+public class SkillCooldownPlaceholder extends EntityScopedPlaceholder<Double> implements DoublePlaceholder {
+
+    private final ResolvedPlaceholderSegment<PlaceholderString> skill;
+    private final Types type;
+
+    public SkillCooldownPlaceholder(EntityScopedPlaceholderArguments context) {
+        super(context);
+        this.skill = getPlaceholderString(0, SegmentSource.WILDCARD_ARGS);
+        this.type =
+                this.<Types>getResolver()
+                        .mlcGetter(mythicLineConfig ->
+                                mythicLineConfig.getEnum(new String[]{"type"}, Types.class, null)
+                        )
+                        .segIndex(0)
+                        .segValueParser(s -> Types.valueOf(s.toUpperCase()))
+                        .segValueChecker(s ->
+                                Arrays.stream(Types.values()).anyMatch(b -> b.name().equals(s.toUpperCase()))
+                        )
+                        .defaultValue(Types.SECONDS)
+                        .build()
+                        .get()
+                        .value();
+        initializeMetaKeywords();
+    }
+
+    enum Types {
+        MILLIS,
+        SECONDS
+    }
+
+    @Nullable
+    @Override
+    public Double applyToScope(PlaceholderContext placeholderContext) {
+        if (this.type == null) {
+            MythicLogger.debug(MythicLogger.DebugLevel.SKILL_INFO, "Placeholder " + this.instanceData.unparsedPlaceholder + " is invalid");
+            return null;
+        }
+
+        final String skillName = this.skill.getOrDefault(placeholderContext, PlaceholderString::get, null);
+        var maybeSkill = this.manager.getPlugin().getSkillManager().getSkill(skillName);
+
+        if(maybeSkill.isEmpty()) {
+            MythicLogger.debug(MythicLogger.DebugLevel.SKILL_INFO, "Placeholder " + this.instanceData.unparsedPlaceholder + " found no skill " + skillName);
+            return null;
+        }
+
+        var skill = (MetaSkill) maybeSkill.get();
+
+        SkillCaster entity = this.manager.getPlugin().getSkillManager().getCaster(this.getEntity.get(placeholderContext));
+
+        return switch (type) {
+            case MILLIS -> (skill.getCooldown(entity));
+            default -> Numbers.round(skill.getCooldown(entity), 2);
+        };
+    }
+}
+其他类型的通用占位符
+除了GenericPlaceholder，你还可以继承
+
+EntityScopedPlaceholder- 自动在施法者前，目标。等等，直到占位符名称
+NumericEntityScopedPlaceholder- 扩展 EntityScopedPlaceholder，同时自动返回带有四舍五入属性的 Double 值
+EntityScopedPlaceholder
+这个课程让你能使用两个非常有用的功能
+
+getEntity.get(PlaceholderContext)返回用于解析占位符的抽象实体
+getLocation.get(PlaceholderContext)返回用于解析占位符的 AbstractLocation
+注释
+
+NumericEntityScopedPlaceholder继承了EntityScopedPlaceholder，你也可以用那个
+
+@MythicPlaceholder(placeholder="stance")
+public class StancePlaceholder extends EntityScopedPlaceholder<String> implements StringPlaceholder {
+
+    public StancePlaceholder(EntityScopedPlaceholderArguments arguments) {
+        super(arguments);
+    }
+
+    @Nullable
+    @Override
+    public String applyToScope(PlaceholderContext placeholderContext) {
+        if (this.getEntity.get(placeholderContext) instanceof ActiveMob am) {
+            return am.getStance();
+        }
+        return null;
+    }
+}
+@MythicPlaceholder(placeholder="distance")
+public class DistancePlaceholder extends NumericEntityScopedPlaceholder {
+
+
+    public DistancePlaceholder(EntityScopedPlaceholderArguments context) {
+        super(context);
+    }
+
+    @Nullable
+    @Override
+    public Number applyToScopeWithNumericFormatting(PlaceholderContext placeholderContext) {
+        var caster = placeholderContext.meta().getCaster().getEntity().getLocation();
+        var target = getLocation.get(placeholderContext);
+        if (caster.getWorld().equals(target.getWorld())) {
+            return caster.distance(target);
+        }
+        return null;
+    }
+}
+重要
+
+的构造子和的签名不同。这是唯一能改变构造签名的继承类！别自己去做新的签名！EntityScopedPlaceholderGenericPlaceholderGenericPlaceholder
+
+ScopedVariablePlaceholder
+如果你从某处获取变量的值，则是继承的占位类型。变量名将被假定为第一个找到的额外占位参数
+
+@MythicPlaceholder(placeholder="caster.var")
+public class CasterVariablePlaceholder extends ScopedVariablePlaceholder {
+
+    public CasterVariablePlaceholder(GenericPlaceholderArguments metaContext) {
+        super(metaContext);
+    }
+
+    @Nullable
+    @Override
+    protected VariableRegistry getRegistry(PlaceholderContext context) {
+        return manager.getPlugin().getVariableManager().getRegistry(VariableScope.CASTER, context.meta(), context.entity());
+    }
+}
+注册占位符
+import io.lumine.mythic.core.skills.CustomComponentRegistry;
+
+...
+
+        this.componentRegistry = new CustomComponentRegistry(this, Lists.newArrayList())
+                .registerCustomComponent(CustomComponentRegistry.MythicComponentType.PLACEHOLDER, "package.path");

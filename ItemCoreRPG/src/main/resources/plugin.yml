@@ -1,0 +1,38 @@
+name: ItemCoreRPG
+version: ${project.version}
+main: com.minemart.itemcorerpg.ItemCoreRPG
+api-version: 1.20
+author: MineMart
+description: ItemCore RPG扩展插件 - 伤害显示功能
+depend: [ItemCore]
+
+commands:
+  itemcorerpg:
+    description: ItemCoreRPG 主命令
+    aliases: [icrpg]
+    usage: /<command> help
+
+permissions:
+  itemcorerpg.admin:
+    description: ItemCoreRPG 管理员权限
+    default: op
+    children:
+      itemcorerpg.command.reload: true
+      itemcorerpg.command.help: true
+      itemcorerpg.command.info.other: true
+
+  itemcorerpg.command.reload:
+    description: 重载配置文件
+    default: op
+
+  itemcorerpg.command.info:
+    description: 查看自己的属性信息
+    default: true
+
+  itemcorerpg.command.info.other:
+    description: 查看其他玩家的属性信息
+    default: op
+
+  itemcorerpg.command.help:
+    description: 显示帮助信息
+    default: true

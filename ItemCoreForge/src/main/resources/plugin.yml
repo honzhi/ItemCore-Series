@@ -1,0 +1,27 @@
+name: ItemCoreForge
+version: '${project.version}'
+main: com.minemart.itemcoreforge.ItemCoreForge
+api-version: '1.21'
+author: GuCheng
+description: Advanced Crafting System - Custom forges, multi-queue crafting, triggers & GUI
+
+softdepend: [ItemCore, MythicMobs]
+
+commands:
+  itemcoreforge:
+    description: ItemCoreForge main command
+    usage: /<command> gui <forge-id> or /<command> reload
+    aliases: [icf]
+
+permissions:
+  itemcoreforge.list:
+    description: List all forges
+    default: op
+  itemcoreforge.reload:
+    description: Reload forge configs
+    default: op
+  itemcoreforge.admin:
+    description: Full admin access
+    default: op
+    children:
+      itemcoreforge.reload: true

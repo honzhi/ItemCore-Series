@@ -1,0 +1,64 @@
+name: ItemCoreLevel
+version: 1.0.0
+main: com.minemart.itemcorelevel.ItemCoreLevel
+api-version: '1.21'
+author: Gulu
+description: 基于ItemCore的玩家等级系统
+softdepend: [ItemCore, MythicMobs, PlaceholderAPI]
+
+commands:
+  itemcorelevel:
+    description: ItemCoreLevel 主指令
+    aliases: [icl]
+    usage: /<command> help
+
+permissions:
+  itemcorelevel.admin:
+    description: 管理员权限
+    default: op
+    children:
+      itemcorelevel.command.help: true
+      itemcorelevel.command.info: true
+      itemcorelevel.command.info.other: true
+      itemcorelevel.command.add: true
+      itemcorelevel.command.remove: true
+      itemcorelevel.command.set: true
+      itemcorelevel.command.setexp: true
+      itemcorelevel.command.reset: true
+      itemcorelevel.command.reload: true
+
+  itemcorelevel.command.help:
+    description: 查看帮助
+    default: true
+
+  itemcorelevel.command.info:
+    description: 查看自己的等级信息
+    default: true
+
+  itemcorelevel.command.info.other:
+    description: 查看他人的等级信息
+    default: op
+
+  itemcorelevel.command.add:
+    description: 增加玩家经验
+    default: op
+
+  itemcorelevel.command.remove:
+    description: 扣除玩家经验
+    default: op
+
+  itemcorelevel.command.set:
+    description: 设置玩家等级
+    default: op
+
+  itemcorelevel.command.setexp:
+    description: 设置玩家经验值
+    default: op
+
+  itemcorelevel.command.reset:
+    description: 重置玩家数据
+    default: op
+
+  itemcorelevel.command.reload:
+    description: 重载配置文件
+    default: op

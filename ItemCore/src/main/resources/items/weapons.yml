@@ -1,0 +1,80 @@
+
+legendary_blade:
+  material: NETHERITE_SWORD
+  type: weapons
+  display-name: "&4&l传说之刃"
+  lore:
+    - "&7传说中的神秘武器"
+    - "&7散发着毁灭的气息"
+  unbreakable: true
+  attributes:
+    ATTACK_DAMAGE: 15
+    ATTACK_SPEED: 1.6
+    ATTACK_RANGE: 1
+    PHYSICAL_DAMAGE: 20
+    PHYSICAL_PENETRATION: 10
+    PHYSICAL_PENETRATION_PERCENT: 10
+    CRIT_CHANCE: 25
+    CRIT_DAMAGE: 50
+    KNOCKBACK: 0.5
+  skills:
+    right_click:
+      provider: mythicmobs
+      skill: text
+  active-slots:
+    - main-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+mage_staff:
+  material: BLAZE_ROD
+  type: weapons
+  display-name: "&b&l大法师之杖"
+  lore:
+    - "&7蕴含着强大的魔法能量"
+  unbreakable: true
+  attributes:
+    ATTACK_DAMAGE: 3
+    ATTACK_SPEED: 1.0
+    SPELL_DAMAGE: 30
+    SPELL_POWER: 20
+    ADAPTIVE_FORCE: 10
+    CRIT_CHANCE: 10
+    CRIT_DAMAGE: 25
+    SPELL_PENETRATION: 5
+    SPELL_PENETRATION_PERCENT: 10
+  skills:
+    right_click:
+      provider: mythicmobs
+      skill: fireball
+  active-slots:
+    - main-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+
+
+ranger_bow:
+  material: BOW
+  type: weapons
+  display-name: "&a&l游侠长弓"
+  lore:
+    - "&7百步穿杨，例无虚发"
+  unbreakable: true
+  attributes:
+    ATTACK_DAMAGE: 5
+    PROJECTILE_DAMAGE: 25
+    CRIT_CHANCE: 35
+    CRIT_DAMAGE: 30
+    PHYSICAL_PENETRATION: 5
+    LUCK: 5
+  active-slots:
+    - main-hand
+  item-flags:
+    - HIDE_ENCHANTS
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE

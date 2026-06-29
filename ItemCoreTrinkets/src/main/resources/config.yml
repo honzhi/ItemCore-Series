@@ -1,0 +1,19 @@
+# ========================================
+# ItemCoreTrinkets 配置文件
+# ========================================
+
+# 通用设置
+general:
+  # 自动保存间隔（秒）
+  auto-save-interval: 300
+  # 调试模式 - 开启后输出详细日志
+  debug-mode: false
+
+# 属性设置
+attributes:
+  # 是否应用血量加成
+  apply-health: true
+  # 是否应用回血效果
+  apply-regeneration: true
+  # 是否应用伤害加成
+  apply-damage-boosts: true

@@ -1,0 +1,37 @@
+﻿# ItemCore Series - Git 忽略规则
+
+# Maven 构建输出
+target/
+**/target/
+
+# IDE 文件
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# 系统文件
+Thumbs.db
+.DS_Store
+
+# Java 编译临时文件
+*.class
+*.log
+*.tmp
+
+# Maven 记录文件
+javac.*.args
+
+# 依赖目录（不含源码的依赖包）
+依赖/
+apache-maven-*/
+MMOItems-Zh-nightly/
+参考项目/
+
+# API库（内容是外部依赖库）
+API库/
+
+# 旧的 git 副本
+ItemCore-git/

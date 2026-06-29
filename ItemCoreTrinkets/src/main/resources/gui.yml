@@ -1,0 +1,146 @@
+# ================================================
+# lore 字段说明:
+# - 使用列表形式定义多行说明文本
+# - 支持 & 颜色代码，每行用 "- " 开头
+# - 留空或不设置则不显示说明
+# locked-material 字段说明:
+# - 可选，槽位锁定状态时显示的物品材质
+# - 不设置则默认使用 RED_STAINED_GLASS_PANE
+# locked-lore 字段说明:
+# - 可选，槽位锁定状态时显示的说明文本
+# - 使用列表形式定义多行，支持 & 颜色代码
+# - 不设置则自动显示“槽位未解锁”及相关条件
+# ================================================
+# ItemCoreTrinkets GUI 配置文件
+# ================================================
+# 此文件用于配置饰品管理界面的布局和功能
+# 使用字符映射方式定义界面布局，易于修改
+# ================================================
+
+# GUI 基础设置
+settings:
+  # 界面行数（每行9格）
+  rows: 5
+  # 界面标题（支持颜色代码）
+  title: "&6饰品管理"
+
+# ================================================
+# 字符映射布局
+# ================================================
+# 每行9个字符，每个字符代表一个槽位的功能
+# 参考下方 slots 定义了解每个字符的含义
+# ================================================
+layout:
+  - 'AAAAAAAAA'
+  - 'AAAABAAXA'
+  - 'AAAFCGAAA'
+  - 'AAAADAAAA'
+  - 'AAAAEAAAA'
+  - 'AAAAAAAAA'
+
+# ================================================
+# 槽位功能定义
+# ================================================
+slots:
+  # ============================================
+  # 边框装饰
+  # ============================================
+  A:
+    material: BLACK_STAINED_GLASS_PANE
+    display-name: " "
+    function: border
+  # ============================================
+  # 原版装备显示槽位（只读，显示玩家当前装备）
+  # ============================================
+  B:
+    material: AIR
+    display-name: "&7头盔"
+    function: equipment_slot
+    slot-type: helmet
+
+  C:
+    material: AIR
+    display-name: "&7胸甲"
+    function: equipment_slot
+    slot-type: chestplate
+
+  D:
+    material: AIR
+    display-name: "&7护腿"
+    function: equipment_slot
+    slot-type: leggings
+
+  E:
+    material: AIR
+    display-name: "&7靴子"
+    function: equipment_slot
+    slot-type: boots
+
+  # ============================================
+  # 饰品槽位（可交互，显示未装备时的默认物品）
+  # ============================================
+  # F - 左手戒指槽位（locked-material/locked-lore 可选，覆盖锁定状态的材质和说明）
+  F:
+    material: glass_pane
+    display-name: "&6左手戒指"
+    custom-model-data: 0
+    function: trinket_slot
+    trinket-slot-id: ring_left
+    lore:
+      - "&7类型: 戒指"
+      - ""
+      - "&e点击放入饰品"
+    locked-material: BARRIER   #未满槽位条件显示的材质
+    locked-lore:               #未满槽位条件显示的lore
+      - "&c未解锁"
+      - "&7需要满足条件才能使用此槽位"
+
+  # G - 右手戒指槽位
+  G:
+    material: glass_pane
+    display-name: "&6右手戒指"
+    custom-model-data: 0
+    function: trinket_slot
+    trinket-slot-id: ring_right    
+    lore:
+      - "&7类型: 戒指"
+      - ""
+      - "&e点击放入饰品"
+
+  # X - 护符槽位
+  X:
+    material: glass_pane
+    display-name: "&6护符"
+    custom-model-data: 0
+    function: trinket_slot
+    trinket-slot-id: amulet
+    lore:
+      - "&7类型: 护符"
+      - ""
+      - "&e点击放入饰品"
+
+  # ============================================
+  # 功能按钮
+  # ============================================
+  # → - 关闭按钮
+  →:
+    material: ARROW
+    display-name: "&a关闭"
+    custom-model-data: 0
+    function: close
+
+# ================================================
+# function: 类型说明 
+# ================================================
+# border           边框装饰，无交互功能
+# trinket_slot     饰品槽位，显示玩家已装备的饰品或未装备时的默认物品，可交互
+# equipment_slot   原版装备槽位，仅显示玩家当前装备，不可交互
+# close            关闭按钮，点击关闭界面
+# ================================================
+# equipment_slot 的 slot-type 可选值
+# - helmet      头盔槽位
+# - chestplate  胸甲槽位
+# - leggings    护腿槽位
+# - boots       靴子槽位
+# - offhand     副手槽位
+# ================================================
