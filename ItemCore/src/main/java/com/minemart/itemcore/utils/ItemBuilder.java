@@ -13,6 +13,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -117,10 +118,16 @@ public class ItemBuilder {
             meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
         }
 
-        // 自定义耐久：禁用原版耐久显示
+        // 自定义耐久：显示原版耐久条
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
-            meta.setUnbreakable(true);
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            int vanillaMax = material.getMaxDurability();
+            if (vanillaMax > 0) {
+                ((org.bukkit.inventory.meta.Damageable) meta).setDamage(vanillaMax - customItem.getDurability());
+            } else {
+                // 无原版耐久的材质（如BLAZE_ROD），隐藏原版条
+                meta.setUnbreakable(true);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            }
         }
 
         // [Debug] 写入自定义耐久数据
