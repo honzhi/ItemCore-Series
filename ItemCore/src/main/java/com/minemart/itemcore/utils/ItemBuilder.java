@@ -118,16 +118,16 @@ public class ItemBuilder {
             meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
         }
 
-        // 自定义耐久：显示原版耐久条
+        // 自定义耐久：条可见，文字隐藏
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
             int vanillaMax = material.getMaxDurability();
             if (vanillaMax > 0) {
                 ((org.bukkit.inventory.meta.Damageable) meta).setDamage(0);
-            } else {
-                // 无原版耐久的材质（如BLAZE_ROD），隐藏原版条
-                meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             }
+            // HIDE_ADDITIONAL_TOOLTIP 隐藏原版耐久文字，条由 Damage 控制
+            meta.setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         }
 
         // [Debug] 写入自定义耐久数据
