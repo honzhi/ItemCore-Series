@@ -118,13 +118,10 @@ public class ItemBuilder {
             meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
         }
 
-        // 自定义耐久：条由 Damage 控制，文字由 HIDE_ADDITIONAL_TOOLTIP 隐藏
+        // 隐藏原版耐久，使用 Lore 自定义耐久显示
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
-            int vanillaMax = material.getMaxDurability();
-            if (vanillaMax > 0) {
-                ((org.bukkit.inventory.meta.Damageable) meta).setDamage(0);
-                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-            }
+            meta.setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         }
 
         // [Debug] 写入自定义耐久数据
