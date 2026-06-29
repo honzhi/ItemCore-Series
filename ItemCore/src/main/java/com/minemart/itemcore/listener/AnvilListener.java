@@ -16,10 +16,12 @@ public class AnvilListener extends BaseListener {
 
     @EventHandler
     public void onPrepareAnvil(PrepareAnvilEvent event) {
-        ItemStack result = event.getResult();
-        if (result == null || !result.hasItemMeta()) return;
+        // 检查输入物品(slot 0)而非结果物品
+        ItemStack input = event.getInventory().getItem(0);
 
-        ItemMeta meta = result.getItemMeta();
+        if (input == null || !input.hasItemMeta()) return;
+
+        ItemMeta meta = input.getItemMeta();
         if (meta == null) return;
 
         // 检查是否禁止铁砧修复
