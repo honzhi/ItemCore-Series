@@ -70,21 +70,6 @@ public class AttributeCalculator {
                         result.addAttribute(attr, val);
                     }
                 }
-                org.bukkit.inventory.ItemStack actualItem = ItemIdentifier.getItemInSlot(player, slot);
-                if (actualItem != null && actualItem.hasItemMeta()) {
-                    org.bukkit.inventory.meta.ItemMeta meta = actualItem.getItemMeta();
-                    if (meta != null) {
-                        for (CustomAttribute attr : CustomAttribute.values()) {
-                            org.bukkit.NamespacedKey key = com.minemart.itemcore.utils.ItemBuilder.getAttributeKey(attr);
-                            if (meta.getPersistentDataContainer().has(key, org.bukkit.persistence.PersistentDataType.DOUBLE)) {
-                                double pdcVal = meta.getPersistentDataContainer().get(key, org.bukkit.persistence.PersistentDataType.DOUBLE);
-                                if (pdcVal != 0) {
-                                    result.setAttribute(attr, pdcVal);
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }
 

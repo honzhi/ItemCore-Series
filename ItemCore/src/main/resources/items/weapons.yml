@@ -6,17 +6,22 @@ legendary_blade:
   lore:
     - "&7传说中的神秘武器"
     - "&7散发着毁灭的气息"
-  unbreakable: true
+  durability: 250
+  durability_break: false
   attributes:
     ATTACK_DAMAGE:
       min: 5
       max: 10
     ATTACK_SPEED: 1.6
     ATTACK_RANGE: 1
-    PHYSICAL_DAMAGE: 20
+    PHYSICAL_DAMAGE:
+      min: 15
+      max: 25
     PHYSICAL_PENETRATION: 10
     PHYSICAL_PENETRATION_PERCENT: 10
-    CRIT_CHANCE: 25
+    CRIT_CHANCE:
+      min: 20
+      max: 30
     CRIT_DAMAGE: 50
     KNOCKBACK: 0.5
   skills:
