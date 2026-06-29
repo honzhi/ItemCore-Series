@@ -1,4 +1,4 @@
-name: ItemCore
+﻿name: ItemCore
 version: ${project.version}
 main: com.minemart.itemcore.ItemCore
 api-version: 1.20
@@ -22,6 +22,7 @@ permissions:
       itemcore.command.give: true
       itemcore.command.list: true
       itemcore.command.reload: true
+      itemcore.command.repair: true
       itemcore.command.info: true
       itemcore.gui.obtain: true
 
@@ -43,6 +44,10 @@ permissions:
 
   itemcore.command.reload:
     description: 重载配置
+    default: op
+
+  itemcore.command.repair:
+    description: 修复物品耐久
     default: op
 
   itemcore.command.info:

@@ -1,4 +1,4 @@
-package com.minemart.itemcore.item;
+﻿package com.minemart.itemcore.item;
 
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.skill.ItemSkill;
@@ -31,6 +31,7 @@ public class CustomItem {
     private final boolean droppable;
     private final boolean clickable;
     private final boolean keepOnDeath;
+    private final int durability;
     private final List<ItemSkill> skills;
 
     public CustomItem(String id, String type, Material material, String displayName,
@@ -40,7 +41,7 @@ public class CustomItem {
                       String permission, AttributeContainer attributes,
                       List<ItemSlot> activeSlots, boolean rightClickable,
                       boolean leftClickable, boolean droppable, boolean clickable,
-                      boolean keepOnDeath, List<ItemSkill> skills) {
+                      boolean keepOnDeath, int durability, List<ItemSkill> skills) {
         this.id = id;
         this.type = type;
         this.material = material;
@@ -60,6 +61,7 @@ public class CustomItem {
         this.droppable = droppable;
         this.clickable = clickable;
         this.keepOnDeath = keepOnDeath;
+        this.durability = durability;
         this.skills = skills != null ? skills : new ArrayList<>();
     }
 
@@ -139,6 +141,14 @@ public class CustomItem {
         return keepOnDeath;
     }
 
+    public int getDurability() {
+        return durability;
+    }
+
+    public boolean hasDurability() {
+        return durability > 0;
+    }
+
     public List<ItemSkill> getSkills() {
         return skills;
     }
@@ -211,6 +221,7 @@ public class CustomItem {
         private boolean droppable = true;
         private boolean clickable = true;
         private boolean keepOnDeath = false;
+        private int durability;
         private final List<ItemSkill> skills = new ArrayList<>();
 
         private Builder(String id) {
@@ -355,7 +366,7 @@ public class CustomItem {
             return new CustomItem(id, type, material, displayName, lore, enchantments,
                     itemFlags, customModelData, unbreakable, maxStack, effects,
                     permission, attributes, slots, rightClickable, leftClickable,
-                    droppable, clickable, keepOnDeath, skills);
+                    droppable, clickable, keepOnDeath, durability, skills);
         }
     }
 }

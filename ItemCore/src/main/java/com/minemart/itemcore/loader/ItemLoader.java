@@ -1,4 +1,4 @@
-package com.minemart.itemcore.loader;
+﻿package com.minemart.itemcore.loader;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
@@ -168,6 +168,10 @@ public class ItemLoader {
 
         if (section.contains("unbreakable")) {
             builder.unbreakable(section.getBoolean("unbreakable"));
+        }
+
+        if (section.contains("durability")) {
+            builder.durability(section.getInt("durability"));
         }
 
         if (section.contains("max-stack")) {

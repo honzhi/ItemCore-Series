@@ -1,14 +1,24 @@
-﻿# ========================================
-# 属性描述配置（Stats Display）
+﻿durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 # 这个配置文件用于定义物品属性在 tooltip 中的显示格式
 # 占位符:
 #   {value} - 属性值
 #   <plus>  - 自动添加 +/- 符号 (正数+，负数-)
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
+
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
 
 # ========================================
 # 基础属性
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 
 attack_damage: '&f攻击伤害: &6<plus>{value}'
@@ -20,8 +30,14 @@ regeneration: '&f生命恢复: &6<plus>{value}'
 knockback: '&f击退: &6<plus>{value}'
 luck: '&f幸运值: &6<plus>{value}'
 
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 # 伤害加成
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 
 spell_damage: '&f法术加成: &6<plus>{value}'
@@ -30,15 +46,27 @@ projectile_damage: '&f射击加成: &6<plus>{value}'
 spell_power: '&f法术强度: &6<plus>{value}'
 adaptive_force: '&f适应之力: &6<plus>{value}'
 
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 # 暴击
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 
 crit_chance: '&f暴击几率: &6<plus>{value}%'
 crit_damage: '&f暴击伤害: &6<plus>{value}%'
 
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 # 防御
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
+
 # ========================================
 
 armor: '&f护甲: &6<plus>{value}'
@@ -49,6 +77,9 @@ physical_penetration_percent: '&f物理穿透百分比: &6<plus>{value}%'
 spell_penetration: '&f法术穿透: &6<plus>{value}'
 spell_penetration_percent: '&f法术穿透百分比: &6<plus>{value}%'
 damage_reduction: '&f伤害减免: &6<plus>{value}%'
+
+durability: '&f耐久: &a{current}&7/&a{max}'
+durability_bar: '&f耐久: &a{bar}'
 
 # ========================================
 # 元素属性

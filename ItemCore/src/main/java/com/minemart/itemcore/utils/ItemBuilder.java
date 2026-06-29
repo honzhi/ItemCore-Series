@@ -1,4 +1,4 @@
-package com.minemart.itemcore.utils;
+﻿package com.minemart.itemcore.utils;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
@@ -25,6 +25,8 @@ public class ItemBuilder {
 
     public static final NamespacedKey ITEM_ID_KEY = new NamespacedKey("itemcore", "item_id");
     public static final NamespacedKey LORE_VERSION_KEY = new NamespacedKey("itemcore", "lore_ver");
+    public static final NamespacedKey DURABILITY_KEY = new NamespacedKey("itemcore", "durability");
+    public static final NamespacedKey MAX_DURABILITY_KEY = new NamespacedKey("itemcore", "max_durability");
     
     // MMOItems 风格：添加假的属性修饰符来覆盖原版属性
     private static final UUID DECOY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
@@ -110,6 +112,14 @@ public class ItemBuilder {
         ItemCore icPlugin = ItemCore.getInstance();
         if (icPlugin != null) {
             meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
+        }
+
+        // 写入自定义耐久数据
+        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
+            meta.getPersistentDataContainer().set(MAX_DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
+            if (!meta.getPersistentDataContainer().has(DURABILITY_KEY, PersistentDataType.INTEGER)) {
+                meta.getPersistentDataContainer().set(DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
+            }
         }
 
         itemStack.setItemMeta(meta);

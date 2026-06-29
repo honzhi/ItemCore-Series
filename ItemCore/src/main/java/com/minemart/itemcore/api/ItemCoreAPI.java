@@ -1,4 +1,4 @@
-package com.minemart.itemcore.api;
+﻿package com.minemart.itemcore.api;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.api.event.ItemObtainedEvent;
@@ -7,6 +7,7 @@ import com.minemart.itemcore.damage.DamageManager;
 import com.minemart.itemcore.damage.DamageRequest;
 import com.minemart.itemcore.damage.HealManager;
 import com.minemart.itemcore.damage.HealingRequest;
+import com.minemart.itemcore.util.DurabilityManager;
 import com.minemart.itemcore.element.AccumulationManager;
 import com.minemart.itemcore.element.ElementConfig;
 import com.minemart.itemcore.element.AccumulationManager.AccumulationSnapshot;
@@ -291,5 +292,33 @@ public class ItemCoreAPI {
 
     public static void processHeal(HealingRequest request) {
         HealManager.processHeal(request);
+    }
+
+    // ========================================
+    // 耐久系统 API
+    // ========================================
+
+    public static int getDurability(ItemStack item) {
+        return DurabilityManager.getDurability(item);
+    }
+
+    public static int getMaxDurability(ItemStack item) {
+        return DurabilityManager.getMaxDurability(item);
+    }
+
+    public static boolean hasDurability(ItemStack item) {
+        return DurabilityManager.hasDurability(item);
+    }
+
+    public static void setDurability(ItemStack item, int durability) {
+        DurabilityManager.setDurability(item, durability);
+    }
+
+    public static void damageItem(Player player, ItemStack item, int amount) {
+        DurabilityManager.damageItem(player, item, amount);
+    }
+
+    public static void repairItem(ItemStack item, int amount) {
+        DurabilityManager.repairItem(item, amount);
     }
 }

@@ -1,4 +1,4 @@
-package com.minemart.itemcore;
+﻿package com.minemart.itemcore;
 
 import com.minemart.itemcore.api.ItemCoreAPI;
 import com.minemart.itemcore.command.CommandManager;
@@ -21,6 +21,7 @@ import com.minemart.itemcore.loader.LoaderManager;
 import com.minemart.itemcore.placeholder.ItemCoreExpansion;
 import com.minemart.itemcore.utils.ItemBuilder;
 import com.minemart.itemcore.utils.MessageUtil;
+import com.minemart.itemcore.util.DurabilityManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -53,6 +54,7 @@ public class ItemCore extends JavaPlugin {
     private CommandManager commandManager;
     private GuiListener guiListener;
     private ItemSkillListener skillListener;
+    private DurabilityManager durabilityManager;
 
     private final AtomicInteger loreVersion = new AtomicInteger(1);
     private int loreTaskId = -1;
@@ -117,6 +119,10 @@ public class ItemCore extends JavaPlugin {
 
     public GuiListener getGuiListener() {
         return guiListener;
+    }
+
+    public DurabilityManager getDurabilityManager() {
+        return durabilityManager;
     }
 
     public ItemSkillListener getSkillListener() {
@@ -226,6 +232,7 @@ public class ItemCore extends JavaPlugin {
     }
 
     public void reload() {
+        DurabilityManager.init(this);
         loreVersion.incrementAndGet();
         elementConfig.reload();
         configManager.reload();
@@ -297,7 +304,7 @@ public class ItemCore extends JavaPlugin {
                 }
                 LoreManager lm = getLoreManager();
                 if (lm == null) continue;
-                List<String> newLore = lm.generateLore(customItem);
+                List<String> newLore = lm.generateLore(customItem, item);
                 List<Component> loreComponents = new ArrayList<>();
                 for (String line : newLore) {
                     loreComponents.add(MessageUtil.colorize(line));

@@ -1,10 +1,11 @@
-package com.minemart.itemcore.config;
+﻿package com.minemart.itemcore.config;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.ElementType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.util.ArrayList;\nimport java.util.StringBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,6 +170,31 @@ public class LoreManager {
                 // 如果已有待处理的空行，不再重复添加（防止连续 {bar} 产生多行空行）
                 if (pendingEmptyLines.isEmpty()) {
                     pendingEmptyLines.add("");
+                }
+                        } else if (placeholder.equals("#durability#")) {
+                int maxDura = customItem.getDurability();
+                if (maxDura > 0 && !customItem.isUnbreakable()) {
+                    String format = attributeConfig.getString("durability");
+                    if (format != null && !format.isEmpty()) {
+                        for (String emptyLine : pendingEmptyLines) {
+                            result.add(emptyLine);
+                        }
+                        pendingEmptyLines.clear();
+                        int current = maxDura;
+                        if (itemStack != null && itemStack.hasItemMeta()) {
+                            var meta = itemStack.getItemMeta();
+                            if (meta != null) {
+                                var pdc = meta.getPersistentDataContainer();
+                                if (pdc.has(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER)) {
+                                    current = pdc.get(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER);
+                                }
+                            }
+                        }
+                        String line = format.replace("{current}", String.valueOf(current))
+                                           .replace("{max}", String.valueOf(maxDura))
+                                           .replace("{bar}", buildDurabilityBar(current, maxDura));
+                        result.add(line);
+                    }
                 }
             } else if (placeholder.equals("{sbar}")) {
                 result.add("");

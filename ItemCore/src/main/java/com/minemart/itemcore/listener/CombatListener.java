@@ -1,4 +1,4 @@
-package com.minemart.itemcore.listener;
+﻿package com.minemart.itemcore.listener;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.calculator.AttributeCalculator;
@@ -9,6 +9,7 @@ import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.DamageTag;
 import com.minemart.itemcore.util.DamageTypeResolver;
+import com.minemart.itemcore.util.DurabilityManager;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;

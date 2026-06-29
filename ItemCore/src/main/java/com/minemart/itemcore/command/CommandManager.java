@@ -1,4 +1,4 @@
-package com.minemart.itemcore.command;
+﻿package com.minemart.itemcore.command;
 
 import com.minemart.itemcore.ItemCore;
 import org.bukkit.command.Command;
