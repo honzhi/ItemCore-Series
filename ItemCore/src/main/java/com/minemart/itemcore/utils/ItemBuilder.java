@@ -117,6 +117,12 @@ public class ItemBuilder {
             meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
         }
 
+        // 自定义耐久：禁用原版耐久显示
+        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
+            meta.setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        }
+
         // 写入自定义耐久数据
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
             meta.getPersistentDataContainer().set(MAX_DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
