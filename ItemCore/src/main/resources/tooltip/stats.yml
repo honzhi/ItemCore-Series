@@ -32,9 +32,9 @@ durability_bar: '&f耐久: &a{bar}'
 
 # ========================================
 
-spell_damage: '&f法术加成: &6<plus>{value}'
-physical_damage: '&f物理加成: &6<plus>{value}'
-projectile_damage: '&f射击加成: &6<plus>{value}'
+spell_damage: '&f法术加成: &6<plus>{value}%'
+physical_damage: '&f物理加成: &6<plus>{value}%'
+projectile_damage: '&f射击加成: &6<plus>{value}%'
 spell_power: '&f法术强度: &6<plus>{value}'
 adaptive_force: '&f适应之力: &6<plus>{value}'
 
