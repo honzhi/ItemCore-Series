@@ -8,7 +8,9 @@ legendary_blade:
     - "&7散发着毁灭的气息"
   unbreakable: true
   attributes:
-    ATTACK_DAMAGE: 15
+    ATTACK_DAMAGE:
+      min: 5
+      max: 10
     ATTACK_SPEED: 1.6
     ATTACK_RANGE: 1
     PHYSICAL_DAMAGE: 20

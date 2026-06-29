@@ -286,9 +286,14 @@ public class LoreManager {
                     }
                 }
             }
+            // 回退到配置值（固定值或范围中值）
             double value = attributes.getAttribute(customAttr);
             if (value != 0) {
                 return value;
+            }
+            if (attributes.hasAttributeRange(customAttr)) {
+                double[] range = attributes.getAttributeRange(customAttr);
+                return (range[0] + range[1]) / 2.0;
             }
             return null;
         }
