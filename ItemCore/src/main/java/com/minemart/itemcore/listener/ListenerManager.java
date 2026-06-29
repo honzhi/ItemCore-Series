@@ -1,4 +1,4 @@
-package com.minemart.itemcore.listener;
+﻿package com.minemart.itemcore.listener;
 
 import com.minemart.itemcore.ItemCore;
 
@@ -21,6 +21,8 @@ public class ListenerManager {
         listeners.add(new ItemInteractListener(plugin));
         listeners.add(new ItemDropListener(plugin));
         listeners.add(new CombatListener(plugin));
+        listeners.add(new AnvilListener(plugin));
+        listeners.add(new EnchantListener(plugin));
 
         for (BaseListener listener : listeners) {
             listener.register();
