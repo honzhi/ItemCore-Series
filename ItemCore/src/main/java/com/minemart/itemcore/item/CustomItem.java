@@ -32,6 +32,9 @@ public class CustomItem {
     private final boolean clickable;
     private final boolean keepOnDeath;
     private final int durability;
+    private final boolean durabilityBreak;
+    private final boolean disableAnvilRepair;
+    private final boolean disableEnchanting;
     private final List<ItemSkill> skills;
 
     public CustomItem(String id, String type, Material material, String displayName,
@@ -41,7 +44,7 @@ public class CustomItem {
                       String permission, AttributeContainer attributes,
                       List<ItemSlot> activeSlots, boolean rightClickable,
                       boolean leftClickable, boolean droppable, boolean clickable,
-                      boolean keepOnDeath, int durability, List<ItemSkill> skills) {
+                      boolean keepOnDeath, int durability, boolean durabilityBreak, boolean disableAnvilRepair, boolean disableEnchanting, List<ItemSkill> skills) {
         this.id = id;
         this.type = type;
         this.material = material;
@@ -62,6 +65,9 @@ public class CustomItem {
         this.clickable = clickable;
         this.keepOnDeath = keepOnDeath;
         this.durability = durability;
+        this.durabilityBreak = durabilityBreak;
+        this.disableAnvilRepair = disableAnvilRepair;
+        this.disableEnchanting = disableEnchanting;
         this.skills = skills != null ? skills : new ArrayList<>();
     }
 
@@ -222,6 +228,9 @@ public class CustomItem {
         private boolean clickable = true;
         private boolean keepOnDeath = false;
         private int durability;
+        private boolean durabilityBreak = true;
+        private boolean disableAnvilRepair = false;
+        private boolean disableEnchanting = false;
         private final List<ItemSkill> skills = new ArrayList<>();
 
         private Builder(String id) {
@@ -366,7 +375,7 @@ public class CustomItem {
             return new CustomItem(id, type, material, displayName, lore, enchantments,
                     itemFlags, customModelData, unbreakable, maxStack, effects,
                     permission, attributes, slots, rightClickable, leftClickable,
-                    droppable, clickable, keepOnDeath, durability, skills);
+                    droppable, clickable, keepOnDeath, durability, durabilityBreak, disableAnvilRepair, disableEnchanting, skills);
         }
     }
 }
