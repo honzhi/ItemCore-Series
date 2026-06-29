@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.placeholder;
+package com.minemart.itemcore.placeholder;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.calculator.AttributeCalculator;

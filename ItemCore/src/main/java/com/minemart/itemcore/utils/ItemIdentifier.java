@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.utils;
+package com.minemart.itemcore.utils;
 
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.ItemSlot;

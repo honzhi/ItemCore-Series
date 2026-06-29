@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.element;
+package com.minemart.itemcore.element;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.attribute.AilmentRegistry;

@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.config;
+package com.minemart.itemcore.config;
 
 public final class ConfigKeys {
 

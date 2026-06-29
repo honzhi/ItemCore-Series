@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.util;
+package com.minemart.itemcore.util;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.utils.ItemBuilder;
@@ -160,7 +160,7 @@ public class DurabilityManager {
 
         if (loc != null) {
             loc.getWorld().playSound(loc, Sound.ENTITY_ITEM_BREAK, 1.0f, 1.0f);
-            loc.getWorld().spawnParticle(Particle.ITEM_CRACK, loc.clone().add(0, 1, 0), 20, 0.3, 0.3, 0.3, 0.1);
+            try { loc.getWorld().spawnParticle(Particle.ITEM, loc.clone().add(0, 1, 0), 20, 0.3, 0.3, 0.3, 0.1, item); } catch (Exception ignored) {}
         }
 
         item.setAmount(0);

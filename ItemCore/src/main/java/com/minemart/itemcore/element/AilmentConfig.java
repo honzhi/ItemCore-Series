@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.element;
+package com.minemart.itemcore.element;
 
 import com.minemart.itemcore.ItemCore;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.command;
+package com.minemart.itemcore.command;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.config.Messages;
@@ -36,6 +36,11 @@ public class RepairCommand extends BaseSubCommand {
     @Override
     public String getPermission() {
         return "itemcore.command.repair";
+    }
+
+    @Override
+    public boolean isPlayerOnly() {
+        return false;
     }
 
     @Override
@@ -83,7 +88,7 @@ public class RepairCommand extends BaseSubCommand {
     }
 
     @Override
-    public List<String> tabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 2) {
             for (Player player : Bukkit.getOnlinePlayers()) {

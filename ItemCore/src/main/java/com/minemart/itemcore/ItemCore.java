@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore;
+package com.minemart.itemcore;
 
 import com.minemart.itemcore.api.ItemCoreAPI;
 import com.minemart.itemcore.command.CommandManager;

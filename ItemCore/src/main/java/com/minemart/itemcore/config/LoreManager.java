@@ -1,10 +1,11 @@
-﻿package com.minemart.itemcore.config;
+package com.minemart.itemcore.config;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.ElementType;
+import com.minemart.itemcore.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,7 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;\nimport java.util.StringBuilder;
+import org.bukkit.persistence.PersistentDataType;
+import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,12 +146,16 @@ public class LoreManager {
     }
 
     public List<String> generateLore(CustomItem item) {
+        return generateLore(item, null);
+    }
+
+    public List<String> generateLore(CustomItem item, ItemStack itemStack) {
         if (!isEnabled()) {
             return item.getLore();
         }
 
-        List<String> format = loreConfig.getStringList("lore_format");
-        if (format.isEmpty()) {
+        List<String> loreFormatList = loreConfig.getStringList("lore_format");
+        if (loreFormatList.isEmpty()) {
             return item.getLore();
         }
 
@@ -156,7 +163,7 @@ public class LoreManager {
         List<String> result = new ArrayList<>();
         List<String> pendingEmptyLines = new ArrayList<>();
 
-        for (String placeholder : format) {
+        for (String placeholder : loreFormatList) {
             if (placeholder.equals("#item-lore#")) {
                 List<String> itemLore = item.getLore();
                 if (!itemLore.isEmpty()) {
@@ -166,20 +173,20 @@ public class LoreManager {
                     pendingEmptyLines.clear();
                 }
             } else if (placeholder.equals("{bar}")) {
-                // {bar}: 分隔线，仅当上下都有内容时才显示
-                // 如果已有待处理的空行，不再重复添加（防止连续 {bar} 产生多行空行）
                 if (pendingEmptyLines.isEmpty()) {
                     pendingEmptyLines.add("");
                 }
-                        } else if (placeholder.equals("#durability#")) {
-                int maxDura = customItem.getDurability();
-                if (maxDura > 0 && !customItem.isUnbreakable()) {
+            } else if (placeholder.equals("{sbar}")) {
+                result.add("");
+                pendingEmptyLines.clear();
+            } else if (placeholder.equals("#durability#")) {
+                int maxDura = item.getDurability();
+                if (maxDura > 0 && !item.isUnbreakable()) {
                     for (String emptyLine : pendingEmptyLines) {
                         result.add(emptyLine);
                     }
                     pendingEmptyLines.clear();
 
-                    // 检查是否损坏
                     int current = maxDura;
                     if (itemStack != null && itemStack.hasItemMeta()) {
                         var meta = itemStack.getItemMeta();
@@ -194,19 +201,16 @@ public class LoreManager {
                     if (current <= 0) {
                         result.add("&c&l已损坏");
                     } else {
-                        String format = attributeConfig.getString("durability");
-                        if (format != null && !format.isEmpty()) {
-                            String line = format.replace("{current}", String.valueOf(current))
+                        String durabilFormat = attributeConfig.getString("durability");
+                        if (durabilFormat != null && !durabilFormat.isEmpty()) {
+                            String durabilLine = durabilFormat.replace("{current}", String.valueOf(current))
                                                .replace("{max}", String.valueOf(maxDura))
                                                .replace("{bar}", buildDurabilityBar(current, maxDura));
-                            result.add(line);
+                            result.add(durabilLine);
                         }
                     }
                 }
-            } else if (placeholder.equals("{sbar}")) {
-                result.add("");
-                pendingEmptyLines.clear();
-                        } else if (placeholder.equals("#element_mastery#") || placeholder.equals("#element_resist#")) {
+            } else if (placeholder.equals("#element_mastery#") || placeholder.equals("#element_resist#")) {
                 boolean isMastery = placeholder.equals("#element_mastery#");
                 String formatKey = isMastery ? "element_mastery" : "element_resist";
                 String elementFormat = attributeConfig.getString(formatKey);
@@ -231,7 +235,8 @@ public class LoreManager {
                         }
                     }
                 }
-            } else if (placeholder.startsWith("#") && placeholder.endsWith("#")) {     String attrName = placeholder.substring(1, placeholder.length() - 1);
+            } else if (placeholder.startsWith("#") && placeholder.endsWith("#")) {
+                String attrName = placeholder.substring(1, placeholder.length() - 1);
                 String loreLine = getAttributeLoreLine(attrName, attributes);
                 if (loreLine != null) {
                     for (String emptyLine : pendingEmptyLines) {
@@ -244,9 +249,7 @@ public class LoreManager {
         }
 
         return result;
-    }
-
-    private String getAttributeLoreLine(String attrName, AttributeContainer attributes) {
+    }private String getAttributeLoreLine(String attrName, AttributeContainer attributes) {
         String format = attributeConfig.getString(attrName);
         if (format == null || format.isEmpty()) {
             return null;
@@ -330,4 +333,25 @@ public class LoreManager {
     public FileConfiguration getAttributeConfig() {
         return attributeConfig;
     }
-}
+
+    private String buildDurabilityBar(int current, int max) {
+        if (max <= 0) return "";
+        int totalBars = 10;
+        int filled = (int) Math.round((double) current / max * totalBars);
+        filled = Math.max(0, Math.min(totalBars, filled));
+        int empty = totalBars - filled;
+
+        StringBuilder bar = new StringBuilder();
+        if (current <= 10) {
+            bar.append("&c");
+        } else if (current <= max * 0.3) {
+            bar.append("&e");
+        } else {
+            bar.append("&a");
+        }
+
+        for (int i = 0; i < filled; i++) bar.append("|");
+        bar.append("&7");
+        for (int i = 0; i < empty; i++) bar.append("|");
+        return bar.toString();
+    }}

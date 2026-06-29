@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.item;
+package com.minemart.itemcore.item;
 
 import org.bukkit.inventory.EquipmentSlot;
 

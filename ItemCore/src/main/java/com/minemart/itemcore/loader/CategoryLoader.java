@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.loader;
+package com.minemart.itemcore.loader;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.ItemCategory;

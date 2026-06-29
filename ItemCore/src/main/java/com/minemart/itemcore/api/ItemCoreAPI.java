@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.api;
+package com.minemart.itemcore.api;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.api.event.ItemObtainedEvent;

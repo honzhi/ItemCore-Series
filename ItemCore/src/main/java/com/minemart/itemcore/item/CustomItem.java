@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.item;
+package com.minemart.itemcore.item;
 
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.skill.ItemSkill;
@@ -154,6 +154,20 @@ public class CustomItem {
     public boolean hasDurability() {
         return durability > 0;
     }
+
+    public boolean isDurabilityBreak() {
+        return durabilityBreak;
+    }
+
+    public boolean isDisableAnvilRepair() {
+        return disableAnvilRepair;
+    }
+
+    public boolean isDisableEnchanting() {
+        return disableEnchanting;
+    }
+
+
 
     public List<ItemSkill> getSkills() {
         return skills;
@@ -352,6 +366,27 @@ public class CustomItem {
             this.keepOnDeath = keepOnDeath;
             return this;
         }
+
+        public Builder durability(int durability) {
+            this.durability = durability;
+            return this;
+        }
+
+        public Builder durabilityBreak(boolean durabilityBreak) {
+            this.durabilityBreak = durabilityBreak;
+            return this;
+        }
+
+        public Builder disableAnvilRepair(boolean disableAnvilRepair) {
+            this.disableAnvilRepair = disableAnvilRepair;
+            return this;
+        }
+
+        public Builder disableEnchanting(boolean disableEnchanting) {
+            this.disableEnchanting = disableEnchanting;
+            return this;
+        }
+
 
         public Builder skill(ItemSkill skill) {
             if (skill != null) {

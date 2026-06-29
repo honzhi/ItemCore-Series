@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.listener;
+package com.minemart.itemcore.listener;
 
 import com.minemart.itemcore.ItemCore;
 

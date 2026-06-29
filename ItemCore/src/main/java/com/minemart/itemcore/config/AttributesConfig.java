@@ -1,4 +1,4 @@
-﻿package com.minemart.itemcore.config;
+package com.minemart.itemcore.config;
 
 import com.minemart.itemcore.ItemCore;
 import org.bukkit.configuration.file.FileConfiguration;
