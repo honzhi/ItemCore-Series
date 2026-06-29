@@ -36,17 +36,40 @@ public class AttributeCalculator {
         for (java.util.Map.Entry<com.minemart.itemcore.item.ItemSlot, java.util.List<CustomItem>> entry : equipped.entrySet()) {
             com.minemart.itemcore.item.ItemSlot slot = entry.getKey();
             for (CustomItem ci : entry.getValue()) {
-                result.merge(ci.getAttributes());
-                // 如果 PDC 没有属性值（旧物品），用范围中值回退
+                // 合并元素精通/抗性
+                for (Map.Entry<ElementType, Double> e : ci.getAttributes().getElementMastery().entrySet()) {
+                    result.setElementMastery(e.getKey(), result.getElementMastery(e.getKey()) + e.getValue());
+                }
+                for (Map.Entry<ElementType, Double> e : ci.getAttributes().getElementResistance().entrySet()) {
+                    result.setElementResistance(e.getKey(), result.getElementResistance(e.getKey()) + e.getValue());
+                }
+                // 数值属性优先 PDC，再 config，再范围中值
                 for (CustomAttribute attr : CustomAttribute.values()) {
-                    if (ci.getAttributes().hasAttributeRange(attr)) {
-                        double[] range = ci.getAttributes().getAttributeRange(attr);
-                        if (!result.getBaseAttributes().containsKey(attr) || result.getAttribute(attr) == 0) {
-                            result.setAttribute(attr, (range[0] + range[1]) / 2.0);
+                    double val = 0;
+                    // 优先 PDC
+                    org.bukkit.inventory.ItemStack actualItem = ItemIdentifier.getItemInSlot(player, slot);
+                    if (actualItem != null && actualItem.hasItemMeta()) {
+                        org.bukkit.inventory.meta.ItemMeta itemMeta = actualItem.getItemMeta();
+                        if (itemMeta != null) {
+                            org.bukkit.NamespacedKey key = com.minemart.itemcore.utils.ItemBuilder.getAttributeKey(attr);
+                            if (itemMeta.getPersistentDataContainer().has(key, org.bukkit.persistence.PersistentDataType.DOUBLE)) {
+                                val = itemMeta.getPersistentDataContainer().get(key, org.bukkit.persistence.PersistentDataType.DOUBLE);
+                            }
                         }
                     }
+                    // PDC 没有则用 config 值
+                    if (val == 0) {
+                        val = ci.getAttributes().getAttribute(attr);
+                    }
+                    // config 也没有且是范围属性，用范围中值
+                    if (val == 0 && ci.getAttributes().hasAttributeRange(attr)) {
+                        double[] range = ci.getAttributes().getAttributeRange(attr);
+                        val = (range[0] + range[1]) / 2.0;
+                    }
+                    if (val != 0) {
+                        result.addAttribute(attr, val);
+                    }
                 }
-                // 从实际物品 PDC 读取属性值覆盖 config 值
                 org.bukkit.inventory.ItemStack actualItem = ItemIdentifier.getItemInSlot(player, slot);
                 if (actualItem != null && actualItem.hasItemMeta()) {
                     org.bukkit.inventory.meta.ItemMeta meta = actualItem.getItemMeta();
