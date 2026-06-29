@@ -174,26 +174,33 @@ public class LoreManager {
                         } else if (placeholder.equals("#durability#")) {
                 int maxDura = customItem.getDurability();
                 if (maxDura > 0 && !customItem.isUnbreakable()) {
-                    String format = attributeConfig.getString("durability");
-                    if (format != null && !format.isEmpty()) {
-                        for (String emptyLine : pendingEmptyLines) {
-                            result.add(emptyLine);
-                        }
-                        pendingEmptyLines.clear();
-                        int current = maxDura;
-                        if (itemStack != null && itemStack.hasItemMeta()) {
-                            var meta = itemStack.getItemMeta();
-                            if (meta != null) {
-                                var pdc = meta.getPersistentDataContainer();
-                                if (pdc.has(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER)) {
-                                    current = pdc.get(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER);
-                                }
+                    for (String emptyLine : pendingEmptyLines) {
+                        result.add(emptyLine);
+                    }
+                    pendingEmptyLines.clear();
+
+                    // 检查是否损坏
+                    int current = maxDura;
+                    if (itemStack != null && itemStack.hasItemMeta()) {
+                        var meta = itemStack.getItemMeta();
+                        if (meta != null) {
+                            var pdc = meta.getPersistentDataContainer();
+                            if (pdc.has(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER)) {
+                                current = pdc.get(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER);
                             }
                         }
-                        String line = format.replace("{current}", String.valueOf(current))
-                                           .replace("{max}", String.valueOf(maxDura))
-                                           .replace("{bar}", buildDurabilityBar(current, maxDura));
-                        result.add(line);
+                    }
+
+                    if (current <= 0) {
+                        result.add("&c&l已损坏");
+                    } else {
+                        String format = attributeConfig.getString("durability");
+                        if (format != null && !format.isEmpty()) {
+                            String line = format.replace("{current}", String.valueOf(current))
+                                               .replace("{max}", String.valueOf(maxDura))
+                                               .replace("{bar}", buildDurabilityBar(current, maxDura));
+                            result.add(line);
+                        }
                     }
                 }
             } else if (placeholder.equals("{sbar}")) {
