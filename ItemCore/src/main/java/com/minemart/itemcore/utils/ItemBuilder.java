@@ -4,6 +4,7 @@ import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.EnchantmentInfo;
 import com.minemart.itemcore.item.PotionEffectInfo;
+import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -20,7 +21,9 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemBuilder {
 
@@ -41,6 +44,10 @@ public class ItemBuilder {
             AttributeModifier.Operation.ADD_NUMBER,
             org.bukkit.inventory.EquipmentSlot.HAND
     );
+
+    public static NamespacedKey getAttributeKey(CustomAttribute attr) {
+        return new NamespacedKey("itemcore", "a_" + attr.getConfigKey().toLowerCase());
+    }
 
     public static ItemStack build(CustomItem customItem) {
         return build(customItem, 1);
@@ -136,6 +143,21 @@ public class ItemBuilder {
             meta.getPersistentDataContainer().set(DURABILITY_BREAK_KEY, PersistentDataType.INTEGER, customItem.isDurabilityBreak() ? 1 : 0);
             meta.getPersistentDataContainer().set(DISABLE_ANVIL_REPAIR_KEY, PersistentDataType.INTEGER, customItem.isDisableAnvilRepair() ? 1 : 0);
             meta.getPersistentDataContainer().set(DISABLE_ENCHANTING_KEY, PersistentDataType.INTEGER, customItem.isDisableEnchanting() ? 1 : 0);
+        }
+
+        // 写入属性值到 PDC（固定值直接写入，范围值随机后写入）
+        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
+            // 有自定义耐久的物品才写入属性PDC，避免非IC物品异常
+        }
+        for (Map.Entry<CustomAttribute, Double> entry : customItem.getAttributes().getBaseAttributes().entrySet()) {
+            CustomAttribute attr = entry.getKey();
+            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, entry.getValue());
+        }
+        for (Map.Entry<CustomAttribute, double[]> entry : customItem.getAttributes().getAttributeRanges().entrySet()) {
+            CustomAttribute attr = entry.getKey();
+            double[] range = entry.getValue();
+            double rolled = Math.round(ThreadLocalRandom.current().nextDouble(range[0], range[1]) * 10.0) / 10.0;
+            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, rolled);
         }
 
         itemStack.setItemMeta(meta);

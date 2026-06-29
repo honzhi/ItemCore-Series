@@ -348,8 +348,16 @@ public class ItemLoader {
 
             CustomAttribute attribute = CustomAttribute.fromConfigKey(upperKey);
             if (attribute != null) {
-                double parsedValue = YamlParserUtil.parsePercentage(section.get(key));
-                container.setAttribute(attribute, parsedValue);
+                Object value = section.get(key);
+                if (value instanceof org.bukkit.configuration.ConfigurationSection) {
+                    org.bukkit.configuration.ConfigurationSection rangeSec = (org.bukkit.configuration.ConfigurationSection) value;
+                    double min = rangeSec.getDouble("min", 0);
+                    double max = rangeSec.getDouble("max", 0);
+                    container.setAttributeRange(attribute, min, max);
+                } else {
+                    double parsedValue = YamlParserUtil.parsePercentage(value);
+                    container.setAttribute(attribute, parsedValue);
+                }
             }
         }
 

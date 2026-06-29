@@ -32,9 +32,28 @@ public class AttributeCalculator {
     public static AttributeContainer calculatePlayerAttributes(Player player) {
         AttributeContainer result = new AttributeContainer();
 
-        List<CustomItem> equipped = ItemIdentifier.getEquippedItemsAsList(player);
-        for (CustomItem item : equipped) {
-            result.merge(item.getAttributes());
+        java.util.Map<com.minemart.itemcore.item.ItemSlot, java.util.List<CustomItem>> equipped = ItemIdentifier.getEquippedItems(player);
+        for (java.util.Map.Entry<com.minemart.itemcore.item.ItemSlot, java.util.List<CustomItem>> entry : equipped.entrySet()) {
+            com.minemart.itemcore.item.ItemSlot slot = entry.getKey();
+            for (CustomItem ci : entry.getValue()) {
+                result.merge(ci.getAttributes());
+                // 从实际物品 PDC 读取属性值覆盖 config 值
+                org.bukkit.inventory.ItemStack actualItem = ItemIdentifier.getItemInSlot(player, slot);
+                if (actualItem != null && actualItem.hasItemMeta()) {
+                    org.bukkit.inventory.meta.ItemMeta meta = actualItem.getItemMeta();
+                    if (meta != null) {
+                        for (CustomAttribute attr : CustomAttribute.values()) {
+                            org.bukkit.NamespacedKey key = com.minemart.itemcore.utils.ItemBuilder.getAttributeKey(attr);
+                            if (meta.getPersistentDataContainer().has(key, org.bukkit.persistence.PersistentDataType.DOUBLE)) {
+                                double pdcVal = meta.getPersistentDataContainer().get(key, org.bukkit.persistence.PersistentDataType.DOUBLE);
+                                if (pdcVal != 0) {
+                                    result.setAttribute(attr, pdcVal);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 

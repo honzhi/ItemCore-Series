@@ -15,7 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import org.bukkit.NamespacedKey;
 import org.bukkit.persistence.PersistentDataType;
+import com.minemart.itemcore.utils.ItemBuilder;
+import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -237,7 +240,7 @@ public class LoreManager {
                 }
             } else if (placeholder.startsWith("#") && placeholder.endsWith("#")) {
                 String attrName = placeholder.substring(1, placeholder.length() - 1);
-                String loreLine = getAttributeLoreLine(attrName, attributes);
+                String loreLine = getAttributeLoreLine(attrName, attributes, itemStack);
                 if (loreLine != null) {
                     for (String emptyLine : pendingEmptyLines) {
                         result.add(emptyLine);
@@ -249,13 +252,15 @@ public class LoreManager {
         }
 
         return result;
-    }private String getAttributeLoreLine(String attrName, AttributeContainer attributes) {
+        }
+
+    private String getAttributeLoreLine(String attrName, AttributeContainer attributes, ItemStack itemStack) {
         String format = attributeConfig.getString(attrName);
         if (format == null || format.isEmpty()) {
             return null;
         }
 
-        Double value = getAttributeValue(attrName, attributes);
+        Double value = getAttributeValue(attrName, attributes, itemStack);
         if (value == null) {
             return null;
         }
@@ -269,9 +274,18 @@ public class LoreManager {
         return result;
     }
 
-    private Double getAttributeValue(String attrName, AttributeContainer attributes) {
+    private Double getAttributeValue(String attrName, AttributeContainer attributes, ItemStack itemStack) {
         CustomAttribute customAttr = getCustomAttribute(attrName);
         if (customAttr != null) {
+            if (itemStack != null && itemStack.hasItemMeta()) {
+                ItemMeta meta = itemStack.getItemMeta();
+                if (meta != null) {
+                    NamespacedKey key = ItemBuilder.getAttributeKey(customAttr);
+                    if (meta.getPersistentDataContainer().has(key, PersistentDataType.DOUBLE)) {
+                        return meta.getPersistentDataContainer().get(key, PersistentDataType.DOUBLE);
+                    }
+                }
+            }
             double value = attributes.getAttribute(customAttr);
             if (value != 0) {
                 return value;
