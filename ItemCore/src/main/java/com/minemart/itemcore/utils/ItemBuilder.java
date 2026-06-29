@@ -69,10 +69,58 @@ public class ItemBuilder {
             meta.displayName(displayName);
         }
 
-        List<String> loreToUse;
+        // === 第一步：先写入所有 PDC 数据（包括随机属性值）===
         ItemCore plugin = ItemCore.getInstance();
+
+        // 写入物品 ID
+        meta.getPersistentDataContainer().set(ITEM_ID_KEY, PersistentDataType.STRING, customItem.getId());
+        if (plugin != null) {
+            meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, plugin.getLoreVersion());
+        }
+
+        // 隐藏原版耐久，使用 Lore 自定义耐久显示
+        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
+            meta.setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        }
+
+        // [Debug] 写入自定义耐久数据
+        if (customItem.hasDurability()) {
+            System.out.println("[ItemCore-Debug] ItemBuilder: id=" + customItem.getId() + " hasDurability=" + customItem.hasDurability() + " unbreakable=" + customItem.isUnbreakable() + " durability=" + customItem.getDurability());
+        }
+        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
+            meta.getPersistentDataContainer().set(MAX_DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
+            if (!meta.getPersistentDataContainer().has(DURABILITY_KEY, PersistentDataType.INTEGER)) {
+                meta.getPersistentDataContainer().set(DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
+            }
+            meta.getPersistentDataContainer().set(DURABILITY_BREAK_KEY, PersistentDataType.INTEGER, customItem.isDurabilityBreak() ? 1 : 0);
+            meta.getPersistentDataContainer().set(DISABLE_ANVIL_REPAIR_KEY, PersistentDataType.INTEGER, customItem.isDisableAnvilRepair() ? 1 : 0);
+            meta.getPersistentDataContainer().set(DISABLE_ENCHANTING_KEY, PersistentDataType.INTEGER, customItem.isDisableEnchanting() ? 1 : 0);
+        }
+
+        // 写入属性值到 PDC（固定值直接写入，范围值随机后写入）
+        for (Map.Entry<CustomAttribute, Double> entry : customItem.getAttributes().getBaseAttributes().entrySet()) {
+            CustomAttribute attr = entry.getKey();
+            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, entry.getValue());
+        }
+        for (Map.Entry<CustomAttribute, double[]> entry : customItem.getAttributes().getAttributeRanges().entrySet()) {
+            CustomAttribute attr = entry.getKey();
+            double[] range = entry.getValue();
+            double rolled = Math.round(ThreadLocalRandom.current().nextDouble(range[0], range[1]) * 10.0) / 10.0;
+            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, rolled);
+        }
+
+        // === 第二步：先设置 meta 到 itemStack，使 PDC 可读 ===
+        itemStack.setItemMeta(meta);
+        meta = itemStack.getItemMeta();
+        if (meta == null) {
+            return itemStack;
+        }
+
+        // === 第三步：基于 ItemStack（PDC 已包含随机值）生成 Lore ===
+        List<String> loreToUse;
         if (plugin != null && plugin.getLoreManager() != null) {
-            loreToUse = plugin.getLoreManager().generateLore(customItem);
+            loreToUse = plugin.getLoreManager().generateLore(customItem, itemStack);
         } else {
             loreToUse = customItem.getLore();
         }
@@ -85,6 +133,7 @@ public class ItemBuilder {
             meta.lore(lore);
         }
 
+        // === 第四步：设置剩余视觉属性 ===
         for (EnchantmentInfo enchantInfo : customItem.getEnchantments()) {
             Enchantment enchantment = enchantInfo.getEnchantment();
             if (enchantment != null) {
@@ -117,47 +166,6 @@ public class ItemBuilder {
             meta.addAttributeModifier(Attribute.ARMOR,
                 new AttributeModifier(UUID.randomUUID(), "ItemCore Armor", armorValue,
                     AttributeModifier.Operation.ADD_NUMBER, getArmorSlot(customItem.getMaterial())));
-        }
-
-        meta.getPersistentDataContainer().set(ITEM_ID_KEY, PersistentDataType.STRING, customItem.getId());
-        ItemCore icPlugin = ItemCore.getInstance();
-        if (icPlugin != null) {
-            meta.getPersistentDataContainer().set(LORE_VERSION_KEY, PersistentDataType.INTEGER, icPlugin.getLoreVersion());
-        }
-
-        // 隐藏原版耐久，使用 Lore 自定义耐久显示
-        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
-            meta.setUnbreakable(true);
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        }
-
-        // [Debug] 写入自定义耐久数据
-        if (customItem.hasDurability()) {
-            System.out.println("[ItemCore-Debug] ItemBuilder: id=" + customItem.getId() + " hasDurability=" + customItem.hasDurability() + " unbreakable=" + customItem.isUnbreakable() + " durability=" + customItem.getDurability());
-        }
-        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
-            meta.getPersistentDataContainer().set(MAX_DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
-            if (!meta.getPersistentDataContainer().has(DURABILITY_KEY, PersistentDataType.INTEGER)) {
-                meta.getPersistentDataContainer().set(DURABILITY_KEY, PersistentDataType.INTEGER, customItem.getDurability());
-            }
-            meta.getPersistentDataContainer().set(DURABILITY_BREAK_KEY, PersistentDataType.INTEGER, customItem.isDurabilityBreak() ? 1 : 0);
-            meta.getPersistentDataContainer().set(DISABLE_ANVIL_REPAIR_KEY, PersistentDataType.INTEGER, customItem.isDisableAnvilRepair() ? 1 : 0);
-            meta.getPersistentDataContainer().set(DISABLE_ENCHANTING_KEY, PersistentDataType.INTEGER, customItem.isDisableEnchanting() ? 1 : 0);
-        }
-
-        // 写入属性值到 PDC（固定值直接写入，范围值随机后写入）
-        if (customItem.hasDurability() && !customItem.isUnbreakable()) {
-            // 有自定义耐久的物品才写入属性PDC，避免非IC物品异常
-        }
-        for (Map.Entry<CustomAttribute, Double> entry : customItem.getAttributes().getBaseAttributes().entrySet()) {
-            CustomAttribute attr = entry.getKey();
-            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, entry.getValue());
-        }
-        for (Map.Entry<CustomAttribute, double[]> entry : customItem.getAttributes().getAttributeRanges().entrySet()) {
-            CustomAttribute attr = entry.getKey();
-            double[] range = entry.getValue();
-            double rolled = Math.round(ThreadLocalRandom.current().nextDouble(range[0], range[1]) * 10.0) / 10.0;
-            meta.getPersistentDataContainer().set(getAttributeKey(attr), PersistentDataType.DOUBLE, rolled);
         }
 
         itemStack.setItemMeta(meta);
