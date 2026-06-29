@@ -106,7 +106,7 @@ public class DurabilityManager {
         // 同步原版耐久条
         int vm = item.getType().getMaxDurability();
         if (vm > 0) {
-            ((org.bukkit.inventory.meta.Damageable) meta).setDamage(vm - newDura);
+            ((org.bukkit.inventory.meta.Damageable) meta).setDamage((int) (vm * (1.0 - (double) newDura / maxDura)));
         }
 
         // 先将耐久更新写入物品
@@ -169,7 +169,7 @@ public class DurabilityManager {
         // 同步原版耐久条
         int vm = item.getType().getMaxDurability();
         if (vm > 0) {
-            ((org.bukkit.inventory.meta.Damageable) meta).setDamage(vm - newDura);
+            ((org.bukkit.inventory.meta.Damageable) meta).setDamage((int) (vm * (1.0 - (double) newDura / maxDura)));
         }
 
         // 先将修复后的耐久写入物品

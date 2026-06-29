@@ -122,7 +122,7 @@ public class ItemBuilder {
         if (customItem.hasDurability() && !customItem.isUnbreakable()) {
             int vanillaMax = material.getMaxDurability();
             if (vanillaMax > 0) {
-                ((org.bukkit.inventory.meta.Damageable) meta).setDamage(vanillaMax - customItem.getDurability());
+                ((org.bukkit.inventory.meta.Damageable) meta).setDamage(0);
             } else {
                 // 无原版耐久的材质（如BLAZE_ROD），隐藏原版条
                 meta.setUnbreakable(true);
