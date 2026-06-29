@@ -1,4 +1,4 @@
-package com.minemart.itemcore.placeholder;
+﻿package com.minemart.itemcore.placeholder;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.calculator.AttributeCalculator;
@@ -112,7 +112,7 @@ public class ItemCoreExpansion extends PlaceholderExpansion {
     }
 
     private void debug(String message) {
-        if (plugin.getConfig().getBoolean("debug-mode", false)) {
+        if (plugin.getConfig().getBoolean("debug_mode", false)) {
             plugin.getLogger().log(Level.WARNING, "[PAPI-Debug] " + message);
         }
     }

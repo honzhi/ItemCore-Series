@@ -1,12 +1,12 @@
-# ============================================================
+﻿# ============================================================
 # ItemCore 元素系统 - 异常配置文件
 # ============================================================
 # 每个异常的配置结构:
 #   {AILMENT_ID}:                # 异常唯一标识（大写英文）
 #     display: "&x显示名"         # 异常显示名称（支持颜色代码）
 #     duration: 160              # 持续时间（tick，20 tick = 1 秒）
-#     refresh-policy: RESET      # 刷新策略（见下方说明）
-#     max-stacks: 5              # 最大层数（仅 STACK 策略有效）
+#     refresh_policy: RESET      # 刷新策略（见下方说明）
+#     max_stacks: 5              # 最大层数（仅 STACK 策略有效）
 #     triggers:                  # 异常效果触发器列表
 #       - type: DAMAGE_PERCENT   #   触发器类型
 #         value: 0.02            #   伤害百分比 2%
@@ -41,7 +41,7 @@ ailments:
   LIUHUO_DOT:
     display: "&c流火"
     duration: 160
-    refresh-policy: RESET
+    refresh_policy: RESET
     triggers:
       - type: DAMAGE_PERCENT
         value: 0.02
@@ -53,7 +53,7 @@ ailments:
   HANSHUANG_WEAKEN:
     display: "&b寒霜"
     duration: 80
-    refresh-policy: RESET
+    refresh_policy: RESET
     triggers:
       - type: ATTRIBUTE_MOD
         attribute: PHYSICAL_RESIST
@@ -68,7 +68,7 @@ ailments:
   LEIZHE_BREAK:
     display: "&e雷蛰"
     duration: 120
-    refresh-policy: RESET
+    refresh_policy: RESET
     triggers:
       - type: RESISTANCE_REDUCTION
         value: -0.25

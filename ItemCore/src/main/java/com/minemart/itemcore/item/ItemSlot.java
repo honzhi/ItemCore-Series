@@ -1,4 +1,4 @@
-package com.minemart.itemcore.item;
+﻿package com.minemart.itemcore.item;
 
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public enum ItemSlot {
 
-    MAIN_HAND("main-hand", EquipmentSlot.HAND),
-    OFF_HAND("off-hand", EquipmentSlot.OFF_HAND),
+    MAIN_HAND("main_hand", EquipmentSlot.HAND),
+    OFF_HAND("off_hand", EquipmentSlot.OFF_HAND),
     HEAD("head", EquipmentSlot.HEAD),
     CHEST("chest", EquipmentSlot.CHEST),
     LEGS("legs", EquipmentSlot.LEGS),

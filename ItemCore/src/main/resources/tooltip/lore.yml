@@ -19,7 +19,7 @@ general:
 # Lore 展示顺序
 # ========================================
 
-lore-format:
+lore_format:
   # 物品描述
   - '#item-lore#'
   # 耐久

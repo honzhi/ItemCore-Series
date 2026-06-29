@@ -147,7 +147,7 @@ public class LoreManager {
             return item.getLore();
         }
 
-        List<String> format = loreConfig.getStringList("lore-format");
+        List<String> format = loreConfig.getStringList("lore_format");
         if (format.isEmpty()) {
             return item.getLore();
         }

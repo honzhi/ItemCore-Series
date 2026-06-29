@@ -1,4 +1,4 @@
-package com.minemart.itemcore.config;
+﻿package com.minemart.itemcore.config;
 
 import com.minemart.itemcore.ItemCore;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -94,11 +94,11 @@ public class AttributesConfig {
     }
 
     public double getAdaptiveForceAttackConversion() {
-        return config.getDouble("adaptive-force.attack_conversion", 1.0);
+        return config.getDouble("adaptive_force.attack_conversion", 1.0);
     }
 
     public double getAdaptiveForceSpellConversion() {
-        return config.getDouble("adaptive-force.spell_conversion", 1.0);
+        return config.getDouble("adaptive_force.spell_conversion", 1.0);
     }
 
     public String getArmorFormula() {

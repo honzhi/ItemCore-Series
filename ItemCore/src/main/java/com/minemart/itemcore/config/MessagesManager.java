@@ -1,4 +1,4 @@
-package com.minemart.itemcore.config;
+﻿package com.minemart.itemcore.config;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.utils.MessageUtil;
@@ -125,29 +125,29 @@ public class MessagesManager {
     }
 
     public String getNoPermission() {
-        return getMessage("permissions.no-permission", "&c你没有权限执行此命令");
+        return getMessage("permissions.no_permission", "&c你没有权限执行此命令");
     }
 
     public String getNoObtainPermission() {
-        return getMessage("permissions.no-obtain-permission", "&c你没有权限获取此物品");
+        return getMessage("permissions.no_obtain_permission", "&c你没有权限获取此物品");
     }
 
     public String getNoGuiObtainPermission() {
-        return getMessage("permissions.no-gui-obtain-permission", "&c你没有权限从GUI获取物品");
+        return getMessage("permissions.no_gui_obtain_permission", "&c你没有权限从GUI获取物品");
     }
 
     public String getPlayerNotFound(String player) {
-        String msg = getMessage("commands.player-not-found", "&c玩家未找到: &7{player}");
+        String msg = getMessage("commands.player_not_found", "&c玩家未找到: &7{player}");
         return format(msg, "{player}", player);
     }
 
     public String getInvalidAmount(String amount) {
-        String msg = getMessage("commands.invalid-amount", "&c无效的数量: &7{amount}");
+        String msg = getMessage("commands.invalid_amount", "&c无效的数量: &7{amount}");
         return format(msg, "{amount}", amount);
     }
 
     public String getItemNotFound(String item) {
-        String msg = getMessage("items.not-found", "&c未找到物品: &7{item}");
+        String msg = getMessage("items.not_found", "&c未找到物品: &7{item}");
         return format(msg, "{item}", item);
     }
 

@@ -1,4 +1,4 @@
-package com.minemart.itemcore.element;
+﻿package com.minemart.itemcore.element;
 
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.attribute.AilmentRegistry;
@@ -60,7 +60,7 @@ public class ElementConfig {
 
                 String display = elementSection.getString("display", elementId);
                 double threshold = elementSection.getDouble("threshold", 100);
-                double decayPerSecond = elementSection.getDouble("decay-per-second", 5);
+                double decayPerSecond = elementSection.getDouble("decay_per_second", 5);
 
                 ConfigurationSection accSection = elementSection.getConfigurationSection("accumulation");
                 AccumulationConfig accumulationConfig = parseAccumulation(accSection);
@@ -95,7 +95,7 @@ public class ElementConfig {
         double value = section.getDouble("value", 0.15);
         String attribute = section.getString("attribute");
         double multiplier = section.getDouble("multiplier", 0);
-        List<String> allowSources = section.getStringList("allow-sources");
+        List<String> allowSources = section.getStringList("allow_sources");
 
         return new AccumulationConfig(mode, value, attribute, multiplier, allowSources);
     }

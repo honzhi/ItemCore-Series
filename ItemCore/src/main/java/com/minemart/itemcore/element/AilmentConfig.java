@@ -1,4 +1,4 @@
-package com.minemart.itemcore.element;
+﻿package com.minemart.itemcore.element;
 
 import com.minemart.itemcore.ItemCore;
 import org.bukkit.configuration.ConfigurationSection;
@@ -58,8 +58,8 @@ public class AilmentConfig {
 
                 String display = ailmentSection.getString("display", ailmentId);
                 int duration = ailmentSection.getInt("duration", 100);
-                String refreshPolicy = ailmentSection.getString("refresh-policy", "RESET");
-                int maxStacks = ailmentSection.getInt("max-stacks", 1);
+                String refreshPolicy = ailmentSection.getString("refresh_policy", "RESET");
+                int maxStacks = ailmentSection.getInt("max_stacks", 1);
 
                 List<AilmentTrigger> triggers = new ArrayList<>();
                 List<Map<?, ?>> triggerList = ailmentSection.getMapList("triggers");

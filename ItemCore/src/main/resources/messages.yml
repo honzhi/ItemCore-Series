@@ -1,4 +1,4 @@
-# ========================================
+﻿# ========================================
 # ItemCore 消息配置文件
 # ========================================
 # 此文件配置插件在聊天框显示的提示消息
@@ -18,21 +18,21 @@ general:
 # 权限消息
 # ========================================
 permissions:
-  no-permission: "&c你没有权限执行此命令"
-  no-obtain-permission: "&c你没有权限获取此物品"
-  no-gui-obtain-permission: "&c你没有权限从GUI获取物品"
+  no_permission: "&c你没有权限执行此命令"
+  no_obtain_permission: "&c你没有权限获取此物品"
+  no_gui_obtain_permission: "&c你没有权限从GUI获取物品"
 
 # ========================================
 # 命令消息
 # ========================================
 commands:
-  player-not-found: "&c玩家未找到: &7{player}"
-  invalid-amount: "&c无效的数量: &7{amount}"
+  player_not_found: "&c玩家未找到: &7{player}"
+  invalid_amount: "&c无效的数量: &7{amount}"
 
 # ========================================
 # 物品消息
 # ========================================
 items:
-  not-found: "&c未找到物品: &7{item}"
+  not_found: "&c未找到物品: &7{item}"
   given: "&a已给予 &7{player} &a物品: &7{item} &ax{amount}"
   obtained: "&a你获得了物品: &7{item}"

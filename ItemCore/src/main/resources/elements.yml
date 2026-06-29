@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 # ItemCore 元素系统 - 元素配置文件
 # ============================================================
 # 每个元素的配置结构:
@@ -7,11 +7,11 @@
     # icon: '✦'                   # 元素图标（伤害飘字用）
     # color: '&f'                 # 元素颜色代码（伤害飘字用）
 #     threshold: 30            # 积累阈值 —— 达到此值触发异常
-#     decay-per-second: 1       # 每秒自动衰减量（无元素伤害输入时）
+#     decay_per_second: 1       # 每秒自动衰减量（无元素伤害输入时）
 #     accumulation:             # 累积规则
 #       mode: DAMAGE_PERCENT    #   见下方「累积模式」说明
 #       value: 0.5             #   模式参数
-#       allow-sources:          #   允许积累的伤害来源
+#       allow_sources:          #   允许积累的伤害来源
 #         - ATTACK              #     普通攻击
 #         - SKILL               #     技能伤害
 #     ailment: LIUHUO_DOT       # 达到阈值后触发的异常 ID（见 ailments.yml）
@@ -37,11 +37,11 @@ elements:
     icon: '🔥'
     color: '&c'
     threshold: 30
-    decay-per-second: 1
+    decay_per_second: 1
     accumulation:
       mode: DAMAGE_PERCENT
       value: 0.5
-      allow-sources:
+      allow_sources:
         - ATTACK
         - SKILL
     ailment: LIUHUO_DOT
@@ -52,11 +52,11 @@ elements:
     icon: '❄'
     color: '&b'
     threshold: 30
-    decay-per-second: 2
+    decay_per_second: 2
     accumulation:
       mode: FIXED
       value: 25
-      allow-sources:
+      allow_sources:
         - ATTACK
         - SKILL
     ailment: HANSHUANG_WEAKEN
@@ -67,12 +67,12 @@ elements:
     icon: '⚡'
     color: '&e'
     threshold: 30
-    decay-per-second: 1
+    decay_per_second: 1
     accumulation:
       mode: ATTRIBUTE
       attribute: SPELL_POWER
       multiplier: 0.2
-      allow-sources:
+      allow_sources:
         - ATTACK
         - SKILL
     ailment: LEIZHE_BREAK
