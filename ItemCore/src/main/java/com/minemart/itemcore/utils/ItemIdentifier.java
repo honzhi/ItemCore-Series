@@ -1,7 +1,8 @@
-package com.minemart.itemcore.utils;
+﻿package com.minemart.itemcore.utils;
 
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.ItemSlot;
+import com.minemart.itemcore.util.DurabilityManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +39,7 @@ public class ItemIdentifier {
         PlayerInventory inv = player.getInventory();
 
         ItemStack mainHand = inv.getItemInMainHand();
-        if (isCustomItem(mainHand)) {
+        if (isCustomItem(mainHand) && !DurabilityManager.isBroken(mainHand)) {
             CustomItem item = getCustomItem(mainHand);
             if (item != null && item.canSlot(ItemSlot.MAIN_HAND)) {
                 result.computeIfAbsent(ItemSlot.MAIN_HAND, k -> new ArrayList<>()).add(item);
@@ -46,7 +47,7 @@ public class ItemIdentifier {
         }
 
         ItemStack offHand = inv.getItemInOffHand();
-        if (isCustomItem(offHand)) {
+        if (isCustomItem(offHand) && !DurabilityManager.isBroken(offHand)) {
             CustomItem item = getCustomItem(offHand);
             if (item != null && item.canSlot(ItemSlot.OFF_HAND)) {
                 result.computeIfAbsent(ItemSlot.OFF_HAND, k -> new ArrayList<>()).add(item);
@@ -58,7 +59,7 @@ public class ItemIdentifier {
 
         for (int i = 0; i < armor.length && i < armorSlots.length; i++) {
             ItemStack armorItem = armor[i];
-            if (armorItem != null && isCustomItem(armorItem)) {
+            if (armorItem != null && isCustomItem(armorItem) && !DurabilityManager.isBroken(armorItem)) {
                 CustomItem item = getCustomItem(armorItem);
                 if (item != null && item.canSlot(armorSlots[i])) {
                     result.computeIfAbsent(armorSlots[i], k -> new ArrayList<>()).add(item);
@@ -130,6 +131,7 @@ public class ItemIdentifier {
     }
 
     public static boolean isWeapon(ItemStack itemStack) {
+        if (DurabilityManager.isBroken(itemStack)) return false;
         CustomItem customItem = getCustomItem(itemStack);
         if (customItem != null) {
             return customItem.canSlot(ItemSlot.MAIN_HAND);
@@ -143,6 +145,7 @@ public class ItemIdentifier {
     }
 
     public static boolean isArmor(ItemStack itemStack) {
+        if (DurabilityManager.isBroken(itemStack)) return false;
         CustomItem customItem = getCustomItem(itemStack);
         if (customItem != null) {
             return customItem.canSlot(ItemSlot.HEAD)
