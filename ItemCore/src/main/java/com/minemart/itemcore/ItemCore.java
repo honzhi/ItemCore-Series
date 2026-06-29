@@ -22,6 +22,7 @@ import com.minemart.itemcore.placeholder.ItemCoreExpansion;
 import com.minemart.itemcore.utils.ItemBuilder;
 import com.minemart.itemcore.utils.MessageUtil;
 import com.minemart.itemcore.util.DurabilityManager;
+import org.bstats.bukkit.Metrics;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
