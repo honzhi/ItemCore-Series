@@ -23,7 +23,6 @@ legendary_blade:
       min: 20
       max: 30
     CRIT_DAMAGE: 50
-    KNOCKBACK: 0.5
   skills:
     right_click:
       provider: mythicmobs
