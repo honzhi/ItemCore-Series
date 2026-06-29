@@ -1,7 +1,6 @@
 ﻿package com.minemart.itemcore.util;
 
 import com.minemart.itemcore.ItemCore;
-import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.utils.ItemBuilder;
 import com.minemart.itemcore.utils.MessageUtil;
 import org.bukkit.Bukkit;
@@ -69,6 +68,18 @@ public class DurabilityManager {
     }
 
     /**
+     * 判断物品是否已损坏（耐久为 0）
+     */
+    public static boolean isBroken(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return false;
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+        if (!meta.getPersistentDataContainer().has(ItemBuilder.MAX_DURABILITY_KEY, PersistentDataType.INTEGER)) return false;
+        int current = meta.getPersistentDataContainer().getOrDefault(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER, -1);
+        return current == 0;
+    }
+
+    /**
      * 消耗物品耐久
      * @param player 持有者（用于播放音效，可为null）
      * @param item 物品
@@ -84,6 +95,8 @@ public class DurabilityManager {
         if (maxDura <= 0) return false;
 
         int current = meta.getPersistentDataContainer().get(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER);
+        if (current <= 0) return true;
+
         int newDura = Math.max(0, current - amount);
 
         meta.getPersistentDataContainer().set(ItemBuilder.DURABILITY_KEY, PersistentDataType.INTEGER, newDura);
@@ -97,7 +110,11 @@ public class DurabilityManager {
         item.setItemMeta(meta);
 
         if (newDura <= 0) {
-            breakItem(player, item);
+            // 检查是否允许销毁
+            boolean shouldBreak = meta.getPersistentDataContainer().getOrDefault(ItemBuilder.DURABILITY_BREAK_KEY, PersistentDataType.INTEGER, 1) == 1;
+            if (shouldBreak) {
+                breakItem(player, item);
+            }
             return true;
         }
 
