@@ -1,6 +1,7 @@
 package com.minemart.itemcore.utils;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
@@ -28,6 +29,7 @@ public final class MessageUtil {
             return Component.empty();
         }
         return Component.empty()
+            .color(NamedTextColor.WHITE)
             .decoration(TextDecoration.ITALIC, false)
             .append(LEGACY_SERIALIZER.deserialize(message));
     }
