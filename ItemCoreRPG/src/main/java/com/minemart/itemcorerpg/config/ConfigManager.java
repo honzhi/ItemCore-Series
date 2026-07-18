@@ -88,6 +88,11 @@ public class ConfigManager {
         return Double.isFinite(healthScale) && healthScale > 0 ? healthScale : 20.0;
     }
 
+    public boolean isAbsorptionCompressionEnabled() {
+        return isHealthCompressionEnabled()
+                && config.getBoolean("health_compression.compress_absorption", true);
+    }
+
     public String getFormat(String type) {
         return config.getString("damage_indicators.types." + type + ".format", "{icon} &f{value}");
     }

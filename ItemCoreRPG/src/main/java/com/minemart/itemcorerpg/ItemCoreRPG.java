@@ -4,6 +4,7 @@ import com.minemart.itemcorerpg.command.CommandManager;
 import com.minemart.itemcorerpg.config.ConfigManager;
 import com.minemart.itemcorerpg.gui.GuiListener;
 import com.minemart.itemcorerpg.listener.CombatListener;
+import com.minemart.itemcorerpg.manager.AbsorptionCompressionManager;
 import com.minemart.itemcorerpg.manager.HealthCompressionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,6 +15,7 @@ public class ItemCoreRPG extends JavaPlugin {
     private ConfigManager configManager;
     private CombatListener combatListener;
     private HealthCompressionManager healthCompressionManager;
+    private AbsorptionCompressionManager absorptionCompressionManager;
     private CommandManager commandManager;
 
     public static ItemCoreRPG getInstance() {
@@ -26,6 +28,10 @@ public class ItemCoreRPG extends JavaPlugin {
 
     public HealthCompressionManager getHealthCompressionManager() {
         return healthCompressionManager;
+    }
+
+    public AbsorptionCompressionManager getAbsorptionCompressionManager() {
+        return absorptionCompressionManager;
     }
 
     @Override
@@ -44,6 +50,10 @@ public class ItemCoreRPG extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(healthCompressionManager, this);
         healthCompressionManager.refreshAll();
 
+        absorptionCompressionManager = new AbsorptionCompressionManager(this);
+        Bukkit.getPluginManager().registerEvents(absorptionCompressionManager, this);
+        absorptionCompressionManager.start();
+
         Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
 
         commandManager = new CommandManager(this);
@@ -60,6 +70,9 @@ public class ItemCoreRPG extends JavaPlugin {
         }
         if (healthCompressionManager != null) {
             healthCompressionManager.shutdown();
+        }
+        if (absorptionCompressionManager != null) {
+            absorptionCompressionManager.shutdown();
         }
         getLogger().info("ItemCoreRPG \u5df2\u7981\u7528");
     }

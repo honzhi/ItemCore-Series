@@ -4,7 +4,7 @@ main: com.minemart.itemcorerpg.ItemCoreRPG
 api-version: '1.21'
 author: MineMart
 description: ItemCore RPG扩展插件 - 伤害显示功能
-depend: [ItemCore]
+depend: [ItemCore, ProtocolLib]
 
 commands:
   itemcorerpg:
