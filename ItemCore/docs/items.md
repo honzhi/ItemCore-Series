@@ -26,6 +26,7 @@ legendary_blade:
 | `type` | 字符串 | `misc` | 分类 ID |
 | `display_name` | 字符串 | — | 显示名称（支持 `&` 颜色码） |
 | `color` | RGB | — | 皮革护甲颜色，例如 `255, 0, 0` |
+| `set` | 字符串 | — | 所属套装 ID，对应 `sets.yml` 中的配置 |
 | `lore` | 列表 | — | 物品描述 |
 | `attributes` | Map | — | 属性配置 |
 | `enchantments` | Map | — | 附魔：`sharpness: 5` |

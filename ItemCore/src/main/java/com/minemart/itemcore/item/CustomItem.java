@@ -18,6 +18,7 @@ public class CustomItem {
     private final Material material;
     private final String displayName;
     private final Color color;
+    private final String setId;
     private final List<String> lore;
     private final List<EnchantmentInfo> enchantments;
     private final List<ItemFlag> itemFlags;
@@ -47,14 +48,15 @@ public class CustomItem {
                       List<ItemSlot> activeSlots, boolean rightClickable,
                       boolean leftClickable, boolean droppable, boolean clickable,
                       boolean keepOnDeath, int durability, boolean durabilityBreak, boolean disableAnvilRepair, boolean disableEnchanting, List<ItemSkill> skills) {
-        this(id, type, material, displayName, null, lore, enchantments, itemFlags, customModelData,
+        this(id, type, material, displayName, null, null, lore, enchantments, itemFlags, customModelData,
                 unbreakable, maxStack, effects, permission, attributes, activeSlots, rightClickable,
                 leftClickable, droppable, clickable, keepOnDeath, durability, durabilityBreak,
                 disableAnvilRepair, disableEnchanting, skills);
     }
 
     private CustomItem(String id, String type, Material material, String displayName, Color color,
-                      List<String> lore, List<EnchantmentInfo> enchantments,
+                       String setId,
+                       List<String> lore, List<EnchantmentInfo> enchantments,
                       List<ItemFlag> itemFlags, int customModelData,
                       boolean unbreakable, int maxStack, List<PotionEffectInfo> effects,
                       String permission, AttributeContainer attributes,
@@ -66,6 +68,7 @@ public class CustomItem {
         this.material = material;
         this.displayName = displayName;
         this.color = color;
+        this.setId = setId;
         this.lore = lore != null ? lore : new ArrayList<>();
         this.enchantments = enchantments != null ? enchantments : new ArrayList<>();
         this.itemFlags = itemFlags != null ? itemFlags : new ArrayList<>();
@@ -106,6 +109,10 @@ public class CustomItem {
 
     public Color getColor() {
         return color;
+    }
+
+    public String getSetId() {
+        return setId;
     }
 
     public List<String> getLore() {
@@ -248,6 +255,7 @@ public class CustomItem {
         private Material material;
         private String displayName;
         private Color color;
+        private String setId;
         private final List<String> lore = new ArrayList<>();
         private final List<EnchantmentInfo> enchantments = new ArrayList<>();
         private final List<ItemFlag> itemFlags = new ArrayList<>();
@@ -291,6 +299,11 @@ public class CustomItem {
 
         public Builder color(Color color) {
             this.color = color;
+            return this;
+        }
+
+        public Builder itemSet(String setId) {
+            this.setId = setId;
             return this;
         }
 
@@ -440,7 +453,7 @@ public class CustomItem {
             List<ItemSlot> slots = activeSlotsConfigured
                     ? new ArrayList<>(activeSlots)
                     : ItemSlot.defaultSlots();
-            return new CustomItem(id, type, material, displayName, color, lore, enchantments,
+            return new CustomItem(id, type, material, displayName, color, setId, lore, enchantments,
                     itemFlags, customModelData, unbreakable, maxStack, effects,
                     permission, attributes, slots, rightClickable, leftClickable,
                     droppable, clickable, keepOnDeath, durability, durabilityBreak, disableAnvilRepair, disableEnchanting, skills);

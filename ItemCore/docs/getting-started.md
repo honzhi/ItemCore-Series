@@ -16,6 +16,7 @@ plugins/ItemCore/
 ├── attributes.yml          # 属性全局参数
 ├── messages.yml            # 消息配置
 ├── categories.yml          # 分类配置
+├── sets.yml                # 套装配置
 ├── elements.yml            # 元素配置
 ├── ailments.yml            # 异常配置
 ├── items/                  # 物品配置目录

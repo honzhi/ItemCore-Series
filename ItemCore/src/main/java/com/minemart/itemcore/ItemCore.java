@@ -7,6 +7,7 @@ import com.minemart.itemcore.config.ConfigManager;
 import com.minemart.itemcore.config.LoreManager;
 import com.minemart.itemcore.config.MessagesManager;
 import com.minemart.itemcore.core.CoreManager;
+import com.minemart.itemcore.core.SetManager;
 import com.minemart.itemcore.damage.DamageManager;
 import com.minemart.itemcore.element.AccumulationManager;
 import com.minemart.itemcore.element.AilmentConfig;
@@ -108,6 +109,10 @@ public class ItemCore extends JavaPlugin {
 
     public CoreManager getCoreManager() {
         return coreManager;
+    }
+
+    public SetManager getSetManager() {
+        return coreManager != null ? coreManager.getSetManager() : null;
     }
 
     public ListenerManager getListenerManager() {
@@ -227,6 +232,10 @@ public class ItemCore extends JavaPlugin {
     public void onDisable() {
         stopLoreRefreshScheduler();
 
+        if (getSetManager() != null) {
+            Bukkit.getOnlinePlayers().forEach(getSetManager()::clearPassiveBonuses);
+        }
+
         if (listenerManager != null) {
             listenerManager.unregisterAll();
         }
@@ -253,6 +262,7 @@ public class ItemCore extends JavaPlugin {
         if (coreManager != null) {
             coreManager.reload();
         }
+        Bukkit.getOnlinePlayers().forEach(ItemCoreAPI::refreshPlayerAttributes);
 
         // ── 重启 lore 刷新调度器（以应用配置变更） ──
         stopLoreRefreshScheduler();

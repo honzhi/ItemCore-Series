@@ -54,6 +54,7 @@ nav:
   - 权限系统: permissions.md
   - 物品创建: items.md
   - 属性系统: attributes.md
+  - 套装系统: sets.md
   - 元素系统: elements.md
   - 伤害系统: damage.md
   - Lore 展示系统: lore.md

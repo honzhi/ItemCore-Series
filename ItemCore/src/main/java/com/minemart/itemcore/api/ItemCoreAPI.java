@@ -17,6 +17,7 @@ import com.minemart.itemcore.item.ItemCategory;
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.ElementType;
+import com.minemart.itemcore.utils.ItemIdentifier;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -66,6 +67,28 @@ public class ItemCoreAPI {
         AttributeInstance speedAttr = player.getAttribute(Attribute.MOVEMENT_SPEED);
         if (speedAttr != null) {
             speedAttr.setBaseValue(movementSpeed);
+        }
+
+        ItemCore plugin = ItemCore.getInstance();
+        if (plugin != null && plugin.getSetManager() != null) {
+            double customAttackSpeed = 0;
+            ItemStack mainHand = player.getInventory().getItemInMainHand();
+            if (ItemIdentifier.isCustomItem(mainHand)) {
+                CustomItem customItem = ItemIdentifier.getCustomItem(mainHand);
+                if (customItem != null) {
+                    customAttackSpeed = customItem.getAttributes()
+                            .getAttribute(CustomAttribute.ATTACK_SPEED);
+                }
+            }
+            double setAttackSpeed = plugin.getSetManager().calculateActiveAttributes(player)
+                    .getAttribute(CustomAttribute.ATTACK_SPEED);
+            AttributeInstance attackSpeedAttribute = player.getAttribute(Attribute.ATTACK_SPEED);
+            if (attackSpeedAttribute != null) {
+                attackSpeedAttribute.setBaseValue(customAttackSpeed != 0
+                        ? customAttackSpeed + setAttackSpeed
+                        : 4.0 + setAttackSpeed);
+            }
+            plugin.getSetManager().applyPassiveBonuses(player);
         }
     }
 

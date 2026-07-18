@@ -73,6 +73,10 @@ public class AttributeCalculator {
             }
         }
 
+        ItemCore plugin = ItemCore.getInstance();
+        if (plugin != null && plugin.getSetManager() != null) {
+            result.merge(plugin.getSetManager().calculateActiveAttributes(player, equipped));
+        }
 
         // 合并注册属性提供者的贡献（如饰品插件）
         for (AttributeProvider provider : ItemCoreAPI.getAttributeProviders()) {

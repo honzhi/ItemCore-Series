@@ -1,6 +1,7 @@
 package com.minemart.itemcore.listener;
 
 import com.minemart.itemcore.ItemCore;
+import com.minemart.itemcore.core.SetManager;
 import com.minemart.itemcore.event.ItemSkillTriggerEvent;
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.skill.ItemSkill;
@@ -23,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +32,9 @@ import java.util.UUID;
 public class ItemSkillListener extends BaseListener {
     private final Map<UUID, Map<String, BukkitRunnable>> activeTimers = new HashMap<>();
     private final Map<UUID, Long> lastClickTime = new HashMap<>();
+    private final Map<UUID, Long> lastSetClickTime = new HashMap<>();
     private static final long CLICK_DELAY_MS = 500;
+    private static final long SET_CLICK_DEDUPLICATION_MS = 50;
 
     public ItemSkillListener(ItemCore plugin) {
         super(plugin);
@@ -45,19 +49,6 @@ public class ItemSkillListener extends BaseListener {
             return;
         }
 
-        ItemStack item = hand == EquipmentSlot.HAND
-            ? player.getInventory().getItemInMainHand()
-            : player.getInventory().getItemInOffHand();
-
-        if (!ItemIdentifier.isCustomItem(item)) {
-            return;
-        }
-
-        CustomItem customItem = ItemIdentifier.getCustomItem(item);
-        if (customItem == null || !customItem.hasSkills() || !canTriggerSkills(player, item, customItem)) {
-            return;
-        }
-
         SkillTrigger trigger = null;
         if (event.getAction().isLeftClick()) {
             trigger = SkillTrigger.LEFT_CLICK;
@@ -67,13 +58,23 @@ public class ItemSkillListener extends BaseListener {
             lastClickTime.put(player.getUniqueId(), System.currentTimeMillis());
         }
 
-        if (trigger != null) {
-            // 检查当前手持位置是否在 active_slots 内
+        if (trigger == null) {
+            return;
+        }
+
+        ItemStack item = hand == EquipmentSlot.HAND
+            ? player.getInventory().getItemInMainHand()
+            : player.getInventory().getItemInOffHand();
+        if (ItemIdentifier.isCustomItem(item)) {
+            CustomItem customItem = ItemIdentifier.getCustomItem(item);
             ItemSlot handSlot = (hand == EquipmentSlot.HAND) ? ItemSlot.MAIN_HAND : ItemSlot.OFF_HAND;
-            if (customItem.canSlot(handSlot)) {
+            if (customItem != null && customItem.hasSkills()
+                    && canTriggerSkills(player, item, customItem) && customItem.canSlot(handSlot)) {
                 triggerSkills(player, customItem, trigger);
             }
         }
+
+        triggerSetSkillsOnce(player, trigger, null);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -91,19 +92,17 @@ public class ItemSkillListener extends BaseListener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        if (!ItemIdentifier.isCustomItem(item)) {
-            return;
+        LivingEntity target = (LivingEntity) event.getEntity();
+        if (ItemIdentifier.isCustomItem(item)) {
+            CustomItem customItem = ItemIdentifier.getCustomItem(item);
+            if (customItem != null && customItem.hasSkills()
+                    && canTriggerSkills(player, item, customItem)
+                    && customItem.canSlot(ItemSlot.MAIN_HAND)) {
+                triggerSkills(player, customItem, SkillTrigger.ATTACK, target);
+            }
         }
 
-        CustomItem customItem = ItemIdentifier.getCustomItem(item);
-        if (customItem == null || !customItem.hasSkills() || !canTriggerSkills(player, item, customItem)) {
-            return;
-        }
-
-        // 检查主手是否在 active_slots 内
-        if (customItem.canSlot(ItemSlot.MAIN_HAND)) {
-            triggerSkills(player, customItem, SkillTrigger.ATTACK, (LivingEntity) event.getEntity());
-        }
+        triggerSetSkills(player, SkillTrigger.ATTACK, target);
     }
 
     public void registerTimerSkills(Player player, CustomItem item) {
@@ -146,10 +145,20 @@ public class ItemSkillListener extends BaseListener {
                 for (int index = 0; index < skills.size(); index++) {
                     ItemSkill skill = skills.get(index);
                     if (skill.getTrigger() == SkillTrigger.TIMER && skill.hasTimer()) {
-                        String timerKey = item.getId().toLowerCase() + ":" + index;
-                        desiredTimers.putIfAbsent(timerKey, new TimerBinding(item, skill));
+                        String timerKey = "item:" + item.getId().toLowerCase(Locale.ROOT) + ":" + index;
+                        desiredTimers.putIfAbsent(timerKey, new TimerBinding(item, skill, null));
                     }
                 }
+            }
+        }
+
+        SetManager setManager = plugin.getSetManager();
+        if (setManager != null) {
+            for (SetManager.SetSkillActivation activation
+                    : setManager.getActiveSkills(player, SkillTrigger.TIMER)) {
+                String timerKey = "set:" + activation.getActivationKey();
+                desiredTimers.putIfAbsent(timerKey, new TimerBinding(
+                        activation.getSourceItem(), activation.getSkill(), activation.getActivationKey()));
             }
         }
 
@@ -186,7 +195,15 @@ public class ItemSkillListener extends BaseListener {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                if (!player.isOnline() || !isItemActiveAndUsable(player, binding.item)) {
+                if (!player.isOnline()) {
+                    cancel();
+                    removeTimer(playerId, timerKey);
+                    return;
+                }
+                boolean active = binding.setActivationKey == null
+                        ? isItemActiveAndUsable(player, binding.item)
+                        : isSetSkillActive(player, binding.setActivationKey);
+                if (!active) {
                     cancel();
                     removeTimer(playerId, timerKey);
                     return;
@@ -209,6 +226,7 @@ public class ItemSkillListener extends BaseListener {
         }
         unregisterTimerSkills(player.getUniqueId());
         lastClickTime.remove(player.getUniqueId());
+        lastSetClickTime.remove(player.getUniqueId());
     }
 
     private void unregisterTimerSkills(UUID playerId) {
@@ -217,6 +235,7 @@ public class ItemSkillListener extends BaseListener {
             timers.values().forEach(BukkitRunnable::cancel);
         }
         lastClickTime.remove(playerId);
+        lastSetClickTime.remove(playerId);
     }
 
     private void removeTimer(UUID playerId, String timerKey) {
@@ -253,6 +272,20 @@ public class ItemSkillListener extends BaseListener {
         return false;
     }
 
+    private boolean isSetSkillActive(Player player, String activationKey) {
+        SetManager setManager = plugin.getSetManager();
+        if (setManager == null) {
+            return false;
+        }
+        for (SetManager.SetSkillActivation activation
+                : setManager.getActiveSkills(player, SkillTrigger.TIMER)) {
+            if (activation.getActivationKey().equals(activationKey)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void triggerSkills(Player player, CustomItem item, SkillTrigger trigger) {
         triggerSkills(player, item, trigger, null);
     }
@@ -268,13 +301,38 @@ public class ItemSkillListener extends BaseListener {
         }
     }
 
+    private void triggerSetSkillsOnce(Player player, SkillTrigger trigger, LivingEntity target) {
+        long currentTime = System.currentTimeMillis();
+        Long lastTrigger = lastSetClickTime.get(player.getUniqueId());
+        if (lastTrigger != null && currentTime - lastTrigger < SET_CLICK_DEDUPLICATION_MS) {
+            return;
+        }
+        lastSetClickTime.put(player.getUniqueId(), currentTime);
+        triggerSetSkills(player, trigger, target);
+    }
+
+    private void triggerSetSkills(Player player, SkillTrigger trigger, LivingEntity target) {
+        SetManager setManager = plugin.getSetManager();
+        if (setManager == null) {
+            return;
+        }
+        for (SetManager.SetSkillActivation activation : setManager.getActiveSkills(player, trigger)) {
+            ItemSkillTriggerEvent event = new ItemSkillTriggerEvent(
+                    player, activation.getSourceItem(), activation.getSkill(), trigger,
+                    target, player.getLocation());
+            Bukkit.getPluginManager().callEvent(event);
+        }
+    }
+
     private static class TimerBinding {
         private final CustomItem item;
         private final ItemSkill skill;
+        private final String setActivationKey;
 
-        private TimerBinding(CustomItem item, ItemSkill skill) {
+        private TimerBinding(CustomItem item, ItemSkill skill, String setActivationKey) {
             this.item = item;
             this.skill = skill;
+            this.setActivationKey = setActivationKey;
         }
     }
 }

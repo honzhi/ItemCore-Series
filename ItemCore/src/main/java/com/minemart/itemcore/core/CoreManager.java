@@ -11,16 +11,19 @@ public class CoreManager {
     private final ItemCore plugin;
     private final ItemManager itemManager;
     private final CategoryManager categoryManager;
+    private final SetManager setManager;
 
     public CoreManager(ItemCore plugin) {
         this.plugin = plugin;
         this.itemManager = new ItemManager(plugin);
         this.categoryManager = new CategoryManager(plugin);
+        this.setManager = new SetManager(plugin);
     }
 
     public void initialize() {
         itemManager.loadAll();
         categoryManager.loadAll();
+        setManager.loadAll();
 
         ItemCoreAPI.setItemRegistry(itemManager);
         ItemCoreAPI.setCategoryRegistry(categoryManager);
@@ -31,6 +34,7 @@ public class CoreManager {
     public void reload() {
         itemManager.reload();
         categoryManager.reload();
+        setManager.reload();
         plugin.getLogger().info("核心管理器重载完成");
     }
 
@@ -40,6 +44,10 @@ public class CoreManager {
 
     public CategoryManager getCategoryManager() {
         return categoryManager;
+    }
+
+    public SetManager getSetManager() {
+        return setManager;
     }
 
     public org.bukkit.inventory.ItemStack getItemStack(String itemId) {

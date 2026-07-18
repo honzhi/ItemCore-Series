@@ -183,9 +183,12 @@ public class CombatListener extends BaseListener {
         if (attacker != null) {
             ItemStack handItem = attacker.getInventory().getItemInMainHand();
             if (DurabilityManager.hasDurability(handItem)) {
-                DurabilityManager.damageItem(attacker, handItem, 1);
+                boolean broken = DurabilityManager.damageItem(attacker, handItem, 1);
                 // 显式写回背包，确保修改持久化
                 attacker.getInventory().setItemInMainHand(handItem);
+                if (broken) {
+                    schedulePassiveAttributeUpdate(attacker);
+                }
             }
         }
     }
@@ -316,16 +319,24 @@ public class CombatListener extends BaseListener {
                 customAttackSpeed = customWeapon.getAttributes().getAttribute(CustomAttribute.ATTACK_SPEED);
             }
         }
+        double setAttackSpeed = plugin.getSetManager() != null
+                ? plugin.getSetManager().calculateActiveAttributes(player)
+                    .getAttribute(CustomAttribute.ATTACK_SPEED)
+                : 0;
 
         AttributeInstance attackSpeedAttr = player.getAttribute(Attribute.ATTACK_SPEED);
         if (attackSpeedAttr != null) {
             if (customAttackSpeed != 0) {
                 // IC 武器：直接使用配置值作为最终攻�?
-                attackSpeedAttr.setBaseValue(customAttackSpeed);
+                attackSpeedAttr.setBaseValue(customAttackSpeed + setAttackSpeed);
             } else {
                 // 原版武器：重置为 4.0，原版修饰符自动生效
-                attackSpeedAttr.setBaseValue(4.0);
+                attackSpeedAttr.setBaseValue(4.0 + setAttackSpeed);
             }
+        }
+
+        if (plugin.getSetManager() != null) {
+            plugin.getSetManager().applyPassiveBonuses(player);
         }
 
         // 药水效果：仅 active_slots 允许的装备位生效

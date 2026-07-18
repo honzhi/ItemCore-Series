@@ -3,11 +3,13 @@ package com.minemart.itemcore.loader;
 import com.minemart.itemcore.ItemCore;
 import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.ItemCategory;
+import com.minemart.itemcore.item.set.ItemSet;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Map;
 
 public class LoaderManager {
@@ -15,11 +17,13 @@ public class LoaderManager {
     private final ItemCore plugin;
     private final CategoryLoader categoryLoader;
     private final ItemLoader itemLoader;
+    private final SetLoader setLoader;
 
     public LoaderManager(ItemCore plugin) {
         this.plugin = plugin;
         this.categoryLoader = new CategoryLoader(plugin);
         this.itemLoader = new ItemLoader(plugin);
+        this.setLoader = new SetLoader(plugin);
     }
 
     public void loadAll() {
@@ -41,12 +45,27 @@ public class LoaderManager {
             plugin.getLogger().info("已复制默认分类配置");
         }
 
+        File setsFile = new File(dataFolder, "sets.yml");
+        if (!setsFile.exists()) {
+            plugin.saveResource("sets.yml", false);
+            plugin.getLogger().info("已复制默认套装配置");
+        }
+
+        setLoader.load(setsFile);
         categoryLoader.load(categoryFile);
         itemLoader.load(itemsDir, categoryLoader.getCategories());
+        for (CustomItem item : itemLoader.getItems().values()) {
+            if (item.getSetId() != null
+                    && !setLoader.getItemSets().containsKey(item.getSetId().toLowerCase(Locale.ROOT))) {
+                plugin.getLogger().warning("物品 " + item.getId() + " 引用了不存在的套装: " + item.getSetId());
+            }
+        }
 
+        int setCount = setLoader.getItemSets().size();
         int categoryCount = categoryLoader.getCategories().size();
         int itemCount = itemLoader.getItems().size();
-        plugin.getLogger().info("加载完成: " + categoryCount + " 个分类, " + itemCount + " 个物品");
+        plugin.getLogger().info("加载完成: " + setCount + " 个套装, "
+                + categoryCount + " 个分类, " + itemCount + " 个物品");
     }
 
     private void copyDefaultItems(File itemsDir) {
@@ -105,12 +124,20 @@ public class LoaderManager {
         return itemLoader;
     }
 
+    public SetLoader getSetLoader() {
+        return setLoader;
+    }
+
     public Map<String, ItemCategory> getCategories() {
         return categoryLoader.getCategories();
     }
 
     public Map<String, CustomItem> getItems() {
         return itemLoader.getItems();
+    }
+
+    public Map<String, ItemSet> getItemSets() {
+        return setLoader.getItemSets();
     }
 
     public ItemCategory getCategory(String id) {

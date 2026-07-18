@@ -150,6 +150,11 @@ public class ItemLoader {
             }
         }
 
+        String setId = section.getString("set");
+        if (setId != null && !setId.trim().isEmpty()) {
+            builder.itemSet(setId.trim());
+        }
+
         List<String> lore = section.getStringList("lore");
         if (lore != null && !lore.isEmpty()) {
             builder.lore(lore);

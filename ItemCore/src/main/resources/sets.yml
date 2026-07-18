@@ -1,0 +1,50 @@
+# ========================================
+# ItemCore 套装配置
+# ========================================
+#
+# 物品通过以下配置加入套装：
+# set: coal_set
+#
+# 套装件数只统计实际生效的 active_slots：
+# - 每个实际生效槽位最多计算 1 件
+# - active_slots 未配置时默认为 any
+# - 损坏或无使用权限的物品不参与计数
+#
+# activation_mode 可选值：
+# - cumulative   达到高档位时累计激活所有已达到的效果（默认）
+# - highest_only 只激活当前达到的最高档效果
+#
+# bonuses 下的数字表示激活所需件数。
+# 属性数值使用与物品 attributes 相同的名称。
+# 套装属性为固定值，不支持 min/max 随机范围。
+#
+# 技能支持的触发器：
+# - left_click
+# - right_click
+# - attack
+# - timer（duration 单位为 tick）
+# ========================================
+
+# coal_set:
+#   display_name: "&8煤炭套装"
+#   activation_mode: cumulative
+#
+#   bonuses:
+#     2:
+#       attributes:
+#         ARMOR: 5
+#         HEALTH: 10
+#
+#     4:
+#       attributes:
+#         PHYSICAL_DAMAGE: 15
+#
+#       skills:
+#         attack:
+#           provider: mythicmobs
+#           skill: CoalFlame
+#
+#         timer:
+#           provider: mythicmobs
+#           skill: CoalAura
+#           duration: 20
