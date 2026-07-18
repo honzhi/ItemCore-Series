@@ -29,6 +29,9 @@
 coal_set:
   display_name: "&8煤炭套装"
   activation_mode: cumulative
+  lore:
+    - '&7Arcane Set Bonus:'
+    - '&8[3] +20% Magic Damage'
 
   bonuses:
     2:
@@ -44,6 +47,16 @@ coal_set:
         attack:
           provider: mythicmobs
           skill: CoalFlame
+```
+
+`lore` 会显示在所有属于该套装的物品上。其显示位置由
+`plugins/ItemCore/tooltip/lore.yml` 中的 `#set_lore#` 占位符决定：
+
+```yaml
+lore_format:
+  - '#item-lore#'
+  - '#set_lore#'
+  - '{bar}'
 ```
 
 ## 激活模式

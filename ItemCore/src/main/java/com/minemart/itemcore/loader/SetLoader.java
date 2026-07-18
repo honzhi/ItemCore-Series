@@ -53,6 +53,7 @@ public class SetLoader {
 
     private ItemSet parseSet(String setId, ConfigurationSection section) {
         String displayName = section.getString("display_name", setId);
+        List<String> lore = section.getStringList("lore");
         ItemSet.ActivationMode activationMode = ItemSet.ActivationMode.fromConfig(
                 section.getString("activation_mode", "cumulative"));
         ConfigurationSection bonusesSection = section.getConfigurationSection("bonuses");
@@ -88,7 +89,7 @@ public class SetLoader {
             }
         }
 
-        return new ItemSet(setId, displayName, activationMode, bonuses);
+        return new ItemSet(setId, displayName, lore, activationMode, bonuses);
     }
 
     private AttributeContainer parseAttributes(String setId, int pieces, ConfigurationSection section) {

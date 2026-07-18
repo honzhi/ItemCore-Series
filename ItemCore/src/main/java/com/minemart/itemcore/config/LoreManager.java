@@ -5,6 +5,7 @@ import com.minemart.itemcore.item.CustomItem;
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.ElementType;
+import com.minemart.itemcore.item.set.ItemSet;
 import com.minemart.itemcore.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -175,6 +176,12 @@ public class LoreManager {
                     }
                     pendingEmptyLines.clear();
                 }
+            } else if (placeholder.equals("#set_lore#")) {
+                List<String> setLore = getSetLore(item);
+                if (!setLore.isEmpty()) {
+                    result.addAll(setLore);
+                    pendingEmptyLines.clear();
+                }
             } else if (placeholder.equals("{bar}")) {
                 if (pendingEmptyLines.isEmpty()) {
                     pendingEmptyLines.add("");
@@ -253,6 +260,15 @@ public class LoreManager {
 
         return result;
         }
+
+    private List<String> getSetLore(CustomItem item) {
+        if (item.getSetId() == null || plugin.getSetManager() == null) {
+            return List.of();
+        }
+
+        ItemSet itemSet = plugin.getSetManager().getItemSet(item.getSetId());
+        return itemSet != null ? itemSet.getLore() : List.of();
+    }
 
     private String getAttributeLoreLine(String attrName, AttributeContainer attributes, ItemStack itemStack) {
         String format = attributeConfig.getString(attrName);

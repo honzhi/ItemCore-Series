@@ -23,13 +23,15 @@ public class ItemSet {
 
     private final String id;
     private final String displayName;
+    private final List<String> lore;
     private final ActivationMode activationMode;
     private final NavigableMap<Integer, SetBonus> bonuses;
 
-    public ItemSet(String id, String displayName, ActivationMode activationMode,
+    public ItemSet(String id, String displayName, List<String> lore, ActivationMode activationMode,
                    Map<Integer, SetBonus> bonuses) {
         this.id = id;
         this.displayName = displayName;
+        this.lore = lore != null ? new ArrayList<>(lore) : new ArrayList<>();
         this.activationMode = activationMode != null ? activationMode : ActivationMode.CUMULATIVE;
         this.bonuses = new TreeMap<>();
         if (bonuses != null) {
@@ -43,6 +45,10 @@ public class ItemSet {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public List<String> getLore() {
+        return Collections.unmodifiableList(lore);
     }
 
     public ActivationMode getActivationMode() {

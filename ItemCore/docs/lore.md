@@ -4,8 +4,9 @@
 
 ```yaml
 # tooltip/lore.yml
-lore-format:
+lore_format:
   - '#item-lore#'
+  - '#set_lore#'
   - '{bar}'
   - '#attack_damage#'
   - '#attack_speed#'
@@ -19,6 +20,7 @@ lore-format:
 |--------|------|
 | `#属性名#` | 显示属性值（为0自动隐藏） |
 | `#item-lore#` | 物品描述文本 |
+| `#set_lore#` | 物品所属套装的描述文本 |
 | `{bar}` | 条件分隔线 |
 | `{sbar}` | 始终显示的分隔线 |
 

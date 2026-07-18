@@ -15,6 +15,8 @@
 # - highest_only 只激活当前达到的最高档效果
 #
 # bonuses 下的数字表示激活所需件数。
+# lore 会显示在所有属于该套装的物品上，显示位置由
+# tooltip/lore.yml 中的 #set_lore# 占位符决定。
 # 属性数值使用与物品 attributes 相同的名称。
 # 套装属性为固定值，不支持 min/max 随机范围。
 #
@@ -28,6 +30,9 @@
 # coal_set:
 #   display_name: "&8煤炭套装"
 #   activation_mode: cumulative
+#   lore:
+#     - '&7Arcane Set Bonus:'
+#     - '&8[3] +20% Magic Damage'
 #
 #   bonuses:
 #     2:
