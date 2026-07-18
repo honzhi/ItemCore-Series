@@ -70,6 +70,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         }
 
         plugin.getConfigManager().load();
+        plugin.getHealthCompressionManager().refreshAll();
         sender.sendMessage(ChatColor.GREEN + "[ItemCoreRPG] \u914d\u7f6e\u6587\u4ef6\u5df2\u91cd\u8f7d");
     }
 

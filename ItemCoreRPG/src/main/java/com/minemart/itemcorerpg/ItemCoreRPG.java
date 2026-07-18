@@ -4,6 +4,7 @@ import com.minemart.itemcorerpg.command.CommandManager;
 import com.minemart.itemcorerpg.config.ConfigManager;
 import com.minemart.itemcorerpg.gui.GuiListener;
 import com.minemart.itemcorerpg.listener.CombatListener;
+import com.minemart.itemcorerpg.manager.HealthCompressionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,7 @@ public class ItemCoreRPG extends JavaPlugin {
     private static ItemCoreRPG instance;
     private ConfigManager configManager;
     private CombatListener combatListener;
+    private HealthCompressionManager healthCompressionManager;
     private CommandManager commandManager;
 
     public static ItemCoreRPG getInstance() {
@@ -20,6 +22,10 @@ public class ItemCoreRPG extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public HealthCompressionManager getHealthCompressionManager() {
+        return healthCompressionManager;
     }
 
     @Override
@@ -34,6 +40,10 @@ public class ItemCoreRPG extends JavaPlugin {
         combatListener = new CombatListener(this);
         Bukkit.getPluginManager().registerEvents(combatListener, this);
 
+        healthCompressionManager = new HealthCompressionManager(this);
+        Bukkit.getPluginManager().registerEvents(healthCompressionManager, this);
+        healthCompressionManager.refreshAll();
+
         Bukkit.getPluginManager().registerEvents(new GuiListener(), this);
 
         commandManager = new CommandManager(this);
@@ -47,6 +57,9 @@ public class ItemCoreRPG extends JavaPlugin {
     public void onDisable() {
         if (combatListener != null) {
             combatListener.shutdown();
+        }
+        if (healthCompressionManager != null) {
+            healthCompressionManager.shutdown();
         }
         getLogger().info("ItemCoreRPG \u5df2\u7981\u7528");
     }

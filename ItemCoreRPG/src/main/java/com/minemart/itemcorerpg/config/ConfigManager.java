@@ -79,6 +79,15 @@ public class ConfigManager {
         return config.getDouble("damage_indicators.animation.vertical-offset", 0.5);
     }
 
+    public boolean isHealthCompressionEnabled() {
+        return config.getBoolean("health_compression.enabled", true);
+    }
+
+    public double getHealthScale() {
+        double healthScale = config.getDouble("health_compression.health_scale", 20.0);
+        return Double.isFinite(healthScale) && healthScale > 0 ? healthScale : 20.0;
+    }
+
     public String getFormat(String type) {
         return config.getString("damage_indicators.types." + type + ".format", "{icon} &f{value}");
     }
