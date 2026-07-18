@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemFlag;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ public class ItemLoader {
 
     public ItemLoader(ItemCore plugin) {
         this.plugin = plugin;
-        this.items = new HashMap<>();
+        this.items = new LinkedHashMap<>();
         this.itemCategoryMap = new HashMap<>();
     }
 
