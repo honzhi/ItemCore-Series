@@ -45,6 +45,9 @@ public class ItemCoreRPG extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (combatListener != null) {
+            combatListener.shutdown();
+        }
         getLogger().info("ItemCoreRPG \u5df2\u7981\u7528");
     }
 }

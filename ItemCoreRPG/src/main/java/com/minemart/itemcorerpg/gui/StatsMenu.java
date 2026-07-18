@@ -23,7 +23,9 @@ public class StatsMenu {
     private static final String TITLE = "\u00a78\u25a0\u25a0 \u00a76\u73a9\u5bb6\u4fe1\u606f \u00a78\u25a0\u25a0";
 
     public static void open(Player viewer, Player target) {
-        Inventory inv = Bukkit.createInventory(null, INVENTORY_SIZE, TITLE);
+        StatsMenuHolder holder = new StatsMenuHolder(target.getUniqueId());
+        Inventory inv = Bukkit.createInventory(holder, INVENTORY_SIZE, TITLE);
+        holder.setInventory(inv);
 
         AttributeContainer attrs = ItemCoreAPI.getPlayerAttributes(target);
         if (attrs == null) {
@@ -59,7 +61,6 @@ public class StatsMenu {
         inv.setItem(48, createRefreshItem());
         inv.setItem(50, createCloseItem());
 
-        GuiListener.trackView(viewer.getUniqueId(), target.getUniqueId());
         viewer.openInventory(inv);
     }
 

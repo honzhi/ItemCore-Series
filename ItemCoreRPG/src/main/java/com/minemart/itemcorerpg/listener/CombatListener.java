@@ -22,6 +22,10 @@ public class CombatListener implements Listener {
         this.displayManager = new DamageDisplayManager(plugin);
     }
 
+    public void shutdown() {
+        displayManager.clearDisplays();
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onItemCoreDamage(ItemCoreDamageEvent event) {
         if (!plugin.getConfigManager().isDamageDisplayEnabled()) {
