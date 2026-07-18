@@ -3,6 +3,7 @@ package com.minemart.itemcore.item;
 import com.minemart.itemcore.item.attribute.AttributeContainer;
 import com.minemart.itemcore.item.skill.ItemSkill;
 import com.minemart.itemcore.utils.ItemBuilder;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,7 @@ public class CustomItem {
     private final String type;
     private final Material material;
     private final String displayName;
+    private final Color color;
     private final List<String> lore;
     private final List<EnchantmentInfo> enchantments;
     private final List<ItemFlag> itemFlags;
@@ -45,10 +47,25 @@ public class CustomItem {
                       List<ItemSlot> activeSlots, boolean rightClickable,
                       boolean leftClickable, boolean droppable, boolean clickable,
                       boolean keepOnDeath, int durability, boolean durabilityBreak, boolean disableAnvilRepair, boolean disableEnchanting, List<ItemSkill> skills) {
+        this(id, type, material, displayName, null, lore, enchantments, itemFlags, customModelData,
+                unbreakable, maxStack, effects, permission, attributes, activeSlots, rightClickable,
+                leftClickable, droppable, clickable, keepOnDeath, durability, durabilityBreak,
+                disableAnvilRepair, disableEnchanting, skills);
+    }
+
+    private CustomItem(String id, String type, Material material, String displayName, Color color,
+                      List<String> lore, List<EnchantmentInfo> enchantments,
+                      List<ItemFlag> itemFlags, int customModelData,
+                      boolean unbreakable, int maxStack, List<PotionEffectInfo> effects,
+                      String permission, AttributeContainer attributes,
+                      List<ItemSlot> activeSlots, boolean rightClickable,
+                      boolean leftClickable, boolean droppable, boolean clickable,
+                      boolean keepOnDeath, int durability, boolean durabilityBreak, boolean disableAnvilRepair, boolean disableEnchanting, List<ItemSkill> skills) {
         this.id = id;
         this.type = type;
         this.material = material;
         this.displayName = displayName;
+        this.color = color;
         this.lore = lore != null ? lore : new ArrayList<>();
         this.enchantments = enchantments != null ? enchantments : new ArrayList<>();
         this.itemFlags = itemFlags != null ? itemFlags : new ArrayList<>();
@@ -85,6 +102,10 @@ public class CustomItem {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public List<String> getLore() {
@@ -226,6 +247,7 @@ public class CustomItem {
         private String type;
         private Material material;
         private String displayName;
+        private Color color;
         private final List<String> lore = new ArrayList<>();
         private final List<EnchantmentInfo> enchantments = new ArrayList<>();
         private final List<ItemFlag> itemFlags = new ArrayList<>();
@@ -263,6 +285,11 @@ public class CustomItem {
 
         public Builder displayName(String displayName) {
             this.displayName = displayName;
+            return this;
+        }
+
+        public Builder color(Color color) {
+            this.color = color;
             return this;
         }
 
@@ -407,7 +434,7 @@ public class CustomItem {
                 throw new IllegalArgumentException("Material must be set for item: " + id);
             }
             List<ItemSlot> slots = activeSlots.isEmpty() ? ItemSlot.defaultSlots() : activeSlots;
-            return new CustomItem(id, type, material, displayName, lore, enchantments,
+            return new CustomItem(id, type, material, displayName, color, lore, enchantments,
                     itemFlags, customModelData, unbreakable, maxStack, effects,
                     permission, attributes, slots, rightClickable, leftClickable,
                     droppable, clickable, keepOnDeath, durability, durabilityBreak, disableAnvilRepair, disableEnchanting, skills);

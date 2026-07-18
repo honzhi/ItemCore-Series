@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 
@@ -143,6 +144,10 @@ public class ItemBuilder {
 
         if (customItem.hasCustomModelData()) {
             meta.setCustomModelData(customItem.getCustomModelData());
+        }
+
+        if (customItem.getColor() != null && meta instanceof LeatherArmorMeta) {
+            ((LeatherArmorMeta) meta).setColor(customItem.getColor());
         }
 
         if (customItem.isUnbreakable()) {

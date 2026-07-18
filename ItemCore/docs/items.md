@@ -8,13 +8,13 @@
 legendary_blade:
   material: NETHERITE_SWORD
   type: weapons
-  display-name: "&4&l传说之刃"
+  display_name: "&4&l传说之刃"
   lore:
     - "&7传说中的神秘武器"
   attributes:
     ATTACK_DAMAGE: 15
     CRIT_CHANCE: 25
-  active-slots:
+  active_slots:
     - main-hand
 ```
 
@@ -24,18 +24,30 @@ legendary_blade:
 |--------|------|--------|------|
 | `material` | 材质名 | **必填** | 物品材质 |
 | `type` | 字符串 | `misc` | 分类 ID |
-| `display-name` | 字符串 | — | 显示名称（支持 `&` 颜色码） |
+| `display_name` | 字符串 | — | 显示名称（支持 `&` 颜色码） |
+| `color` | RGB | — | 皮革护甲颜色，例如 `255, 0, 0` |
 | `lore` | 列表 | — | 物品描述 |
 | `attributes` | Map | — | 属性配置 |
 | `enchantments` | Map | — | 附魔：`sharpness: 5` |
-| `item-flags` | 列表 | — | ItemFlag：`HIDE_ATTRIBUTES` |
+| `item_flags` | 列表 | — | ItemFlag：`HIDE_ATTRIBUTES` |
 | `unbreakable` | 布尔 | false | 不可破坏 |
-| `max-stack` | 整数 | 64 | 最大堆叠 |
-| `custom-model-data` | 整数 | — | 自定义模型数据 |
-| `active-slots` | 列表 | 全装备位 | 生效装备位 |
+| `max_stack` | 整数 | 64 | 最大堆叠 |
+| `custom_model_data` | 整数 | — | 自定义模型数据 |
+| `active_slots` | 列表 | 全装备位 | 生效装备位 |
 | `skills` | 列表 | — | 技能配置 |
 | `effects` | 列表 | — | 药水效果 |
-| `keep-on-death` | 布尔 | false | 死亡保留 |
+| `keep_on_death` | 布尔 | false | 死亡保留 |
+
+## 皮革护甲染色
+
+`color` 使用红、绿、蓝三个 `0-255` 的整数，仅对支持染色的皮革装备生效：
+
+```yaml
+煤炭头盔:
+  material: LEATHER_HELMET
+  display_name: "煤炭头盔"
+  color: 255, 0, 0
+```
 
 ## 完整示例
 
@@ -43,16 +55,16 @@ legendary_blade:
 fire_sword:
   material: DIAMOND_SWORD
   type: weapons
-  display-name: "&c烈焰之剑"
+  display_name: "&c烈焰之剑"
   lore:
     - "&7燃烧一切的烈焰之剑"
   enchantments:
     sharpness: 3
     fire_aspect: 2
-  item-flags:
+  item_flags:
     - HIDE_ATTRIBUTES
   unbreakable: true
-  active-slots:
+  active_slots:
     - main-hand
   attributes:
     ATTACK_DAMAGE: 12

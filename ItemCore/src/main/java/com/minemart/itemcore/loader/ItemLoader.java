@@ -11,6 +11,7 @@ import com.minemart.itemcore.item.attribute.CustomAttribute;
 import com.minemart.itemcore.item.attribute.ElementType;
 import com.minemart.itemcore.item.skill.ItemSkill;
 import com.minemart.itemcore.item.skill.SkillTrigger;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -139,6 +140,13 @@ public class ItemLoader {
         String displayName = section.getString("display_name");
         if (displayName != null) {
             builder.displayName(displayName);
+        }
+
+        if (section.contains("color")) {
+            Color color = parseColor(itemId, section.get("color"));
+            if (color != null) {
+                builder.color(color);
+            }
         }
 
         List<String> lore = section.getStringList("lore");
@@ -362,6 +370,47 @@ public class ItemLoader {
         }
 
         return container;
+    }
+
+    private Color parseColor(String itemId, Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        String[] components;
+        if (value instanceof List<?>) {
+            List<?> values = (List<?>) value;
+            if (values.size() != 3) {
+                plugin.getLogger().warning("物品 " + itemId + " 的 color 必须包含三个 RGB 数值");
+                return null;
+            }
+            components = new String[]{
+                String.valueOf(values.get(0)),
+                String.valueOf(values.get(1)),
+                String.valueOf(values.get(2))
+            };
+        } else {
+            components = String.valueOf(value).split(",");
+        }
+
+        if (components.length != 3) {
+            plugin.getLogger().warning("物品 " + itemId + " 的 color 格式无效，应为: 255, 0, 0");
+            return null;
+        }
+
+        try {
+            int red = Integer.parseInt(components[0].trim());
+            int green = Integer.parseInt(components[1].trim());
+            int blue = Integer.parseInt(components[2].trim());
+            if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+                plugin.getLogger().warning("物品 " + itemId + " 的 color 数值必须在 0 到 255 之间");
+                return null;
+            }
+            return Color.fromRGB(red, green, blue);
+        } catch (NumberFormatException exception) {
+            plugin.getLogger().warning("物品 " + itemId + " 的 color 格式无效，应为: 255, 0, 0");
+            return null;
+        }
     }
 
     private ElementType resolveElement(String id) {
