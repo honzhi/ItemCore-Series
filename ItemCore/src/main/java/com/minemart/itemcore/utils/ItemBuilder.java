@@ -148,6 +148,7 @@ public class ItemBuilder {
 
         if (customItem.getColor() != null && meta instanceof LeatherArmorMeta) {
             ((LeatherArmorMeta) meta).setColor(customItem.getColor());
+            meta.addItemFlags(ItemFlag.HIDE_DYE);
         }
 
         if (customItem.isUnbreakable()) {
