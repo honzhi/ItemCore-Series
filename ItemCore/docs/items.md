@@ -15,7 +15,7 @@ legendary_blade:
     ATTACK_DAMAGE: 15
     CRIT_CHANCE: 25
   active_slots:
-    - main-hand
+    - main_hand
 ```
 
 ## 完整配置项
@@ -33,7 +33,7 @@ legendary_blade:
 | `unbreakable` | 布尔 | false | 不可破坏 |
 | `max_stack` | 整数 | 64 | 最大堆叠 |
 | `custom_model_data` | 整数 | — | 自定义模型数据 |
-| `active_slots` | 列表 | 全装备位 | 生效装备位 |
+| `active_slots` | 列表 | `any` | 生效装备位；配置后仅按列表中的槽位生效 |
 | `skills` | 列表 | — | 技能配置 |
 | `effects` | 列表 | — | 药水效果 |
 | `keep_on_death` | 布尔 | false | 死亡保留 |
@@ -65,7 +65,7 @@ fire_sword:
     - HIDE_ATTRIBUTES
   unbreakable: true
   active_slots:
-    - main-hand
+    - main_hand
   attributes:
     ATTACK_DAMAGE: 12
     ATTACK_SPEED: 1.6

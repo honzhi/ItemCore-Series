@@ -258,6 +258,7 @@ public class CustomItem {
         private String permission;
         private AttributeContainer attributes = new AttributeContainer();
         private final List<ItemSlot> activeSlots = new ArrayList<>();
+        private boolean activeSlotsConfigured;
         private boolean rightClickable = true;
         private boolean leftClickable = true;
         private boolean droppable = true;
@@ -356,6 +357,7 @@ public class CustomItem {
         }
 
         public Builder activeSlot(ItemSlot slot) {
+            this.activeSlotsConfigured = true;
             if (slot != null) {
                 this.activeSlots.add(slot);
             }
@@ -363,6 +365,8 @@ public class CustomItem {
         }
 
         public Builder activeSlots(List<ItemSlot> slots) {
+            this.activeSlotsConfigured = true;
+            this.activeSlots.clear();
             if (slots != null) {
                 this.activeSlots.addAll(slots);
             }
@@ -433,7 +437,9 @@ public class CustomItem {
             if (material == null) {
                 throw new IllegalArgumentException("Material must be set for item: " + id);
             }
-            List<ItemSlot> slots = activeSlots.isEmpty() ? ItemSlot.defaultSlots() : activeSlots;
+            List<ItemSlot> slots = activeSlotsConfigured
+                    ? new ArrayList<>(activeSlots)
+                    : ItemSlot.defaultSlots();
             return new CustomItem(id, type, material, displayName, color, lore, enchantments,
                     itemFlags, customModelData, unbreakable, maxStack, effects,
                     permission, attributes, slots, rightClickable, leftClickable,

@@ -240,6 +240,9 @@ public class ItemCore extends JavaPlugin {
 
     public void reload() {
         DurabilityManager.init(this);
+        if (skillListener != null) {
+            Bukkit.getOnlinePlayers().forEach(skillListener::unregisterTimerSkills);
+        }
         loreVersion.incrementAndGet();
         elementConfig.reload();
         configManager.reload();

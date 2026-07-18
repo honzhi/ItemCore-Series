@@ -28,7 +28,7 @@ legendary_blade:
       provider: mythicmobs
       skill: text
   active_slots:
-    - main-hand
+    - main_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
@@ -57,7 +57,7 @@ mage_staff:
       provider: mythicmobs
       skill: fireball
   active_slots:
-    - main-hand
+    - main_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
@@ -79,7 +79,7 @@ ranger_bow:
     PHYSICAL_PENETRATION: 5
     LUCK: 5
   active_slots:
-    - main-hand
+    - main_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES

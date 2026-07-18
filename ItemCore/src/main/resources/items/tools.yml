@@ -18,7 +18,7 @@ legendary_pickaxe:
     ATTACK_SPEED: 1.2
     LUCK: 5
   active_slots:
-    - main-hand
+    - main_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES

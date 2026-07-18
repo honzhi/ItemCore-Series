@@ -224,14 +224,27 @@ public class ItemLoader {
             builder.skills(skills);
         }
 
-        List<?> slotsList = section.getList("active_slots");
-        if (slotsList != null) {
-            for (Object obj : slotsList) {
-                if (obj instanceof String) {
-                    ItemSlot slot = ItemSlot.fromConfigKey((String) obj);
-                    builder.activeSlot(slot);
+        if (section.contains("active_slots")) {
+            List<ItemSlot> activeSlots = new ArrayList<>();
+            List<?> slotsList = section.getList("active_slots");
+            if (slotsList == null) {
+                plugin.getLogger().warning("物品 " + itemId + " 的 active_slots 必须是列表");
+            } else {
+                for (Object value : slotsList) {
+                    if (!(value instanceof String)) {
+                        plugin.getLogger().warning("物品 " + itemId + " 的 active_slots 包含非字符串值: " + value);
+                        continue;
+                    }
+
+                    ItemSlot slot = ItemSlot.fromConfigKey((String) value);
+                    if (slot == null) {
+                        plugin.getLogger().warning("物品 " + itemId + " 的 active_slots 包含未知槽位: " + value);
+                        continue;
+                    }
+                    activeSlots.add(slot);
                 }
             }
+            builder.activeSlots(activeSlots);
         }
 
         if (section.contains("right_clickable")) {

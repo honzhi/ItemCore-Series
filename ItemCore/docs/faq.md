@@ -4,7 +4,7 @@
 A: `/ic reload` 即可热重载。
 
 **Q: 属性为什么不生效？**
-A: 检查 `active-slots` 配置。
+A: 检查 `active_slots` 配置。
 
 **Q: 多装备属性如何计算？**
 A: 同名属性自动累加。

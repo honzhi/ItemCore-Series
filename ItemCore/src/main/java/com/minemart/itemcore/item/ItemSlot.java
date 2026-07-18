@@ -2,7 +2,6 @@ package com.minemart.itemcore.item;
 
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,15 +33,16 @@ public enum ItemSlot {
     }
 
     public static ItemSlot fromConfigKey(String key) {
-        if (key == null) {
-            return MAIN_HAND;
+        if (key == null || key.trim().isEmpty()) {
+            return null;
         }
+        String normalized = key.trim().replace('-', '_');
         for (ItemSlot slot : values()) {
-            if (slot.configKey.equalsIgnoreCase(key)) {
+            if (slot.configKey.equalsIgnoreCase(normalized)) {
                 return slot;
             }
         }
-        return MAIN_HAND;
+        return null;
     }
 
     public static List<EquipmentSlot> toEquipmentSlots(List<ItemSlot> slots) {
@@ -53,6 +53,6 @@ public enum ItemSlot {
     }
 
     public static List<ItemSlot> defaultSlots() {
-        return Arrays.asList(MAIN_HAND);
+        return List.of(ANY);
     }
 }

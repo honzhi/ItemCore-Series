@@ -12,7 +12,7 @@ life_crystal:
     HEALTH: 20
     REGENERATION: 3
   active_slots:
-    - off-hand
+    - off_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
@@ -32,7 +32,7 @@ adaptive_stone:
     SPELL_POWER: 5
     LUCK: 2
   active_slots:
-    - off-hand
+    - off_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES
@@ -50,7 +50,7 @@ wind_feather:
     MOVEMENT_SPEED: 0.05
     LUCK: 3
   active_slots:
-    - off-hand
+    - off_hand
   item_flags:
     - HIDE_ENCHANTS
     - HIDE_ATTRIBUTES

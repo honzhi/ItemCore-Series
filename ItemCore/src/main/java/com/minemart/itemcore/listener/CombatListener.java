@@ -328,7 +328,7 @@ public class CombatListener extends BaseListener {
             }
         }
 
-        // 药水效果：仅�?active-slots 允许的装备位生效
+        // 药水效果：仅 active_slots 允许的装备位生效
         applyPotionEffects(player);
     }
 
@@ -343,7 +343,7 @@ public class CombatListener extends BaseListener {
             }
         }
 
-        // 获取当前已装备的 IC 物品（已�?active-slots 过滤�?
+        // 获取当前已装备的 IC 物品（已按 active_slots 过滤）
         Map<ItemSlot, java.util.List<CustomItem>> equipped = ItemIdentifier.getEquippedItems(player);
         Set<PotionEffectType> newEffects = new HashSet<>();
 

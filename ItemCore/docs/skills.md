@@ -41,7 +41,7 @@ Skills:
 | `penetration` | `p` | `0` | 穿透 |
 | `lifesteal` | `ls` | `0` | 吸血 |
 
-## active-slots 影响
+## active_slots 影响
 
 - 属性：装备位决定生效
 - 技能：主/副手决定触发
