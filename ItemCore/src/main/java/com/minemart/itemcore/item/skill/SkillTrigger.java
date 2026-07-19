@@ -5,7 +5,8 @@ public enum SkillTrigger {
     RIGHT_CLICK("Right_Click"),
     TIMER("Timer"),
     ATTACK("Attack"),
-    HIT("Hit");
+    HIT("Hit"),
+    BLOCK_BREAK("Block_Break");
 
     private final String configKey;
 

@@ -20,9 +20,11 @@ import org.bukkit.inventory.ItemFlag;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class ItemLoader {
@@ -226,7 +228,7 @@ public class ItemLoader {
 
         ConfigurationSection skillsSection = section.getConfigurationSection("skills");
         if (skillsSection != null) {
-            List<ItemSkill> skills = parseSkills(skillsSection);
+            List<ItemSkill> skills = parseSkills(itemId, skillsSection);
             builder.skills(skills);
         }
 
@@ -277,7 +279,7 @@ public class ItemLoader {
         }
     }
 
-    private List<ItemSkill> parseSkills(ConfigurationSection skillsSection) {
+    private List<ItemSkill> parseSkills(String itemId, ConfigurationSection skillsSection) {
         List<ItemSkill> skills = new ArrayList<>();
         boolean debugMode = plugin.getConfigManager().isDebugMode();
         
@@ -301,7 +303,7 @@ public class ItemLoader {
             Object value = skillsSection.get(key);
             if (value instanceof ConfigurationSection) {
                 ConfigurationSection skillConfig = (ConfigurationSection) value;
-                
+
                 String skillName = skillConfig.getString("skill");
                 String provider = skillConfig.getString("provider", "mythicmobs");
                 
@@ -313,16 +315,16 @@ public class ItemLoader {
                     plugin.getLogger().info("[DEBUG] 技能类型: " + skillName);
                     plugin.getLogger().info("[DEBUG] 技能提供者: " + provider);
                 }
-                
+
                 if (skillName != null && !skillName.isEmpty()) {
-                    if (trigger == SkillTrigger.TIMER) {
-                        int duration = skillConfig.getInt("duration", 20);
-                        skills.add(new ItemSkill(trigger, provider, skillName, duration));
-                    } else {
-                        skills.add(new ItemSkill(trigger, provider, skillName, 20));
-                    }
+                    int duration = trigger == SkillTrigger.TIMER ? skillConfig.getInt("duration", 20) : 20;
+                    String context = "物品 " + itemId + " 的技能 " + key;
+                    double chance = parseSkillChance(skillConfig, context);
+                    Set<Material> blockTypes = parseSkillBlockTypes(skillConfig, context);
+                    skills.add(new ItemSkill(trigger, provider, skillName, duration, chance, blockTypes));
                     if (debugMode) {
-                        plugin.getLogger().info("[DEBUG] 成功添加技能: 触发=" + trigger + ", 提供者=" + provider + ", 技能名=" + skillName);
+                        plugin.getLogger().info("[DEBUG] 成功添加技能: 触发=" + trigger + ", 提供者=" + provider
+                                + ", 技能名=" + skillName + ", 概率=" + chance);
                     }
                 }
             } else {
@@ -337,6 +339,42 @@ public class ItemLoader {
         }
         
         return skills;
+    }
+
+    private double parseSkillChance(ConfigurationSection section, String context) {
+        if (!section.contains("chance")) {
+            return 100.0;
+        }
+
+        double chance = YamlParserUtil.parseDouble(section.get("chance"), Double.NaN);
+        if (!Double.isFinite(chance)) {
+            plugin.getLogger().warning(context + " 的 chance 无效，已使用默认值 100");
+            return 100.0;
+        }
+        if (chance < 0.0 || chance > 100.0) {
+            plugin.getLogger().warning(context + " 的 chance 必须在 0 到 100 之间，已自动限制范围");
+        }
+        return Math.max(0.0, Math.min(100.0, chance));
+    }
+
+    private Set<Material> parseSkillBlockTypes(ConfigurationSection section, String context) {
+        if (!section.contains("blocks")) {
+            return null;
+        }
+
+        Set<Material> blockTypes = new LinkedHashSet<>();
+        for (String blockName : YamlParserUtil.parseStringList(section, "blocks")) {
+            Material material = YamlParserUtil.parseMaterial(blockName);
+            if (material == null || !material.isBlock()) {
+                plugin.getLogger().warning(context + " 的 blocks 包含未知方块: " + blockName);
+                continue;
+            }
+            blockTypes.add(material);
+        }
+        if (blockTypes.isEmpty()) {
+            plugin.getLogger().warning(context + " 配置了 blocks 但没有有效方块，该技能不会被挖掘触发");
+        }
+        return blockTypes;
     }
 
     private AttributeContainer parseAttributes(ConfigurationSection section) {

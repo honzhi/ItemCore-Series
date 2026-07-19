@@ -1,6 +1,6 @@
 # ItemCore
 
-> 版本: v1.0.0 | Paper 1.21.x | 依赖: PlaceholderAPI(可选)
+> 版本: v1.0.4 | Paper 1.21.x | 依赖: PlaceholderAPI(可选)
 
 ---
 

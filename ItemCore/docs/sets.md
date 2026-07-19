@@ -47,6 +47,15 @@ coal_set:
         attack:
           provider: mythicmobs
           skill: CoalFlame
+          chance: 25
+
+        block_break:
+          provider: mythicmobs
+          skill: CoalMiningReward
+          chance: 10
+          blocks:
+            - COAL_ORE
+            - DEEPSLATE_COAL_ORE
 ```
 
 `lore` 会显示在所有属于该套装的物品上。其显示位置由
@@ -54,7 +63,7 @@ coal_set:
 
 ```yaml
 lore_format:
-  - '#item-lore#'
+  - '#item_lore#'
   - '#set_lore#'
   - '{bar}'
 ```
@@ -64,5 +73,7 @@ lore_format:
 - `cumulative`：累计激活所有已达到的档位，默认模式。
 - `highest_only`：只激活当前达到的最高档位。
 
-套装技能支持 `left_click`、`right_click`、`attack` 和 `timer`。TIMER 技能使用
-`duration` 配置触发间隔，单位为 tick。
+套装技能支持 `left_click`、`right_click`、`attack`、`block_break` 和 `timer`。
+`timer` 使用 `duration` 配置触发间隔，单位为 tick。所有技能均可使用 `chance`
+配置触发概率，取值为 `0-100`，默认 `100`。`block_break` 可使用 `blocks`
+限定方块类型；达到多个累计档位时，各档位技能分别进行概率判定。

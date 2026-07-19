@@ -8,15 +8,18 @@ import com.minemart.itemcore.item.set.ItemSet;
 import com.minemart.itemcore.item.set.SetBonus;
 import com.minemart.itemcore.item.skill.ItemSkill;
 import com.minemart.itemcore.item.skill.SkillTrigger;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class SetLoader {
 
@@ -164,10 +167,49 @@ public class SetLoader {
 
             String provider = skillSection.getString("provider", "mythicmobs");
             int duration = skillSection.getInt("duration", 20);
-            skills.add(new ItemSkill(trigger, provider, skillName, duration));
+            String context = "套装 " + setId + " 的 " + pieces + " 件技能 " + triggerKey;
+            double chance = parseSkillChance(skillSection, context);
+            Set<Material> blockTypes = parseSkillBlockTypes(skillSection, context);
+            skills.add(new ItemSkill(trigger, provider, skillName, duration, chance, blockTypes));
         }
 
         return skills;
+    }
+
+    private double parseSkillChance(ConfigurationSection section, String context) {
+        if (!section.contains("chance")) {
+            return 100.0;
+        }
+
+        double chance = YamlParserUtil.parseDouble(section.get("chance"), Double.NaN);
+        if (!Double.isFinite(chance)) {
+            plugin.getLogger().warning(context + " 的 chance 无效，已使用默认值 100");
+            return 100.0;
+        }
+        if (chance < 0.0 || chance > 100.0) {
+            plugin.getLogger().warning(context + " 的 chance 必须在 0 到 100 之间，已自动限制范围");
+        }
+        return Math.max(0.0, Math.min(100.0, chance));
+    }
+
+    private Set<Material> parseSkillBlockTypes(ConfigurationSection section, String context) {
+        if (!section.contains("blocks")) {
+            return null;
+        }
+
+        Set<Material> blockTypes = new LinkedHashSet<>();
+        for (String blockName : YamlParserUtil.parseStringList(section, "blocks")) {
+            Material material = YamlParserUtil.parseMaterial(blockName);
+            if (material == null || !material.isBlock()) {
+                plugin.getLogger().warning(context + " 的 blocks 包含未知方块: " + blockName);
+                continue;
+            }
+            blockTypes.add(material);
+        }
+        if (blockTypes.isEmpty()) {
+            plugin.getLogger().warning(context + " 配置了 blocks 但没有有效方块，该技能不会被挖掘触发");
+        }
+        return blockTypes;
     }
 
     public Map<String, ItemSet> getItemSets() {

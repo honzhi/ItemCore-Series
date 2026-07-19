@@ -11,10 +11,13 @@ import com.minemart.itemcore.utils.ItemIdentifier;
 import com.minemart.itemcore.utils.PermissionUtil;
 import com.minemart.itemcore.item.ItemSlot;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -28,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ItemSkillListener extends BaseListener {
     private final Map<UUID, Map<String, BukkitRunnable>> activeTimers = new HashMap<>();
@@ -103,6 +107,25 @@ public class ItemSkillListener extends BaseListener {
         }
 
         triggerSetSkills(player, SkillTrigger.ATTACK, target);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Material blockType = event.getBlock().getType();
+        Location blockLocation = event.getBlock().getLocation().add(0.5, 0.5, 0.5);
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (ItemIdentifier.isCustomItem(itemStack)) {
+            CustomItem customItem = ItemIdentifier.getCustomItem(itemStack);
+            if (customItem != null && customItem.hasSkills()
+                    && canTriggerSkills(player, itemStack, customItem)
+                    && customItem.canSlot(ItemSlot.MAIN_HAND)) {
+                triggerSkills(player, customItem, SkillTrigger.BLOCK_BREAK, null, blockLocation, blockType);
+            }
+        }
+
+        triggerSetSkills(player, SkillTrigger.BLOCK_BREAK, null, blockLocation, blockType);
     }
 
     public void registerTimerSkills(Player player, CustomItem item) {
@@ -209,10 +232,9 @@ public class ItemSkillListener extends BaseListener {
                     return;
                 }
 
-                ItemSkillTriggerEvent event = new ItemSkillTriggerEvent(
-                    player, binding.item, binding.skill, SkillTrigger.TIMER, null, player.getLocation()
-                );
-                Bukkit.getPluginManager().callEvent(event);
+                callSkillTriggerEvent(
+                        player, binding.item, binding.skill, SkillTrigger.TIMER,
+                        null, player.getLocation(), null);
             }
         };
 
@@ -291,12 +313,14 @@ public class ItemSkillListener extends BaseListener {
     }
 
     private void triggerSkills(Player player, CustomItem item, SkillTrigger trigger, LivingEntity target) {
+        triggerSkills(player, item, trigger, target, player.getLocation(), null);
+    }
+
+    private void triggerSkills(Player player, CustomItem item, SkillTrigger trigger, LivingEntity target,
+                               Location location, Material blockType) {
         for (ItemSkill skill : item.getSkills()) {
             if (skill.getTrigger() == trigger) {
-                ItemSkillTriggerEvent event = new ItemSkillTriggerEvent(
-                    player, item, skill, trigger, target, player.getLocation()
-                );
-                Bukkit.getPluginManager().callEvent(event);
+                callSkillTriggerEvent(player, item, skill, trigger, target, location, blockType);
             }
         }
     }
@@ -308,20 +332,46 @@ public class ItemSkillListener extends BaseListener {
             return;
         }
         lastSetClickTime.put(player.getUniqueId(), currentTime);
-        triggerSetSkills(player, trigger, target);
+        triggerSetSkills(player, trigger, target, player.getLocation(), null);
     }
 
     private void triggerSetSkills(Player player, SkillTrigger trigger, LivingEntity target) {
+        triggerSetSkills(player, trigger, target, player.getLocation(), null);
+    }
+
+    private void triggerSetSkills(Player player, SkillTrigger trigger, LivingEntity target,
+                                  Location location, Material blockType) {
         SetManager setManager = plugin.getSetManager();
         if (setManager == null) {
             return;
         }
         for (SetManager.SetSkillActivation activation : setManager.getActiveSkills(player, trigger)) {
-            ItemSkillTriggerEvent event = new ItemSkillTriggerEvent(
+            callSkillTriggerEvent(
                     player, activation.getSourceItem(), activation.getSkill(), trigger,
-                    target, player.getLocation());
-            Bukkit.getPluginManager().callEvent(event);
+                    target, location, blockType);
         }
+    }
+
+    private void callSkillTriggerEvent(Player player, CustomItem item, ItemSkill skill, SkillTrigger trigger,
+                                       LivingEntity target, Location location, Material blockType) {
+        if (trigger == SkillTrigger.BLOCK_BREAK && (blockType == null || !skill.matchesBlock(blockType))) {
+            return;
+        }
+        if (!passesChance(skill)) {
+            return;
+        }
+
+        ItemSkillTriggerEvent event = new ItemSkillTriggerEvent(
+                player, item, skill, trigger, target, location);
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    private boolean passesChance(ItemSkill skill) {
+        double chance = skill.getChance();
+        if (chance <= 0.0) {
+            return false;
+        }
+        return chance >= 100.0 || ThreadLocalRandom.current().nextDouble(100.0) < chance;
     }
 
     private static class TimerBinding {
