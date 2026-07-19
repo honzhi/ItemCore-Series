@@ -8,7 +8,6 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.events.PacketListener;
-import com.comphenix.protocol.wrappers.WrappedAttribute;
 import com.minemart.itemcorerpg.ItemCoreRPG;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -19,15 +18,33 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class AbsorptionCompressionManager implements Listener {
 
+    private static final String PACKET_CLASS_NAME =
+            "net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket";
+    private static final String SNAPSHOT_CLASS_NAME = PACKET_CLASS_NAME + "$AttributeSnapshot";
+    private static final String ATTRIBUTES_CLASS_NAME =
+            "net.minecraft.world.entity.ai.attributes.Attributes";
+
     private final ItemCoreRPG plugin;
     private ProtocolManager protocolManager;
     private PacketListener packetListener;
+    private Constructor<?> packetConstructor;
+    private Constructor<?> snapshotConstructor;
+    private Method packetEntityIdMethod;
+    private Method packetValuesMethod;
+    private Method snapshotAttributeMethod;
+    private Object maxAbsorptionHolder;
+    private boolean packetRewriteEnabled;
+    private boolean failureLogged;
 
     public AbsorptionCompressionManager(ItemCoreRPG plugin) {
         this.plugin = plugin;
@@ -36,13 +53,19 @@ public class AbsorptionCompressionManager implements Listener {
     public void start() {
         Plugin protocolLib = Bukkit.getPluginManager().getPlugin("ProtocolLib");
         if (protocolLib == null || !protocolLib.isEnabled()) {
-            if (plugin.getConfigManager().isAbsorptionCompressionEnabled()) {
-                plugin.getLogger().warning("未检测到 ProtocolLib，金色吸收生命压缩已禁用");
-            }
+            plugin.getLogger().warning("未检测到 ProtocolLib，金色吸收生命压缩已禁用");
+            return;
+        }
+
+        try {
+            initializeReflection();
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError exception) {
+            logFailure("无法初始化 1.21.11 吸收生命属性包", exception);
             return;
         }
 
         protocolManager = ProtocolLibrary.getProtocolManager();
+        packetRewriteEnabled = true;
         packetListener = new PacketAdapter(
                 plugin, ListenerPriority.NORMAL, PacketType.Play.Server.UPDATE_ATTRIBUTES) {
             @Override
@@ -55,7 +78,7 @@ public class AbsorptionCompressionManager implements Listener {
     }
 
     public void refreshAll() {
-        if (protocolManager == null) {
+        if (protocolManager == null || !packetRewriteEnabled) {
             return;
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -71,54 +94,76 @@ public class AbsorptionCompressionManager implements Listener {
             protocolManager.removePacketListener(packetListener);
             packetListener = null;
         }
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            sendAbsorptionAttribute(player, false);
+        if (packetRewriteEnabled) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                sendAbsorptionAttribute(player, false);
+            }
         }
+        packetRewriteEnabled = false;
         protocolManager = null;
     }
 
+    private void initializeReflection() throws ReflectiveOperationException {
+        Class<?> packetClass = Class.forName(PACKET_CLASS_NAME);
+        Class<?> snapshotClass = Class.forName(SNAPSHOT_CLASS_NAME);
+        Class<?> holderClass = Class.forName("net.minecraft.core.Holder");
+
+        packetConstructor = packetClass.getDeclaredConstructor(int.class, List.class);
+        packetConstructor.setAccessible(true);
+        snapshotConstructor = snapshotClass.getConstructor(
+                holderClass, double.class, Collection.class);
+        packetEntityIdMethod = packetClass.getMethod("getEntityId");
+        packetValuesMethod = packetClass.getMethod("getValues");
+        snapshotAttributeMethod = snapshotClass.getMethod("attribute");
+
+        Class<?> attributesClass = Class.forName(ATTRIBUTES_CLASS_NAME);
+        Field maxAbsorptionField = attributesClass.getField("MAX_ABSORPTION");
+        maxAbsorptionHolder = maxAbsorptionField.get(null);
+    }
+
     private void rewriteAbsorptionAttribute(PacketEvent event) {
-        if (!plugin.getConfigManager().isAbsorptionCompressionEnabled()) {
+        if (!packetRewriteEnabled || !plugin.getConfigManager().isAbsorptionCompressionEnabled()) {
             return;
         }
 
-        PacketContainer originalPacket = event.getPacket();
-        if (originalPacket.getIntegers().size() == 0
-                || originalPacket.getIntegers().read(0) != event.getPlayer().getEntityId()) {
-            return;
-        }
-
-        PacketContainer packet = originalPacket.deepClone();
-        List<WrappedAttribute> attributes = packet.getAttributeCollectionModifier().read(0);
-        if (attributes == null || attributes.isEmpty()) {
-            return;
-        }
-
-        List<WrappedAttribute> rewrittenAttributes = new ArrayList<>(attributes.size());
-        boolean rewritten = false;
-        for (WrappedAttribute attribute : attributes) {
-            if (isMaxAbsorption(attribute)) {
-                double displayValue = compressValue(event.getPlayer(), attribute.getFinalValue());
-                rewrittenAttributes.add(WrappedAttribute.newBuilder(attribute)
-                        .packet(packet)
-                        .baseValue(displayValue)
-                        .modifiers(Collections.emptyList())
-                        .build());
-                rewritten = true;
-            } else {
-                rewrittenAttributes.add(attribute);
+        try {
+            Object packetHandle = event.getPacket().getHandle();
+            int entityId = (int) packetEntityIdMethod.invoke(packetHandle);
+            if (entityId != event.getPlayer().getEntityId()) {
+                return;
             }
-        }
 
-        if (rewritten) {
-            packet.getAttributeCollectionModifier().write(0, rewrittenAttributes);
-            event.setPacket(packet);
+            List<?> snapshots = readSnapshots(packetHandle);
+            List<Object> rewrittenSnapshots = new ArrayList<>(snapshots.size());
+            boolean rewritten = false;
+            for (Object snapshot : snapshots) {
+                Object attributeHolder = snapshotAttributeMethod.invoke(snapshot);
+                if (maxAbsorptionHolder.equals(attributeHolder)) {
+                    double displayValue = getDisplayedMaxAbsorption(event.getPlayer(), true);
+                    rewrittenSnapshots.add(createSnapshot(attributeHolder, displayValue));
+                    rewritten = true;
+                } else {
+                    rewrittenSnapshots.add(snapshot);
+                }
+            }
+
+            if (rewritten) {
+                Object rewrittenPacket = packetConstructor.newInstance(entityId, rewrittenSnapshots);
+                event.setPacket(PacketContainer.fromPacket(rewrittenPacket));
+            }
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError exception) {
+            packetRewriteEnabled = false;
+            logFailure("改写吸收生命属性包失败，功能已自动停用", exception);
         }
     }
 
-    private boolean isMaxAbsorption(WrappedAttribute attribute) {
-        String attributeKey = attribute.getAttributeKey();
-        return attributeKey != null && attributeKey.toLowerCase().endsWith("max_absorption");
+    private List<?> readSnapshots(Object packetHandle) throws ReflectiveOperationException {
+        return (List<?>) packetValuesMethod.invoke(packetHandle);
+    }
+
+    private Object createSnapshot(Object attributeHolder, double value)
+            throws ReflectiveOperationException {
+        return snapshotConstructor.newInstance(attributeHolder, value, Collections.emptyList());
     }
 
     private double compressValue(Player player, double actualValue) {
@@ -129,22 +174,38 @@ public class AbsorptionCompressionManager implements Listener {
         return Math.max(0, actualValue * plugin.getConfigManager().getHealthScale() / maxHealth);
     }
 
-    private void sendAbsorptionAttribute(Player player, boolean compressed) {
+    private double getDisplayedMaxAbsorption(Player player, boolean compressed) {
         AttributeInstance attribute = player.getAttribute(Attribute.MAX_ABSORPTION);
         if (attribute == null) {
+            return 0;
+        }
+        return compressed ? compressValue(player, attribute.getValue()) : attribute.getValue();
+    }
+
+    private void sendAbsorptionAttribute(Player player, boolean compressed) {
+        if (!packetRewriteEnabled || protocolManager == null) {
             return;
         }
 
-        PacketContainer packet = protocolManager.createPacket(PacketType.Play.Server.UPDATE_ATTRIBUTES);
-        packet.getIntegers().write(0, player.getEntityId());
-        double value = compressed ? compressValue(player, attribute.getValue()) : attribute.getValue();
-        WrappedAttribute wrappedAttribute = WrappedAttribute.newBuilder()
-                .packet(packet)
-                .attributeKey(Attribute.MAX_ABSORPTION.getKey().toString())
-                .baseValue(value)
-                .build();
-        packet.getAttributeCollectionModifier().write(0, List.of(wrappedAttribute));
-        protocolManager.sendServerPacket(player, packet, false);
+        try {
+            double displayValue = getDisplayedMaxAbsorption(player, compressed);
+            Object snapshot = createSnapshot(maxAbsorptionHolder, displayValue);
+            Object packetHandle = packetConstructor.newInstance(
+                    player.getEntityId(), List.of(snapshot));
+            protocolManager.sendServerPacket(
+                    player, PacketContainer.fromPacket(packetHandle), false);
+        } catch (ReflectiveOperationException | RuntimeException | LinkageError exception) {
+            packetRewriteEnabled = false;
+            logFailure("发送吸收生命属性包失败，功能已自动停用", exception);
+        }
+    }
+
+    private void logFailure(String message, Throwable throwable) {
+        if (failureLogged) {
+            return;
+        }
+        failureLogged = true;
+        plugin.getLogger().log(java.util.logging.Level.SEVERE, message, throwable);
     }
 
     @EventHandler
