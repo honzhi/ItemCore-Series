@@ -85,7 +85,7 @@ public class ConfigManager {
     }
 
     public boolean isDebug() {
-        return config.getBoolean("settings.debug", true);
+        return config != null && config.getBoolean("settings.debug", true);
     }
 
     public int getRecipesPerPage() {

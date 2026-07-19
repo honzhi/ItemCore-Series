@@ -15,7 +15,7 @@
     <properties>
         <java.version>17</java.version>
         <paper.version>1.21.4-R0.1-SNAPSHOT</paper.version>
-        <itemcore.version>1.0.1</itemcore.version>
+        <itemcore.version>1.0.4</itemcore.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -32,7 +32,7 @@
             <artifactId>ItemCore</artifactId>
             <version>${itemcore.version}</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../ItemCore/target/ItemCore-1.0.1.jar</systemPath>
+            <systemPath>${project.basedir}/../ItemCore/target/ItemCore-1.0.4.jar</systemPath>
         </dependency>
     </dependencies>
 

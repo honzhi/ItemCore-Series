@@ -60,6 +60,7 @@ public class ItemCoreForge extends JavaPlugin implements Listener {
         getLogger().info("========================================");
         
         initManagers();
+        loadConfigs();
         
         if (checkItemCore()) {
             getLogger().info("  ✓ 检测到 ItemCore 插件");
@@ -76,7 +77,6 @@ public class ItemCoreForge extends JavaPlugin implements Listener {
             getLogger().warning("  ✗ 未检测到 MythicMobs 插件");
         }
         
-        loadConfigs();
         registerCommands();
         registerListeners();
         registerTypeHandlers();
